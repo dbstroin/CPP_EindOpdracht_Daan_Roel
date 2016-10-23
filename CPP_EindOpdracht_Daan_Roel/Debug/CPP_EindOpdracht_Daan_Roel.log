@@ -1,0 +1,16 @@
+﻿  stdafx.cpp
+  Talisman.cpp
+  SilverCompass.cpp
+  Room.cpp
+c:\users\daan\documents\.informatica avans\cpp_eindopdracht_daan_roel\cpp_eindopdracht_daan_roel\room.cpp(19): error C2248: 'Enemy::hitPoints': cannot access private member declared in class 'Enemy'
+  c:\users\daan\documents\.informatica avans\cpp_eindopdracht_daan_roel\cpp_eindopdracht_daan_roel\enemy.h(14): note: see declaration of 'Enemy::hitPoints'
+  c:\users\daan\documents\.informatica avans\cpp_eindopdracht_daan_roel\cpp_eindopdracht_daan_roel\enemy.h(7): note: see declaration of 'Enemy'
+  Player.cpp
+  Item.cpp
+  Grenade.cpp
+  Floor.cpp
+  Enemy.cpp
+  Dungeon.cpp
+  CPP_EindOpdracht_Daan_Roel.cpp
+  Boss.cpp
+  Generating Code...
