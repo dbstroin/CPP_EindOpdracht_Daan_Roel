@@ -16,7 +16,7 @@ int Room::GetCombinedHitPoints()
 	int hitPoints;
 	for each (Enemy enemy in enemies)
 	{
-		hitPoints += enemy.hitPoints;
+		hitPoints += enemy.getHitPoints();
 	}
 	return hitPoints;
 }

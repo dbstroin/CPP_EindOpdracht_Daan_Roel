@@ -8,6 +8,7 @@ class Enemy
 public:
 	Enemy();
 	~Enemy();
+	int getHitPoints();
 private:
 	string name;
 	int level;

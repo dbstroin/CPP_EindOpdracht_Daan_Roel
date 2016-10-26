@@ -8,8 +8,9 @@ using namespace std;
 class Dungeon
 {
 public:
-	Dungeon();
+	Dungeon(int width, int height, int layers);
 	~Dungeon();
+	Floor AddFloor(int width, int height, int level);
 private:
 	int length;
 	int width;

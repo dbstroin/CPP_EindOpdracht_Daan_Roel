@@ -1,17 +1,15 @@
 #pragma once
 #include "Room.h"
 
+using namespace std;
+
 class Floor
 {
 public:
-	Floor();
+	Floor(int width, int height, int level);
 	~Floor();
 private:
-	//Room rooms[][];
+	Room *rooms;
 	int level;
-
-	// misschien niet nodig
-	int length;
-	int width;
 };
 
