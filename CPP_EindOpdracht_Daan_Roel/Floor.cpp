@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "Floor.h"
 
-Floor::Floor(int width, int height, int level)
+Floor::Floor()
 {
-level: level;
-rooms: new Room[width * height];
+}
+
+Floor::Floor(int w, int l, int lev)
+{
+	level = lev;
+	rooms: new Room[w * l];
 }
 
 

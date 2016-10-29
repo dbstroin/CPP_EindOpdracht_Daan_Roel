@@ -6,10 +6,13 @@ using namespace std;
 class Floor
 {
 public:
-	Floor(int width, int height, int level);
+	Floor();
+	Floor(int width, int length, int level);
 	~Floor();
 private:
 	Room *rooms;
 	int level;
+
+	// functie om een random dungeon te maken.
 };
 

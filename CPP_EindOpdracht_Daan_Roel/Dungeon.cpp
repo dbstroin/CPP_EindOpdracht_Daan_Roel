@@ -5,15 +5,20 @@
 
 using namespace std;
 
-Dungeon::Dungeon(int width, int height, int layers)
+Dungeon::Dungeon(int w, int l, int f)
 {
-floors: new list<Floor>;
-width: width;
-height: height;
-layers: layers;
-	for (int level = 1; level < layers; level++) {
-		floors.push_back(AddFloor(width, height, level));
+	list<Floor> floors;
+	width = w;
+	length = l;
+	layers = f;
+	for (int level = 0; level < layers; level++) {
+		floors.push_back(AddFloor(width, length, level));
 	}
+	floors.empty();
+}
+
+Dungeon::Dungeon()
+{
 }
 
 Dungeon::~Dungeon()
@@ -22,5 +27,9 @@ Dungeon::~Dungeon()
 
 Floor Dungeon::AddFloor(int width, int height, int level)
 {
-	return new Floor(width, height, level);
+	Floor floor(width, height, level);
+
+	// vul elke floor met kamers. Vul elke kamer met zooi en enemies.
+
+	return floor;
 }

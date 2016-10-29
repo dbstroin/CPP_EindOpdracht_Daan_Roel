@@ -13,10 +13,22 @@ Room::~Room()
 
 int Room::GetCombinedHitPoints()
 {
-	int hitPoints;
+	int hitPoints = 0;
 	for each (Enemy enemy in enemies)
 	{
-		hitPoints += enemy.getHitPoints();
+		//hitPoints += enemy.getHitPoints();
 	}
 	return hitPoints;
+}
+
+void Room::AddToys()
+{
+}
+
+void Room::AddEnemies()
+{
+}
+
+void Room::AddDoors()
+{
 }

@@ -2,10 +2,18 @@
 //
 
 #include "stdafx.h"
-
+#include "Controller.h"
 
 int main()
 {
+	Controller gameController;
+
+	gameController.StartGame();
+
+	while (gameController.RunGame()) {
+		// play game
+	}
+
     return 0;
 }
 
