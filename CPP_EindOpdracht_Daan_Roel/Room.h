@@ -12,6 +12,11 @@ public:
 	Room();
 	~Room();
 	int GetCombinedHitPoints();
+
+	// functies voor het toevoegen van dingen
+	void AddToys();
+	void AddEnemies();
+	void AddDoors();
 private:
 	list<Enemy> enemies;
 	Player player;
