@@ -15,12 +15,14 @@ public:
 
 	// functies voor het toevoegen van dingen
 	void AddToys();
-	void AddEnemies();
-	void AddDoors();
+	void AddEnemies(Enemy e);
+	// void AddDoors(); 
+	int iets;
 private:
 	list<Enemy> enemies;
 	Player player;
-	map<std::string, Room> doors;
+	bool visited;
+	//map<std::string, Room> doors;
 	
 	// dit is voor de edges
 	int combinedHitPoints;

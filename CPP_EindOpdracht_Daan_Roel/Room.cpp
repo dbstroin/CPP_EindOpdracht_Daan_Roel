@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Room.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
+using namespace std;
 
 Room::Room()
 {
@@ -25,10 +29,9 @@ void Room::AddToys()
 {
 }
 
-void Room::AddEnemies()
+void Room::AddEnemies(Enemy e)
 {
+	
+
 }
 
-void Room::AddDoors()
-{
-}

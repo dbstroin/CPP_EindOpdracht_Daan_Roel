@@ -11,7 +11,3 @@ Enemy::~Enemy()
 {
 }
 
-int Enemy::getHitPoints()
-{
-	return hitPoints;
-}

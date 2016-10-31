@@ -5,7 +5,6 @@ Controller::Controller()
 {
 }
 
-
 Controller::~Controller()
 {
 }
@@ -24,6 +23,11 @@ bool Controller::RunGame()
 	cout << "WHADUPPP, ITS DAT BOI!" << endl;
 	return true;
 }
+
+
+
+
+
 
 //	functies die om user input vragen voor de dungeon grootte
 
