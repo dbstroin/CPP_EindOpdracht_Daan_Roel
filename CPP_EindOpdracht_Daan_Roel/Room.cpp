@@ -15,6 +15,12 @@ Room::~Room()
 {
 }
 
+Room::Room(int x, int y)
+{
+	_x = x;
+	_y = y;
+}
+
 int Room::GetCombinedHitPoints()
 {
 	int hitPoints = 0;
@@ -25,13 +31,16 @@ int Room::GetCombinedHitPoints()
 	return hitPoints;
 }
 
+void Room::Draw()
+{
+}
+
 void Room::AddToys()
 {
 }
 
 void Room::AddEnemies(Enemy e)
 {
-	
 
 }
 

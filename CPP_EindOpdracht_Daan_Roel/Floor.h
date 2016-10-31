@@ -1,5 +1,6 @@
 #pragma once
 #include "Room.h"
+#include <vector>
 
 using namespace std;
 
@@ -7,10 +8,11 @@ class Floor
 {
 public:
 	Floor();
-	Floor(int width, int length, int level);
+	Floor(int length, int width, int level);
+	void drawMap();
 	~Floor();
 private:
-	Room *rooms;
+	vector <vector<Room>> rooms;
 	int level;
 
 	// functie om een random dungeon te maken.
