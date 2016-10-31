@@ -15,6 +15,12 @@ Room::~Room()
 {
 }
 
+Room::Room(int x, int y)
+{
+	_x = x;
+	_y = y;
+}
+
 int Room::GetCombinedHitPoints()
 {
 	int hitPoints = 0;
@@ -25,25 +31,27 @@ int Room::GetCombinedHitPoints()
 	return hitPoints;
 }
 
+void Room::Draw()
+{
+}
+
 void Room::AddToys()
 {
 }
 
 void Room::AddEnemies()
 {
-	ifstream file;
-	file.open("monsters.txt");
+	//ifstream file;
+	//file.open("monsters.txt");
 
-	string line = "";
-	if (file.is_open()) {
-		while (!file.eof()) {
-			getline(file, line);
+	//string line = "";
+	//if (file.is_open()) {
+	//	while (!file.eof()) {
+	//		getline(file, line);
 
-			if ()
-
-		}
-	}
-	file.close();
+	//	}
+	//}
+	//file.close();
 
 }
 

@@ -11,13 +11,17 @@ class Room
 public:
 	Room();
 	~Room();
+	Room(int x, int y);
+	int _x;
+	int _y;
 	int GetCombinedHitPoints();
 
+
 	// functies voor het toevoegen van dingen
+	void Draw();
 	void AddToys();
 	void AddEnemies();
 	// void AddDoors(); 
-	int iets;
 private:
 	list<Enemy> enemies;
 	Player player;
