@@ -11,16 +11,22 @@ class Room
 public:
 	Room();
 	~Room();
+	Room(int x, int y);
+	int _x;
+	int _y;
 	int GetCombinedHitPoints();
 
+
 	// functies voor het toevoegen van dingen
+	void Draw();
 	void AddToys();
 	void AddEnemies();
-	void AddDoors();
+	// void AddDoors(); 
 private:
 	list<Enemy> enemies;
 	Player player;
-	map<std::string, Room> doors;
+	bool visited;
+	//map<std::string, Room> doors;
 	
 	// dit is voor de edges
 	int combinedHitPoints;

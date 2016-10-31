@@ -14,7 +14,8 @@ Dungeon::Dungeon(int w, int l, int f)
 	for (int level = 0; level < layers; level++) {
 		floors.push_back(AddFloor(width, length, level));
 	}
-	floors.empty();
+
+	// floors.empty();
 }
 
 Dungeon::Dungeon()
