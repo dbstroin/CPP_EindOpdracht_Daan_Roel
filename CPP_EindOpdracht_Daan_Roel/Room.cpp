@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Room.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
+using namespace std;
 
 Room::Room()
 {
@@ -27,8 +31,19 @@ void Room::AddToys()
 
 void Room::AddEnemies()
 {
+	ifstream file;
+	file.open("monsters.txt");
+
+	string line = "";
+	if (file.is_open()) {
+		while (!file.eof()) {
+			getline(file, line);
+
+			if ()
+
+		}
+	}
+	file.close();
+
 }
 
-void Room::AddDoors()
-{
-}
