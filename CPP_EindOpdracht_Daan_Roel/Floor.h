@@ -16,6 +16,9 @@ private:
 	int level;
 	int width;
 	int length;
+	void createEdges();
+	void createRooms();
+
 
 	// functie om een random dungeon te maken.
 };

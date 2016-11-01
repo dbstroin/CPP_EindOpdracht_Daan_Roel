@@ -33,11 +33,22 @@ int Room::GetCombinedHitPoints()
 
 void Room::Draw()
 {
-
+	if (visited) {
+		type = "N";
+	}
+	else
+	{
+		type = ".";
+	}
+	cout << type;
 }
 
 void Room::AddToys()
 {
+}
+
+int Room::get_x() {
+	return _x;
 }
 
 void Room::AddEnemies(Enemy e)
