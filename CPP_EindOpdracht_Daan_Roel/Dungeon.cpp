@@ -2,12 +2,12 @@
 #include "Dungeon.h"
 #include <list>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 Dungeon::Dungeon(int w, int l, int f)
 {
-	vector<Floor> floors;
 	currFloor = 0;
 	width = w;
 	length = l;
@@ -15,9 +15,6 @@ Dungeon::Dungeon(int w, int l, int f)
 	for (int level = 0; level < layers; level++) {
 		floors.push_back(AddFloor(width, length, level));
 	}
-
-	floors[currFloor].drawMap();
-	// floors.empty();
 }
 
 Dungeon::Dungeon()
@@ -28,11 +25,28 @@ Dungeon::~Dungeon()
 {
 }
 
+void Dungeon::play() {
+	floors[currFloor].startFloor(0, 0);
+	vector<string> options = floors[currFloor].getDirectionOptions();
+	int answer = askPlayerWhatSide(options);
+	floors[currFloor].movePlayer(answer, options);
+}
+
 Floor Dungeon::AddFloor(int width, int height, int level)
 {
 	Floor floor(width, height, level);
-
-	// vul elke floor met kamers. Vul elke kamer met zooi en enemies.
-
 	return floor;
+}
+
+int Dungeon::askPlayerWhatSide(vector<string> options) 
+{
+	cout << "You can go in " << options.size() << " directions" << endl;
+	cout << "Choose an option below" << endl;
+	for (int i = 0; i < options.size(); i++)
+	{
+		cout << i + 1 <<": " << options[i] << endl;
+	}
+	int answer;
+	cin >> answer;
+	return answer-1;
 }

@@ -5,33 +5,38 @@
 #include "Enemy.h"
 #include "Room.h"
 #include "Player.h"
+#include <vector>
+#include <string>
 
 class Room
 {
 public:
 	Room();
 	~Room();
-	Room(int x, int y);
+	Room(int x, int y, string t);
 	int _x;
 	int _y;
-	string type;
 	int GetCombinedHitPoints();
 	Room* north;
 	Room* east;
 	Room* west;
 	Room* south;
 
-
 	// functies voor het toevoegen van dingen
 	void Draw();
 	void AddToys();
 	void AddEnemies(Enemy e);
-	int get_x();
+	void setType(string t);
+	void playerVisits();
+	void playerLeaves();
+	vector<string> getAvailableDirections();
 	// void AddDoors(); 
 private:
+	string type;
 	list<Enemy> enemies;
 	Player player;
 	bool visited;
+	bool visiting;
 	
 	// dit is voor de edges
 	int combinedHitPoints;
