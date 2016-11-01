@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
-#include <list>
-#include <map>
+#include <vector>
 #include "Enemy.h"
 #include "Room.h"
 #include "Player.h"
@@ -21,7 +20,6 @@ public:
 	// functies voor het toevoegen van dingen
 	void Draw();
 	void AddToys();
-	void AddEnemies(Enemy e);
 	void setType(string t);
 	string getType();
 	void playerVisits();
@@ -35,10 +33,14 @@ public:
 	void setWest(Room * r);
 	Room * getSouth();
 	void setSouth(Room * r);
+	void AddEnemy(vector<Enemy> e);
 	// void AddDoors(); 
 private:
 	string type;
 	list<Enemy> enemies;
+
+
+	Enemy enemy;
 	Player player;
 	bool visited;
 	bool visiting;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "Controller.h"
+#include "Dungeon.h"
 
 Controller::Controller()
 {

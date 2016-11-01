@@ -1,5 +1,6 @@
 #pragma once
 #include "Room.h"
+#include "Enemy.h"
 #include <vector>
 
 using namespace std;
@@ -17,7 +18,7 @@ public:
 	vector <vector<Room*>> rooms;
 	~Floor();
 private:
-
+	vector<Enemy> possibleEnemies;
 	int level;
 	int width;
 	int length;
@@ -25,9 +26,8 @@ private:
 	int playerY;
 	void createEdges();
 	void createRooms();
-
 	void createStairs(int playerx, int playery);
-
+	void createPossibleEnemies();
 	// functie om een random dungeon te maken.
 };
 

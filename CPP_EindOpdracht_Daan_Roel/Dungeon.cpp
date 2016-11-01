@@ -16,8 +16,6 @@ Dungeon::~Dungeon()
 {
 }
 
-vector<Floor> floors;
-
 Dungeon::Dungeon(int w, int l, int f)
 {
 	currFloor = 0;
@@ -45,11 +43,10 @@ void Dungeon::spawnPlayer() {
 
 void Dungeon::play() {
 	floors[currFloor].drawMap();
-	
+
 	tryNextFloor();
 	if (finished) return;
 	tryMove();
-	
 }
 
 void Dungeon::tryMove() 

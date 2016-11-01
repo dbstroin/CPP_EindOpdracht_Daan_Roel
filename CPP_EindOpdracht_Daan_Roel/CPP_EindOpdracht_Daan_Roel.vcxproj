@@ -149,6 +149,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FileReader.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Item.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="CPP_EindOpdracht_Daan_Roel.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Item.cpp" />
