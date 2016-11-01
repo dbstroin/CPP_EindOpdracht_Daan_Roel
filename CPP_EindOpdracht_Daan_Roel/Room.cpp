@@ -48,11 +48,6 @@ void Room::AddToys()
 {
 }
 
-void Room::AddEnemies(Enemy e)
-{
-
-}
-
 void Room::setType(string t)
 {
 	type = t;
@@ -76,7 +71,7 @@ void Room::AddEnemy(vector<Enemy> e)
 {
 	// pak een RANDOM int
 	int randomIndex = 0;
-
+	
 	Enemy enemyToAdd = e[randomIndex];
 	//int i = 0; // voor testen
 }

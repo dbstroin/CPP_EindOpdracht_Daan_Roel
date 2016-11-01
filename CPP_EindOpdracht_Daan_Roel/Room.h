@@ -20,7 +20,6 @@ public:
 	// functies voor het toevoegen van dingen
 	void Draw();
 	void AddToys();
-	void AddEnemies(Enemy e);
 	void setType(string t);
 	string getType();
 	void playerVisits();
@@ -34,14 +33,13 @@ public:
 	void setWest(Room * r);
 	Room * getSouth();
 	void setSouth(Room * r);
+	void AddEnemy(vector<Enemy> e);
 	// void AddDoors(); 
 private:
 	string type;
 	list<Enemy> enemies;
 
-	void AddEnemy(vector<Enemy> e);
- 
-private:
+
 	Enemy enemy;
 	Player player;
 	bool visited;

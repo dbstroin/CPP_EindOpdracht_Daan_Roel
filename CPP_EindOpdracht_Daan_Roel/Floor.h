@@ -27,7 +27,7 @@ private:
 	void createEdges();
 	void createRooms();
 	void createStairs(int playerx, int playery);
-	void CreatePossibleEnemies();
+	void createPossibleEnemies();
 	// functie om een random dungeon te maken.
 };
 

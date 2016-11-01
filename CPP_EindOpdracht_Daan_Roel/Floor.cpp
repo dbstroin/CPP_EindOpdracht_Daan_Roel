@@ -23,7 +23,7 @@ Floor::Floor(int l, int w, int lev)
 
 	createRooms();
 	createEdges();
-	CreatePossibleEnemies();	
+	createPossibleEnemies();	
 }
 
 
@@ -162,7 +162,7 @@ void Floor::movePlayer(int direction, vector<string> options)
 	}
 }
 
-void Floor::CreatePossibleEnemies()
+void Floor::createPossibleEnemies()
 {
 	fstream file;
 	FileReader reader;
@@ -185,9 +185,12 @@ void Floor::CreatePossibleEnemies()
 			if (newEnemy.level < 0 && (level + 1) >= 5) {
 				possibleEnemies.push_back(newEnemy);
 			}
-			else if (newEnemy.level <= level + 1) {
+			else if (newEnemy.level <= level + 1 && newEnemy.level > 0) {
 				possibleEnemies.push_back(newEnemy);
 			}
 		}
 	}
+	rooms[0][0]->AddEnemy(possibleEnemies);
+
+
 }
