@@ -25,6 +25,7 @@ Dungeon::Dungeon(int w, int l, int f)
 	for (int level = 0; level < layers; level++) {
 		Floor* f = new Floor(width, length, level);
 		floors.push_back((*f));
+		delete f;
 	}
 	finished = false;
 	spawnPlayer();
@@ -45,7 +46,13 @@ void Dungeon::play() {
 	floors[currFloor].drawMap();
 
 	tryNextFloor();
-	if (finished) return;
+	if (finished) {
+		for each (Floor floor in floors)
+		{
+			floor.clear();
+		}
+		return;
+	}
 	tryMove();
 }
 

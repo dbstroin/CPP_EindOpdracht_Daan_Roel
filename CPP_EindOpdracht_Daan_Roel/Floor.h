@@ -10,6 +10,7 @@ class Floor
 public:
 	Floor();
 	Floor(int l, int w, int lev);
+	void clear();
 	void drawMap();
 	void startFloor(int startx, int starty);
 	vector<string> getDirectionOptions();
