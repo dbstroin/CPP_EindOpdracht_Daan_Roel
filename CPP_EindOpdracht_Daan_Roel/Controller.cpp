@@ -20,7 +20,8 @@ void Controller::StartGame()
 
 bool Controller::RunGame()
 {
-	cout << "WHADUPPP, ITS DAT BOI!" << endl;
+
+	cin;
 	return true;
 }
 

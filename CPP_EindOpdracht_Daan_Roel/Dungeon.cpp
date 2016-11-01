@@ -7,14 +7,16 @@ using namespace std;
 
 Dungeon::Dungeon(int w, int l, int f)
 {
-	list<Floor> floors;
+	vector<Floor> floors;
+	currFloor = 0;
 	width = w;
 	length = l;
 	layers = f;
 	for (int level = 0; level < layers; level++) {
 		floors.push_back(AddFloor(width, length, level));
 	}
-	int h = 3;
+
+	floors[currFloor].drawMap();
 	// floors.empty();
 }
 
