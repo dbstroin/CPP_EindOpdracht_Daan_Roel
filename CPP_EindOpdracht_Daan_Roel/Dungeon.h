@@ -17,6 +17,7 @@ private:
 	int length;
 	int width;
 	int layers;
+	int currFloor;
 	list<Floor> floors;
 };
 

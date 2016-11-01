@@ -26,6 +26,7 @@ public:
 	void Draw();
 	void AddToys();
 	void AddEnemies(Enemy e);
+	int get_x();
 	// void AddDoors(); 
 private:
 	list<Enemy> enemies;
