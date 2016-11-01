@@ -11,8 +11,6 @@ Controller::~Controller()
 {
 }
 
-vector<vector<Room>> test;
-
 void Controller::StartGame()
 {
 	int floors = AskForFloors();

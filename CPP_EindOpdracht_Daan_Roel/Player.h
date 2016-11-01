@@ -17,7 +17,7 @@ private:
 	int experience;
 	int hitPoints;
 	int damage;
-	int defence;
+	int defense;
 
 	list<Item> items;
 };
