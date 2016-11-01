@@ -7,7 +7,6 @@ public:
 	Controller();
 	~Controller();
 	void StartGame();
-	void hi();
 	bool runGame();
 private:
 	Dungeon dungeon;

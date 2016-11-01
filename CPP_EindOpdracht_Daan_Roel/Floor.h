@@ -13,9 +13,10 @@ public:
 	void startFloor(int startx, int starty);
 	vector<string> getDirectionOptions();
 	void movePlayer(int direction, vector<string> options);
+	vector <vector<Room>> rooms;
 	~Floor();
 private:
-	vector <vector<Room>> rooms;
+
 	int level;
 	int width;
 	int length;

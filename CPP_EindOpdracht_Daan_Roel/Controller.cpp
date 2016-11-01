@@ -15,32 +15,13 @@ vector<vector<Room>> test;
 
 void Controller::StartGame()
 {
-	
-	test.reserve(2);
-	for (int i = 0; i < 2; i++)
-	{
-		Room b = Room(i, i, "over");
-		vector<Room> temp;
-		temp.reserve(1);
-		temp.push_back(b);
-		test.push_back(temp);
-	}
-	test.reserve(2);
-
-	test[0][0].south = &test[1][0];
-	test[1][0].north = &test[0][0];
-
-
 	int floors = AskForFloors();
 	int height = AskForHeight();
 	int width = AskForWidth();
 
 	dungeon = Dungeon(width, height, floors);
-}
 
-void Controller::hi() {
-	test[0][0].south->playerVisits();
-	int i = 3;
+	while (runGame());
 }
 
 bool Controller::runGame()

@@ -3,11 +3,15 @@
 #include <random>
 #include <ctime>
 
-vector<vector<Room>> rooms;
-
 Floor::Floor()
 {
 }
+
+Floor::~Floor()
+{
+}
+
+vector <vector<Room>> rooms;
 
 Floor::Floor(int l, int w, int lev)
 {
@@ -21,9 +25,6 @@ Floor::Floor(int l, int w, int lev)
 	createEdges();
 }
 
-Floor::~Floor()
-{
-}
 
 void Floor::createEdges()
 {
@@ -112,7 +113,6 @@ void Floor::createStairs(int playerx, int playery) {
 
 void Floor::drawMap()
 {
-	rooms[playerx][playery].east->playerVisits();
 	for (int lIndex = 0; lIndex < length; lIndex++) {
 		cout << "   ";
 
@@ -158,7 +158,7 @@ void Floor::movePlayer(int direction, vector<string> options)
 		playery--;
 	}
 	if (options[direction] == "east") {
-		rooms[playerx][playery].east->playerVisits();
+		(*rooms[playerx][playery].east).playerVisits();
 		playerx++;
 	}
 	if (options[direction] == "south") {

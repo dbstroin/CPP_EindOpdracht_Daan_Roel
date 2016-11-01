@@ -6,17 +6,6 @@
 
 using namespace std;
 
-Dungeon::Dungeon(int w, int l, int f)
-{
-	currFloor = 0;
-	width = w;
-	length = l;
-	layers = f;
-	for (int level = 0; level < layers; level++) {
-		floors.push_back(AddFloor(width, length, level));
-	}
-}
-
 Dungeon::Dungeon()
 {
 }
@@ -25,17 +14,25 @@ Dungeon::~Dungeon()
 {
 }
 
+vector<Floor> floors;
+
+Dungeon::Dungeon(int w, int l, int f)
+{
+	currFloor = 0;
+	width = w;
+	length = l;
+	layers = f;
+	for (int level = 0; level < layers; level++) {
+		Floor* f = new Floor(width, length, level);
+		floors.push_back((*f));
+	}
+}
+
 void Dungeon::play() {
 	floors[currFloor].startFloor(0, 0);
 	vector<string> options = floors[currFloor].getDirectionOptions();
 	int answer = askPlayerWhatSide(options);
 	floors[currFloor].movePlayer(answer, options);
-}
-
-Floor Dungeon::AddFloor(int width, int height, int level)
-{
-	Floor floor(width, height, level);
-	return floor;
 }
 
 int Dungeon::askPlayerWhatSide(vector<string> options) 

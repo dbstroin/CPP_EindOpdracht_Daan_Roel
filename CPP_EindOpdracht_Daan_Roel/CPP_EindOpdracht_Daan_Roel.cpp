@@ -10,8 +10,6 @@ int main()
 
 
 	gameController.StartGame();
-	gameController.hi();
-	while (gameController.runGame());
 
     return 0;
 }
