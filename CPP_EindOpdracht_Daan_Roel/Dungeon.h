@@ -11,11 +11,14 @@ class Dungeon
 {
 public:
 	Dungeon(int width, int length, int floors);
+	void spawnPlayer();
 	Dungeon();
 	~Dungeon();
 	void play();
-	int askPlayerWhatSide(vector<string> options);
+	void tryMove();
+	void tryNextFloor();
 	vector<Floor> floors;
+	bool finished;
 private:
 	int length;
 	int width;

@@ -12,16 +12,17 @@ public:
 	void drawMap();
 	void startFloor(int startx, int starty);
 	vector<string> getDirectionOptions();
+	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
-	vector <vector<Room>> rooms;
+	vector <vector<Room*>> rooms;
 	~Floor();
 private:
 
 	int level;
 	int width;
 	int length;
-	int playerx;
-	int playery;
+	int playerX;
+	int playerY;
 	void createEdges();
 	void createRooms();
 

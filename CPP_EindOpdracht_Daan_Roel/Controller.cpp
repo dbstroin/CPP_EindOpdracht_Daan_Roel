@@ -21,13 +21,7 @@ void Controller::StartGame()
 
 	dungeon = Dungeon(width, height, floors);
 
-	while (runGame());
-}
-
-bool Controller::runGame()
-{
-	dungeon.play();
-	return true;
+	while (!dungeon.finished) dungeon.play();
 }
 
 //	functies die om user input vragen voor de dungeon grootte

@@ -3,6 +3,8 @@
 #include <list>
 #include <iostream>
 #include <string>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -26,24 +28,80 @@ Dungeon::Dungeon(int w, int l, int f)
 		Floor* f = new Floor(width, length, level);
 		floors.push_back((*f));
 	}
+	finished = false;
+	spawnPlayer();
+}
+
+void Dungeon::spawnPlayer() {
+	default_random_engine generator;
+	generator.seed(time(0));
+
+	uniform_int_distribution<int> distribution1(0, width - 1);
+	int randomX = distribution1(generator);
+	uniform_int_distribution<int> distribution2(0, length - 1);
+	int randomY = distribution2(generator);
+	floors[currFloor].startFloor(randomX, randomY);
 }
 
 void Dungeon::play() {
-	floors[currFloor].startFloor(0, 0);
+	floors[currFloor].drawMap();
+	
+	tryNextFloor();
+	if (finished) return;
+	tryMove();
+	
+}
+
+void Dungeon::tryMove() 
+{
 	vector<string> options = floors[currFloor].getDirectionOptions();
-	int answer = askPlayerWhatSide(options);
+	cout << "There are " << options.size() << " available directions." << endl;
+	cout << "Choose an option below: " << endl;
+	for (int i = 0; i < options.size(); i++)
+	{
+		cout << i <<": " << options[i] << endl;
+	}
+	cout << endl;
+	bool correct = false;
+	int answer;
+	while (!correct) {
+		cin.clear();
+		cin >> answer;
+		if (answer < options.size() && answer >= 0) {
+			correct = true;
+		}
+	}
+	
 	floors[currFloor].movePlayer(answer, options);
 }
 
-int Dungeon::askPlayerWhatSide(vector<string> options) 
-{
-	cout << "You can go in " << options.size() << " directions" << endl;
-	cout << "Choose an option below" << endl;
-	for (int i = 0; i < options.size(); i++)
-	{
-		cout << i + 1 <<": " << options[i] << endl;
+void Dungeon::tryNextFloor() {
+	if (floors[currFloor].getIfOnPlayerOnStairs()) {
+		cout << "You have found the stairs do you want to move to the next floor? " << endl;
+		cout << "0: yes" << endl;
+		cout << "1: no" << endl;
+		cout << endl;
+		bool correct = false;
+		int answer;
+		while (!correct) {
+			cin.clear();
+			cin >> answer;
+			if (answer == 0) {
+				correct = true;
+				currFloor++;
+				if (currFloor < floors.size()) {
+					spawnPlayer();
+					floors[currFloor].drawMap();
+				}
+				else {
+					cout << "You succesfully exited the dungeon, Congratulations!" << endl;
+					getchar(); getchar();
+					finished = true;
+				}
+			}
+			else if (answer == 1) {
+				correct = true;
+			}
+		}
 	}
-	int answer;
-	cin >> answer;
-	return answer-1;
 }

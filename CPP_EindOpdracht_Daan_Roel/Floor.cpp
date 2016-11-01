@@ -11,16 +11,12 @@ Floor::~Floor()
 {
 }
 
-vector <vector<Room>> rooms;
-
 Floor::Floor(int l, int w, int lev)
 {
 	length = l;
 	width = w;
 	level = lev;
 
-	playerx = 0;
-	playery = 0;
 	createRooms();
 	createEdges();
 }
@@ -35,39 +31,25 @@ void Floor::createEdges()
 			//East
 			if (wIndex + 1 < width) {
 
-				rooms[wIndex][lIndex].east = &rooms[wIndex + 1][lIndex];
-			}
-			else {
-				rooms[wIndex][lIndex].east = nullptr;
+				rooms[wIndex][lIndex]->setEast(rooms[wIndex + 1][lIndex]);
 			}
 			//West
 			if (wIndex - 1 > -1) {
 	
-				rooms[wIndex][lIndex].west = &rooms[wIndex - 1][lIndex];
-			}
-			else {
-				rooms[wIndex][lIndex].west = nullptr;
+				rooms[wIndex][lIndex]->setWest(rooms[wIndex - 1][lIndex]);
 			}
 			//North
 			if (lIndex - 1 > -1) {
 
-				rooms[wIndex][lIndex].north = &rooms[wIndex][lIndex - 1];
-			}
-			else {
-				rooms[wIndex][lIndex].north = nullptr;
+				rooms[wIndex][lIndex]->setNorth(rooms[wIndex][lIndex - 1]);
 			}
 			//South
 			if (lIndex + 1 < length) {
 
-				rooms[wIndex][lIndex].south = &rooms[wIndex][lIndex + 1];
-			}
-			else {
-				rooms[wIndex][lIndex].south = nullptr;
+				rooms[wIndex][lIndex]->setSouth(rooms[wIndex][lIndex + 1]);
 			}
 		}
-
 	}
-	//rooms[playerx][playery].east->playerVisits();
 }
 
 void Floor::createRooms()
@@ -76,10 +58,10 @@ void Floor::createRooms()
 	//Fill grid with rooms
 	for (int wIndex = 0; wIndex < width; wIndex++)
 	{
-		vector<Room> temp;
+		vector<Room*> temp;
 		temp.reserve(length);
 		for (int lIndex = 0; lIndex < length; lIndex++) {
-			Room r = Room(wIndex, lIndex, "N");
+			Room* r = new Room(wIndex, lIndex, "N");
 			temp.push_back(r);
 		}
 
@@ -107,7 +89,7 @@ void Floor::createStairs(int playerx, int playery) {
 		}
 	}
 
-	rooms[randomx][randomy].setType("H");
+	rooms[randomx][randomy]->setType("H");
 
 }
 
@@ -117,7 +99,7 @@ void Floor::drawMap()
 		cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
-			if (rooms[wIndex][lIndex].north != nullptr) {
+			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
 				cout << "| ";
 			}
 		}
@@ -126,8 +108,8 @@ void Floor::drawMap()
 		cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
-			rooms[wIndex][lIndex].Draw();
-			if (rooms[wIndex][lIndex].east != nullptr) {
+			rooms[wIndex][lIndex]->Draw();
+			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
 				cout << "-";
 			}
 		}
@@ -138,35 +120,39 @@ void Floor::drawMap()
 
 void Floor::startFloor(int startx, int starty)
 {
-	playerx = startx;
-	playery = starty;
-	rooms[startx][starty].playerVisits();
+	playerX = startx;
+	playerY = starty;
+	rooms[startx][starty]->playerVisits();
 	createStairs(startx, starty);
-	drawMap();
 }
 
 vector<string> Floor::getDirectionOptions()
 {
-	return rooms[playerx][playery].getAvailableDirections();
+	return rooms[playerX][playerY]->getAvailableDirections();
+}
+
+bool Floor::getIfOnPlayerOnStairs() {
+	if (rooms[playerX][playerY]->getType() == "H") return true;
+	else return false;
 }
 
 void Floor::movePlayer(int direction, vector<string> options) 
 {
-	rooms[playerx][playery].playerLeaves();
+	rooms[playerX][playerY]->playerLeaves();
 	if (options[direction] == "north") {
-		rooms[playerx][playery].north->playerVisits();
-		playery--;
+		rooms[playerX][playerY]->getNorth()->playerVisits();
+		playerY--;
 	}
 	if (options[direction] == "east") {
-		(*rooms[playerx][playery].east).playerVisits();
-		playerx++;
+		rooms[playerX][playerY]->getEast()->playerVisits();
+		playerX++;
 	}
 	if (options[direction] == "south") {
-		rooms[playerx][playery].south->playerVisits();
-		playery++;
+		rooms[playerX][playerY]->getSouth()->playerVisits();
+		playerY++;
 	}
 	if (options[direction] == "west") {
-		rooms[playerx][playery].west->playerVisits();
-		playerx--;
+		rooms[playerX][playerY]->getWest()->playerVisits();
+		playerX--;
 	}
 }

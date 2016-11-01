@@ -36,9 +36,11 @@ int Room::GetCombinedHitPoints()
 
 void Room::Draw()
 {
-	if (visiting) cout << 'P';
-	else if (visited) cout << type;
-	else cout << type; //".";
+	if (visiting == true) {
+		cout << 'P';
+	}
+	else if (visited == true) cout << type;
+	else cout << ".";
 }
 
 void Room::AddToys()
@@ -55,11 +57,14 @@ void Room::setType(string t)
 	type = t;
 }
 
+string Room::getType() {
+	return type;
+}
+
 void Room::playerVisits()
 {
 	visited = true;
 	visiting = true;
-	type = 'P';
 }
 
 void Room::playerLeaves()
@@ -86,3 +91,36 @@ vector<string> Room::getAvailableDirections() {
 }
 
 
+#pragma region GettersSetters
+Room* Room::getEast() {
+	return east;
+}
+
+void Room::setEast(Room* r) {
+	east = r;
+}
+
+void Room::setNorth(Room* r) {
+	north = r;
+}
+
+Room* Room::getNorth() {
+	return north;
+}
+
+Room* Room::getWest() {
+	return west;
+}
+
+void Room::setWest(Room* r) {
+	west = r;
+}
+
+Room* Room::getSouth() {
+	return south;
+}
+
+void Room::setSouth(Room* r) {
+	south = r;
+}
+#pragma endregion
