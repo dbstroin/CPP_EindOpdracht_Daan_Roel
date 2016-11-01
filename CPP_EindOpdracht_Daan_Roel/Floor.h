@@ -8,12 +8,14 @@ class Floor
 {
 public:
 	Floor();
-	Floor(int length, int width, int level);
+	Floor(int l, int w, int lev);
 	void drawMap();
 	~Floor();
 private:
 	vector <vector<Room>> rooms;
 	int level;
+	int width;
+	int length;
 
 	// functie om een random dungeon te maken.
 };

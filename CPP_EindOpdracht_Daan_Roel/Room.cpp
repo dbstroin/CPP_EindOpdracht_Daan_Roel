@@ -33,6 +33,7 @@ int Room::GetCombinedHitPoints()
 
 void Room::Draw()
 {
+
 }
 
 void Room::AddToys()
