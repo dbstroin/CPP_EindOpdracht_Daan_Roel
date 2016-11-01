@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Controller.h"
+#include "Dungeon.h"
 
 Controller::Controller()
 {

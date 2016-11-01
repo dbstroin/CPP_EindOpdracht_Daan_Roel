@@ -5,6 +5,10 @@
 
 using namespace std;
 
+Dungeon::Dungeon()
+{
+}
+
 Dungeon::Dungeon(int w, int l, int f)
 {
 	vector<Floor> floors;
@@ -18,10 +22,6 @@ Dungeon::Dungeon(int w, int l, int f)
 
 	floors[currFloor].drawMap();
 	// floors.empty();
-}
-
-Dungeon::Dungeon()
-{
 }
 
 Dungeon::~Dungeon()

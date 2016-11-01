@@ -12,7 +12,7 @@ FileReader::~FileReader()
 string FileReader::GetName(const string& str)
 {
 	string returnValue;
-	regex rgx("\[(\w+);");
+	regex rgx("\\[(\\w+);");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -25,7 +25,7 @@ string FileReader::GetName(const string& str)
 int FileReader::GetHitpoints(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;\d+x\d+;\d+-\d+;\d+;(\d+)]");
+	regex rgx("\\[\\w+;\\w+;\\d+x\\d+;\\d+-\\d+;\\d+;(\\d+)");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -39,7 +39,7 @@ int FileReader::GetHitpoints(const string& str)
 int FileReader::GetLevel(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;(\w+);");
+	regex rgx("\\[\\w+;(\\w+);");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -59,7 +59,7 @@ int FileReader::GetLevel(const string& str)
 int FileReader::GetMinDamage(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;\d+x\d+;(\d+)-");
+	regex rgx("\\[\\w+;\\w+;\\d+x\\d+;(\\d+)-");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -73,7 +73,7 @@ int FileReader::GetMinDamage(const string& str)
 int FileReader::GetMaxDamage(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;\d+x\d+;\d+-(\d+)");
+	regex rgx("\\[\\w+;\\w+;\\d+x\\d+;\\d+-(\\d+)");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -87,7 +87,7 @@ int FileReader::GetMaxDamage(const string& str)
 int FileReader::GetHitRate(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;\d+x(\d+);");
+	regex rgx("\\[\\w+;\\w+;\\d+x(\\d+);");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -101,7 +101,7 @@ int FileReader::GetHitRate(const string& str)
 int FileReader::GetHitChance(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;(\d+)x");
+	regex rgx("\\[\\w+;\\w+;(\\d+)x");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {
@@ -115,7 +115,7 @@ int FileReader::GetHitChance(const string& str)
 int FileReader::GetBlockChance(const string& str)
 {
 	int returnValue = 0;
-	regex rgx("\[\w+;\w+;\d+x\d+;\d+-\d+;(\d+);");
+	regex rgx("\\[\\w+;\\w+;\\d+x\\d+;\\d+-\\d+;(\\d+);");
 	smatch match;
 
 	if (regex_search(str.begin(), str.end(), match, rgx)) {

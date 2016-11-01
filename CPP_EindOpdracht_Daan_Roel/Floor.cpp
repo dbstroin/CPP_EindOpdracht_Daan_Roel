@@ -6,6 +6,7 @@
 
 Floor::Floor()
 {
+	possibleEnemies.reserve(20);
 }
 
 void Floor::drawMap()
@@ -38,7 +39,7 @@ Floor::Floor(int l, int w, int lev)
 
 	createRooms();
 	createEdges();
-
+	CreatePossibleEnemies();	
 }
 
 
@@ -114,7 +115,7 @@ void Floor::CreatePossibleEnemies()
 
 	string line;
 	while (getline(file, line)) {
-		if (line.substr(1) == "[") {
+		if (line.substr(0,1) == "[") {
 			Enemy newEnemy;
 
 			newEnemy.name = reader.GetName(line);
@@ -126,7 +127,10 @@ void Floor::CreatePossibleEnemies()
 			newEnemy.maxDamage = reader.GetMaxDamage(line);
 			newEnemy.blockChance = reader.GetBlockChance(line);
 
-			if (newEnemy.level <= level + 1) {
+			if (newEnemy.level < 0 && (level + 1) >= 5) {
+				possibleEnemies.push_back(newEnemy);
+			}
+			else if (newEnemy.level <= level + 1) {
 				possibleEnemies.push_back(newEnemy);
 			}
 		}

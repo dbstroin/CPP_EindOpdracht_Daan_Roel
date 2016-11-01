@@ -54,9 +54,10 @@ int Room::get_x() {
 
 void Room::AddEnemy(vector<Enemy> e)
 {
-	int randomIndex = rand() % e.size();
-	
-	// kopie maken van de enemy op die random index doe ik vanavond ...
-	// enemy =
+	// pak een RANDOM int
+	int randomIndex = 0;
+
+	Enemy enemyToAdd = e[randomIndex];
+	//int i = 0; // voor testen
 }
 
