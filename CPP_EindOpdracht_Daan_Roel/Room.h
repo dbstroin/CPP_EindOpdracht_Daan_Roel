@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
-#include <list>
-#include <map>
+#include <vector>
 #include "Enemy.h"
 #include "Room.h"
 #include "Player.h"
@@ -39,6 +38,11 @@ public:
 private:
 	string type;
 	list<Enemy> enemies;
+
+	void AddEnemy(vector<Enemy> e);
+ 
+private:
+	Enemy enemy;
 	Player player;
 	bool visited;
 	bool visiting;

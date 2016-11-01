@@ -2,9 +2,13 @@
 #include "Floor.h"
 #include <random>
 #include <ctime>
+#include "FileReader.h"
+#include <string>
+#include <fstream>
 
 Floor::Floor()
 {
+	possibleEnemies.reserve(20);
 }
 
 Floor::~Floor()
@@ -19,6 +23,7 @@ Floor::Floor(int l, int w, int lev)
 
 	createRooms();
 	createEdges();
+	CreatePossibleEnemies();	
 }
 
 
@@ -154,5 +159,35 @@ void Floor::movePlayer(int direction, vector<string> options)
 	if (options[direction] == "west") {
 		rooms[playerX][playerY]->getWest()->playerVisits();
 		playerX--;
+	}
+}
+
+void Floor::CreatePossibleEnemies()
+{
+	fstream file;
+	FileReader reader;
+	file.open("monsters.txt");
+
+	string line;
+	while (getline(file, line)) {
+		if (line.substr(0,1) == "[") {
+			Enemy newEnemy;
+
+			newEnemy.name = reader.GetName(line);
+			newEnemy.level = reader.GetLevel(line);
+			newEnemy.hitPoints = reader.GetHitpoints(line);
+			newEnemy.hitAmount = reader.GetHitRate(line);
+			newEnemy.hitChance = reader.GetHitChance(line);
+			newEnemy.minDamage = reader.GetMinDamage(line);
+			newEnemy.maxDamage = reader.GetMaxDamage(line);
+			newEnemy.blockChance = reader.GetBlockChance(line);
+
+			if (newEnemy.level < 0 && (level + 1) >= 5) {
+				possibleEnemies.push_back(newEnemy);
+			}
+			else if (newEnemy.level <= level + 1) {
+				possibleEnemies.push_back(newEnemy);
+			}
+		}
 	}
 }
