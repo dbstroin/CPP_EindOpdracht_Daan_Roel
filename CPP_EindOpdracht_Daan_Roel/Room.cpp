@@ -10,7 +10,6 @@ Room::Room()
 {
 }
 
-
 Room::~Room()
 {
 }
@@ -23,12 +22,14 @@ Room::Room(int x, int y)
 
 int Room::GetCombinedHitPoints()
 {
-	int hitPoints = 0;
-	for each (Enemy enemy in enemies)
-	{
-		//hitPoints += enemy.getHitPoints();
+	int hitPoints = enemy.hitPoints;
+
+	if (hitPoints != NULL) {
+		return hitPoints;
 	}
-	return hitPoints;
+	else {
+		return 0;
+	}
 }
 
 void Room::Draw()
@@ -51,8 +52,11 @@ int Room::get_x() {
 	return _x;
 }
 
-void Room::AddEnemies(Enemy e)
+void Room::AddEnemy(vector<Enemy> e)
 {
-
+	int randomIndex = rand() % e.size();
+	
+	// kopie maken van de enemy op die random index doe ik vanavond ...
+	// enemy =
 }
 

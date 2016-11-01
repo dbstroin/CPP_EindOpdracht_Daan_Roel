@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Floor.h"
+#include "FileReader.h"
+#include <string>
+#include <fstream>
 
 Floor::Floor()
 {
@@ -9,7 +12,7 @@ void Floor::drawMap()
 {
 	for (int lIndex = 0; lIndex < length; lIndex++) {
 		for (int wIndex = 0; wIndex < width; wIndex++) {
-			if (rooms[wIndex][lIndex].north != nullptr) {			
+			if (rooms[wIndex][lIndex].north != nullptr) {
 				cout << "| ";
 			}
 		}
@@ -100,5 +103,32 @@ void Floor::createRooms()
 		}
 
 		rooms.push_back(temp);
+	}
+}
+
+void Floor::CreatePossibleEnemies()
+{
+	fstream file;
+	FileReader reader;
+	file.open("monsters.txt");
+
+	string line;
+	while (getline(file, line)) {
+		if (line.substr(1) == "[") {
+			Enemy newEnemy;
+
+			newEnemy.name = reader.GetName(line);
+			newEnemy.level = reader.GetLevel(line);
+			newEnemy.hitPoints = reader.GetHitpoints(line);
+			newEnemy.hitAmount = reader.GetHitRate(line);
+			newEnemy.hitChance = reader.GetHitChance(line);
+			newEnemy.minDamage = reader.GetMinDamage(line);
+			newEnemy.maxDamage = reader.GetMaxDamage(line);
+			newEnemy.blockChance = reader.GetBlockChance(line);
+
+			if (newEnemy.level <= level + 1) {
+				possibleEnemies.push_back(newEnemy);
+			}
+		}
 	}
 }
