@@ -20,7 +20,7 @@ public:
 	// functies voor het toevoegen van dingen
 	void Draw();
 	void AddToys();
-	void AddEnemies();
+	void AddEnemies(Enemy e);
 	// void AddDoors(); 
 private:
 	list<Enemy> enemies;

@@ -39,19 +39,8 @@ void Room::AddToys()
 {
 }
 
-void Room::AddEnemies()
+void Room::AddEnemies(Enemy e)
 {
-	//ifstream file;
-	//file.open("monsters.txt");
-
-	//string line = "";
-	//if (file.is_open()) {
-	//	while (!file.eof()) {
-	//		getline(file, line);
-
-	//	}
-	//}
-	//file.close();
 
 }
 

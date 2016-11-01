@@ -8,8 +8,6 @@ class Enemy
 public:
 	Enemy();
 	~Enemy();
-	int getHitPoints();
-private:
 	string name;
 	int level;
 	int hitPoints;
@@ -18,5 +16,6 @@ private:
 	int minDamage;
 	int maxDamage;
 	int blockChance;
+private:
 };
 
