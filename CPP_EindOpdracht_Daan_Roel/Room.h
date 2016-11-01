@@ -14,7 +14,12 @@ public:
 	Room(int x, int y);
 	int _x;
 	int _y;
+	string type;
 	int GetCombinedHitPoints();
+	Room* north;
+	Room* east;
+	Room* west;
+	Room* south;
 
 
 	// functies voor het toevoegen van dingen
@@ -26,7 +31,6 @@ private:
 	list<Enemy> enemies;
 	Player player;
 	bool visited;
-	//map<std::string, Room> doors;
 	
 	// dit is voor de edges
 	int combinedHitPoints;
