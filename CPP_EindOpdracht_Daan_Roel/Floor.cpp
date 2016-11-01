@@ -26,7 +26,6 @@ Floor::Floor(int l, int w, int lev)
 	createPossibleEnemies();	
 }
 
-
 void Floor::createEdges()
 {
 	//Connect rooms on ALL sides
@@ -191,6 +190,14 @@ void Floor::createPossibleEnemies()
 		}
 	}
 	rooms[0][0]->AddEnemy(possibleEnemies);
-
-
 }
+
+void Floor::clear() {
+	for (int wIndex = 0; wIndex < width; wIndex++)
+	{
+		for (int lIndex = 0; lIndex < length; lIndex++) {
+			delete rooms[wIndex][lIndex];
+		}
+	}
+}
+
