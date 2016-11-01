@@ -128,6 +128,7 @@ void Floor::startFloor(int startx, int starty)
 	playerY = starty;
 	rooms[startx][starty]->playerVisits();
 	createStairs(startx, starty);
+	breathFirstSearch(rooms[playerX][playerY]);
 }
 
 vector<string> Floor::getDirectionOptions()
@@ -190,6 +191,37 @@ void Floor::createPossibleEnemies()
 		}
 	}
 	rooms[0][0]->AddEnemy(possibleEnemies);
+}
+
+void Floor::depthFirstSearch(Room* startRoom) {
+
+}
+
+void Floor::depthFirstSearch(Room * vertex, vector<Room*> visited)
+{
+}
+
+void Floor::breathFirstSearch(Room* startRoom) {
+	vector<Room*> queue;
+	vector<Room*> visited;
+
+	queue.push_back(startRoom);
+	
+
+	while (queue.size() > 0) {
+		Room* vertex = queue[0];
+		visited.push_back(vertex);
+		queue.erase(std::remove(queue.begin(), queue.end(), vertex), queue.end());
+
+		for each (Room* adjacentRoom in vertex->getAdjacentRooms())
+		{
+			if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+					queue.push_back(adjacentRoom);
+				}
+			}
+		}
+	}
 }
 
 void Floor::clear() {

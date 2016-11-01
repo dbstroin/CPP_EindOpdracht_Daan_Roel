@@ -29,6 +29,10 @@ private:
 	void createRooms();
 	void createStairs(int playerx, int playery);
 	void createPossibleEnemies();
+	void depthFirstSearch(Room* startRoom);
+	void depthFirstSearch(Room* vertex, vector<Room*> visited);
+	void breathFirstSearch(Room* startRoom);
+
 	// functie om een random dungeon te maken.
 };
 

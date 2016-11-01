@@ -16,6 +16,7 @@ Room::~Room()
 
 Room::Room(int x, int y, string t)
 {
+	searchVisited = false;
 	visiting = false;
 	visited = false;
 	_x = x;
@@ -76,6 +77,8 @@ void Room::AddEnemy(vector<Enemy> e)
 	//int i = 0; // voor testen
 }
 
+
+
 vector<string> Room::getAvailableDirections() {
 	vector<string> temp;
 	temp.reserve(4);
@@ -126,5 +129,32 @@ Room* Room::getSouth() {
 
 void Room::setSouth(Room* r) {
 	south = r;
+}
+
+void Room::setSearchVisited(bool i) {
+	searchVisited = i;
+}
+
+bool Room::setSearchVisited() {
+	return searchVisited;
+}
+
+vector<Room*> Room::getAdjacentRooms()
+{
+	vector<Room*> temp;
+	temp.reserve(4);
+	if (north != nullptr) {
+		temp.push_back(north);
+	}
+	if (east != nullptr) {
+		temp.push_back(east);
+	}
+	if (south != nullptr) {
+		temp.push_back(south);
+	}
+	if (west != nullptr) {
+		temp.push_back(west);
+	}
+	return temp;
 }
 #pragma endregion

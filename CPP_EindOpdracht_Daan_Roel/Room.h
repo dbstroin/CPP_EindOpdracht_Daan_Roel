@@ -33,7 +33,11 @@ public:
 	void setWest(Room * r);
 	Room * getSouth();
 	void setSouth(Room * r);
+	void setSearchVisited(bool i);
+	bool setSearchVisited();
 	void AddEnemy(vector<Enemy> e);
+	bool searchVisited;
+	vector<Room*> getAdjacentRooms();
 	// void AddDoors(); 
 private:
 	string type;
@@ -50,6 +54,7 @@ private:
 	Room* west;
 	Room* south;
 	
+	vector<Room*> adjacentRooms;
 	// dit is voor de edges
 	int combinedHitPoints;
 
