@@ -2,6 +2,7 @@
 #include <iostream>
 #include <list>
 #include "Floor.h"
+#include "Room.h"
 
 
 using namespace std;
@@ -10,14 +11,18 @@ class Dungeon
 {
 public:
 	Dungeon(int width, int length, int floors);
+	void spawnPlayer();
 	Dungeon();
 	~Dungeon();
-	Floor AddFloor(int width, int length, int level);
+	void play();
+	void tryMove();
+	void tryNextFloor();
+	vector<Floor> floors;
+	bool finished;
 private:
 	int length;
 	int width;
 	int layers;
 	int currFloor;
-	list<Floor> floors;
 };
 

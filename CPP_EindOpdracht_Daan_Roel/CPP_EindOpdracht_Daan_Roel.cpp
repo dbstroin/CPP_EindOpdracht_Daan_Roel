@@ -8,11 +8,8 @@ int main()
 {
 	Controller gameController;
 
-	gameController.StartGame();
 
-	while (gameController.RunGame()) {
-		// play game
-	}
+	gameController.StartGame();
 
     return 0;
 }

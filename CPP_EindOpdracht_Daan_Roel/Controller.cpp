@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <iostream>
+#include <string>
 #include "Controller.h"
 
 Controller::Controller()
@@ -9,26 +11,18 @@ Controller::~Controller()
 {
 }
 
+vector<vector<Room>> test;
+
 void Controller::StartGame()
 {
 	int floors = AskForFloors();
 	int height = AskForHeight();
 	int width = AskForWidth();
 
-	Dungeon dungeon(width, height, floors);
+	dungeon = Dungeon(width, height, floors);
+
+	while (!dungeon.finished) dungeon.play();
 }
-
-bool Controller::RunGame()
-{
-
-	cin;
-	return true;
-}
-
-
-
-
-
 
 //	functies die om user input vragen voor de dungeon grootte
 
