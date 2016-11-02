@@ -16,14 +16,15 @@ Dungeon::~Dungeon()
 {
 }
 
-Dungeon::Dungeon(int w, int l, int f)
+Dungeon::Dungeon(int w, int l, int f, Player* p)
 {
+	player = p;
 	currFloor = 0;
 	width = w;
 	length = l;
 	layers = f;
 	for (int level = 0; level < layers; level++) {
-		Floor* f = new Floor(width, length, level);
+		Floor* f = new Floor(width, length, level, player);
 		floors.push_back((*f));
 		delete f;
 	}

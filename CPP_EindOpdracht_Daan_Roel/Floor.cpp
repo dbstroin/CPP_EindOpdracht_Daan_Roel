@@ -15,8 +15,9 @@ Floor::~Floor()
 {
 }
 
-Floor::Floor(int l, int w, int lev)
+Floor::Floor(int l, int w, int lev, Player* p)
 {
+	player = p;
 	length = l;
 	width = w;
 	level = lev;
@@ -124,41 +125,41 @@ void Floor::drawMap()
 
 void Floor::startFloor(int startx, int starty)
 {
-	playerX = startx;
-	playerY = starty;
+	player->setX(startx);
+	player->setY(starty);
 	rooms[startx][starty]->playerVisits();
 	createStairs(startx, starty);
-	breathFirstSearch(rooms[playerX][playerY]);
+	breathFirstSearch(rooms[player->getX()][player->getY()]);
 }
 
 vector<string> Floor::getDirectionOptions()
 {
-	return rooms[playerX][playerY]->getAvailableDirections();
+	return rooms[player->getX()][player->getY()]->getAvailableDirections();
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
-	if (rooms[playerX][playerY]->getType() == "H") return true;
+	if (rooms[player->getX()][player->getY()]->getType() == "H") return true;
 	else return false;
 }
 
 void Floor::movePlayer(int direction, vector<string> options) 
 {
-	rooms[playerX][playerY]->playerLeaves();
+	rooms[player->getX()][player->getY()]->playerLeaves();
 	if (options[direction] == "north") {
-		rooms[playerX][playerY]->getNorth()->playerVisits();
-		playerY--;
+		rooms[player->getX()][player->getY()]->getNorth()->playerVisits();
+		player->setY(player->getY() - 1);
 	}
 	if (options[direction] == "east") {
-		rooms[playerX][playerY]->getEast()->playerVisits();
-		playerX++;
+		rooms[player->getX()][player->getY()]->getEast()->playerVisits();
+		player->setX(player->getX() + 1);
 	}
 	if (options[direction] == "south") {
-		rooms[playerX][playerY]->getSouth()->playerVisits();
-		playerY++;
+		rooms[player->getX()][player->getY()]->getSouth()->playerVisits();
+		player->setY(player->getY() + 1);
 	}
 	if (options[direction] == "west") {
-		rooms[playerX][playerY]->getWest()->playerVisits();
-		playerX--;
+		rooms[player->getX()][player->getY()]->getWest()->playerVisits();
+		player->setX(player->getX() - 1);
 	}
 }
 

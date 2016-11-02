@@ -10,7 +10,7 @@ using namespace std;
 class Dungeon
 {
 public:
-	Dungeon(int width, int length, int floors);
+	Dungeon(int width, int length, int floors, Player* p);
 	void spawnPlayer();
 	Dungeon();
 	~Dungeon();
@@ -19,6 +19,7 @@ public:
 	void tryNextFloor();
 	void tryFightingEnemy();
 	vector<Floor> floors;
+	Player* player;
 	bool finished;
 private:
 	int length;
