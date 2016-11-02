@@ -54,8 +54,8 @@ void Dungeon::play() {
 		}
 		return;
 	}
-	tryFightingEnemy();
 	tryMove();
+	//tryFightingEnemy();
 }
 
 void Dungeon::tryMove() 
@@ -116,7 +116,8 @@ void Dungeon::tryFightingEnemy()
 {
 	floors[currFloor].rooms[player->getX()][player->getY()]->AddEnemy(floors[currFloor].getPossibleEnemies());
 	if (floors[currFloor].rooms[player->getX()][player->getY()]->hasEnemy()) {
-	
+		Enemy * currentEnemy = floors[currFloor].rooms[player->getX()][player->getY()]->getEnemy();
+		cout << "Een wilde " << currentEnemy->name << " kwam tevoorschijn!" << endl;
 	}
 	/*floors[currFloor] room.addEnemy();
 	if (floors[currFloor] has enemy) {

@@ -171,6 +171,14 @@ vector<Room*> Room::getAdjacentRooms()
 	}
 	return temp;
 }
-Enemy * Room::hasEnemy() {
+bool Room::hasEnemy() {
+	if (enemy != nullptr) {
+		return true;
+	}
+	else return false;
+}
+
+Enemy * Room::getEnemy()
+{
 	return enemy;
 }

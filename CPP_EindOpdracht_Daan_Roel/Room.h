@@ -39,7 +39,8 @@ public:
 	bool searchVisited;
 	vector<Room*> getAdjacentRooms();
 	// void AddDoors(); 
-	Enemy * hasEnemy();
+	bool hasEnemy();
+	Enemy * getEnemy();
 private:
 	string type;
 
