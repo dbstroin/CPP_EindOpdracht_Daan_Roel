@@ -7,7 +7,6 @@ public:
 	Controller();
 	~Controller();
 	void StartGame();
-	bool RunGame();
 private:
 	Dungeon dungeon;
 	int AskForHeight();
