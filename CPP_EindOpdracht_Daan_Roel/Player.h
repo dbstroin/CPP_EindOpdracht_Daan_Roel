@@ -20,6 +20,12 @@ public:
 
 	int getX();
 
+	void addItem(Item*);
+
+	vector<Item*> getItems();
+
+
+
 private:
 	int x;
 	int y;
@@ -31,7 +37,7 @@ private:
 	int defense;
 	int maxHealth;
 	int currHealth;
-	vector<Item> items;
+	vector<Item*> items;
 
 };
 

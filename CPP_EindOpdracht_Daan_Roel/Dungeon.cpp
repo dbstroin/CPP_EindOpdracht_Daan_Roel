@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Dungeon.h"
+#include "Item.h"
+#include "Talisman.h"
 #include <list>
 #include <iostream>
 #include <string>
@@ -48,13 +50,23 @@ void Dungeon::play() {
 
 	tryNextFloor();
 	if (finished) {
-		for each (Floor floor in floors)
-		{
-			floor.clear();
-		}
+		for each (Floor floor in floors) floor.clear();
 		return;
 	}
+	tryItems();
 	tryMove();
+}
+
+void Dungeon::tryItems() {
+
+
+	vector<Item*> items = player->getItems();
+	if (items.size() > 0) {
+		for (int item = 0; item < items.size(); item++) {
+			items[item]->useItem();
+		}
+	}
+	
 }
 
 void Dungeon::tryMove() 

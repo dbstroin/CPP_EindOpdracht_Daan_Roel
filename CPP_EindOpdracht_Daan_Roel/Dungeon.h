@@ -4,7 +4,6 @@
 #include "Floor.h"
 #include "Room.h"
 
-
 using namespace std;
 
 class Dungeon
@@ -15,6 +14,7 @@ public:
 	Dungeon();
 	~Dungeon();
 	void play();
+	void tryItems();
 	void tryMove();
 	void tryNextFloor();
 	vector<Floor> floors;

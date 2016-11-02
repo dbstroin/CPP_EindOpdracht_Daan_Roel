@@ -11,6 +11,14 @@ Player::~Player()
 {
 }
 
+void Player::addItem(Item * i) {
+	items.push_back(i);
+}
+
+vector<Item*> Player::getItems() {
+	return items;
+}
+
 void Player::setX(int ix) {
 	x = ix;
 }
