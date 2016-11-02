@@ -17,10 +17,13 @@ void Controller::StartGame()
 	int floors = AskForFloors();
 	int height = AskForHeight();
 	int width = AskForWidth();
+	player = AskForPlayer();
 
-	dungeon = Dungeon(width, height, floors);
+	dungeon = Dungeon(width, height, floors, player);
 
 	while (!dungeon.finished) dungeon.play();
+
+	delete player;
 }
 
 //	functies die om user input vragen voor de dungeon grootte
@@ -69,4 +72,9 @@ int Controller::AskForFloors()
 		}
 	}
 	return floors;
+}
+
+Player* Controller::AskForPlayer() {
+	Player* p = new Player();
+	return p;
 }
