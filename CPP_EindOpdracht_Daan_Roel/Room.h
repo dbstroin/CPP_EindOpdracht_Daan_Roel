@@ -35,16 +35,15 @@ public:
 	void setSouth(Room * r);
 	void setSearchVisited(bool i);
 	bool setSearchVisited();
-	void AddEnemy(vector<Enemy> e);
+	void AddEnemy(vector<Enemy *> e);
 	bool searchVisited;
 	vector<Room*> getAdjacentRooms();
 	// void AddDoors(); 
+	Enemy * hasEnemy();
 private:
 	string type;
-	list<Enemy> enemies;
 
-
-	Enemy enemy;
+	Enemy * enemy;
 	Player player;
 	bool visited;
 	bool visiting;

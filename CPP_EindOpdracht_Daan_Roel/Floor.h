@@ -17,10 +17,11 @@ public:
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
+	vector<Enemy *> getPossibleEnemies();
 	~Floor();
 private:
 	Player* player;
-	vector<Enemy> possibleEnemies;
+	vector<Enemy *> possibleEnemies;
 	int level;
 	int width;
 	int length;

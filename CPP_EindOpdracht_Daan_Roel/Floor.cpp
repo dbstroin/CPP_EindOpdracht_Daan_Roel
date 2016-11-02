@@ -172,23 +172,25 @@ void Floor::createPossibleEnemies()
 	string line;
 	while (getline(file, line)) {
 		if (line.substr(0,1) == "[") {
-			Enemy newEnemy;
+			Enemy * newEnemy = new Enemy();
 
-			newEnemy.name = reader.GetName(line);
-			newEnemy.level = reader.GetLevel(line);
-			newEnemy.hitPoints = reader.GetHitpoints(line);
-			newEnemy.hitAmount = reader.GetHitRate(line);
-			newEnemy.hitChance = reader.GetHitChance(line);
-			newEnemy.minDamage = reader.GetMinDamage(line);
-			newEnemy.maxDamage = reader.GetMaxDamage(line);
-			newEnemy.blockChance = reader.GetBlockChance(line);
+			newEnemy->name = reader.GetName(line);
+			newEnemy->level = reader.GetLevel(line);
+			newEnemy->hitPoints = reader.GetHitpoints(line);
+			newEnemy->hitAmount = reader.GetHitRate(line);
+			newEnemy->hitChance = reader.GetHitChance(line);
+			newEnemy->minDamage = reader.GetMinDamage(line);
+			newEnemy->maxDamage = reader.GetMaxDamage(line);
+			newEnemy->blockChance = reader.GetBlockChance(line);
 
-			if (newEnemy.level < 0 && (level + 1) >= 5) {
+			if (newEnemy->level < 0 && (level + 1) >= 5) {
 				possibleEnemies.push_back(newEnemy);
 			}
-			else if (newEnemy.level <= level + 1 && newEnemy.level > 0) {
+			else if (newEnemy->level <= level + 1 && newEnemy->level > 0) {
 				possibleEnemies.push_back(newEnemy);
 			}
+
+			delete newEnemy;
 		}
 	}
 }
@@ -233,3 +235,6 @@ void Floor::clear() {
 	}
 }
 
+vector<Enemy *> Floor::getPossibleEnemies() {
+	return possibleEnemies;
+}

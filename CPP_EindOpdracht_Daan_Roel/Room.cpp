@@ -28,7 +28,7 @@ Room::Room(int x, int y, string t)
 
 int Room::GetCombinedHitPoints()
 {
-	int hitPoints = enemy.hitPoints;
+	int hitPoints = enemy->hitPoints;
 
 	if (hitPoints != NULL) {
 		return hitPoints;
@@ -71,7 +71,7 @@ void Room::playerLeaves()
 	visiting = false;
 }
 
-void Room::AddEnemy(vector<Enemy> e)
+void Room::AddEnemy(vector<Enemy *> e)
 {
 	bool randomSet = false;
 	int randomIndex = 0;
@@ -171,4 +171,6 @@ vector<Room*> Room::getAdjacentRooms()
 	}
 	return temp;
 }
-#pragma endregion
+Enemy * Room::hasEnemy() {
+	return enemy;
+}
