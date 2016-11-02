@@ -17,6 +17,7 @@ public:
 	void play();
 	void tryMove();
 	void tryNextFloor();
+	void tryFightingEnemy();
 	vector<Floor> floors;
 	bool finished;
 private:

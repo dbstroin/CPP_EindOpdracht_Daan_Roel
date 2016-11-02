@@ -45,6 +45,7 @@ void Dungeon::spawnPlayer() {
 void Dungeon::play() {
 	floors[currFloor].drawMap();
 
+	tryFightingEnemy();
 	tryNextFloor();
 	if (finished) {
 		for each (Floor floor in floors)
@@ -108,4 +109,12 @@ void Dungeon::tryNextFloor() {
 			}
 		}
 	}
+}
+
+void Dungeon::tryFightingEnemy()
+{
+	/*floors[currFloor] room.addEnemy();
+	if (floors[currFloor] has enemy) {
+		start fighting
+	}*/
 }

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -68,16 +70,28 @@ void Room::playerLeaves()
 {
 	visiting = false;
 }
+
 void Room::AddEnemy(vector<Enemy> e)
 {
-	// pak een RANDOM int
+	bool randomSet = false;
 	int randomIndex = 0;
-	
-	Enemy enemyToAdd = e[randomIndex];
-	//int i = 0; // voor testen
+
+	while (!randomSet) {
+		default_random_engine generator;
+		generator.seed(time(0));
+
+		uniform_int_distribution<int> distribution1(0, 99);
+		randomIndex = distribution1(generator);
+
+		if (randomIndex < 50) {
+			uniform_int_distribution<int> distribution2(0, e.size() - 1);
+			randomIndex = distribution2(generator);
+
+			enemy = e[randomIndex];
+		}
+		randomSet = true;
+	}
 }
-
-
 
 vector<string> Room::getAvailableDirections() {
 	vector<string> temp;

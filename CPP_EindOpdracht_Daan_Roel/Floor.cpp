@@ -190,7 +190,6 @@ void Floor::createPossibleEnemies()
 			}
 		}
 	}
-	rooms[0][0]->AddEnemy(possibleEnemies);
 }
 
 void Floor::depthFirstSearch(Room* startRoom) {
