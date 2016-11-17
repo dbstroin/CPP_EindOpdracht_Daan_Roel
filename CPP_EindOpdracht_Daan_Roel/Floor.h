@@ -14,6 +14,7 @@ public:
 	void drawMap();
 	void startFloor(int startx, int starty);
 	vector<string> getDirectionOptions();
+	Enemy* tryEncounterEnemy();
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
@@ -21,7 +22,7 @@ public:
 	~Floor();
 private:
 	Player* player;
-	vector<Enemy> possibleEnemies;
+	vector<Enemy*> possibleEnemies;
 	int level;
 	int width;
 	int length;

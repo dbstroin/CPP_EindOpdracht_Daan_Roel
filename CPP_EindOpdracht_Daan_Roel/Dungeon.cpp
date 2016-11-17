@@ -2,7 +2,7 @@
 #include "Dungeon.h"
 #include "Item.h"
 #include "Talisman.h"
-#include <list>
+#include "Enemy.h"
 #include <iostream>
 #include <string>
 #include <random>
@@ -34,7 +34,7 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	spawnPlayer();
 	Item* talisman = new Talisman(1);
 	talisman->setName();
-	player->addItem(talisman);
+	//player->addItem(talisman);
 }
 
 void Dungeon::spawnPlayer() {
@@ -56,8 +56,50 @@ void Dungeon::play() {
 		for each (Floor floor in floors) floor.clear();
 		return;
 	}
+	tryEncounterEnemy();
 	tryItems();
 	tryMove();
+}
+
+void Dungeon::tryEncounterEnemy() {
+	Enemy* enemy = floors[currFloor].tryEncounterEnemy();
+	if (enemy != NULL) {
+		cout << "You encountered: " << enemy->name << endl;
+		Fight(enemy);
+	}
+}
+
+void Dungeon::Fight(Enemy* enemy) {
+	if (enemy->hitPoints > 0) {
+		cout << "What would you like to do?" << endl;
+		cout << "0: Attack" << endl;
+		cout << "1: Run" << endl;
+		cout << "2: Use Item" << endl;
+
+		bool correct = false;
+		int answer;
+		while (!correct) {
+			cin.clear();
+			cin >> answer;
+			if (answer < 3 && answer >= 0) {
+				correct = true;
+			}
+		}
+		switch (answer) {
+		case 0:
+			//attack
+			break;
+		case 1:
+			cout << "You ran away safely" << endl;
+			return;
+			break;
+		case 2:
+			tryItems();
+			break;
+		}
+
+		Fight(enemy);
+	}
 }
 
 void Dungeon::tryItems() {
@@ -68,14 +110,12 @@ void Dungeon::tryItems() {
 			cout << item << ": " << items[item]->getName() << endl;	
 		}
 		cout << items.size() << ": " << "Cancel" << endl;
-		bool correct = false;
-		int answer;
-		while (!correct) {
-			cin.clear();
-			cin >> answer;
-			if (answer <= items.size() && answer >= 0) correct = true;
-		}
+
+		int answer = getAnswer(items.size() + 1);
 		if(answer != items.size()) floors[currFloor].useItem(items[answer]);
+	}
+	else {
+		cout << "You currently don't have any items" << endl;
 	}
 }
 
@@ -89,15 +129,7 @@ void Dungeon::tryMove()
 		cout << i <<": " << options[i] << endl;
 	}
 	cout << endl;
-	bool correct = false;
-	int answer;
-	while (!correct) {
-		cin.clear();
-		cin >> answer;
-		if (answer < options.size() && answer >= 0) {
-			correct = true;
-		}
-	}
+	int answer = getAnswer(options.size());
 	
 	floors[currFloor].movePlayer(answer, options);
 }
@@ -109,26 +141,31 @@ void Dungeon::tryNextFloor() {
 		cout << "1: no" << endl;
 		cout << endl;
 		bool correct = false;
-		int answer;
-		while (!correct) {
-			cin.clear();
-			cin >> answer;
-			if (answer == 0) {
-				correct = true;
-				currFloor++;
-				if (currFloor < floors.size()) {
-					spawnPlayer();
-					floors[currFloor].drawMap();
-				}
-				else {
-					cout << "You succesfully exited the dungeon, Congratulations!" << endl;
-					getchar(); getchar();
-					finished = true;
-				}
+		int answer = getAnswer(2);
+		if (answer == 0) {
+			currFloor++;
+			if (currFloor < floors.size()) {
+				spawnPlayer();
+				floors[currFloor].drawMap();
 			}
-			else if (answer == 1) {
-				correct = true;
+			else {
+				cout << "You succesfully exited the dungeon, Congratulations!" << endl;
+				getchar(); getchar();
+				finished = true;
 			}
 		}
 	}
+}
+
+int Dungeon::getAnswer(int amountOfOptions) {
+	bool correct = false;
+	int answer;
+	while (!correct) {
+		cin.clear();
+		cin >> answer;
+		if (answer < amountOfOptions && answer >= 0) {
+			correct = true;
+		}
+	}
+	return answer;
 }

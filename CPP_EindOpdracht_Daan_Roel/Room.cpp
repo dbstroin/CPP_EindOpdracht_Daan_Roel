@@ -42,7 +42,7 @@ void Room::Draw()
 		cout << 'P';
 	}
 	else if (visited == true) cout << type;
-	else cout << type;// ".";
+	else cout << ".";
 }
 
 void Room::AddToys()

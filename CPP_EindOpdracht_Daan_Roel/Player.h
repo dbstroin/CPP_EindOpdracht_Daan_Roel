@@ -12,6 +12,10 @@ public:
 	Player();
 	~Player();
 
+	void loadPlayer();
+
+	void newPlayer();
+
 	void setX(int ix);
 
 	void setY(int iy);
@@ -32,7 +36,6 @@ private:
 	string name;
 	int level;
 	int experience;
-	int hitPoints;
 	int damage;
 	int defense;
 	int maxHealth;

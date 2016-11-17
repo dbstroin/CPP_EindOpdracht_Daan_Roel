@@ -76,5 +76,11 @@ int Controller::AskForFloors()
 
 Player* Controller::AskForPlayer() {
 	Player* p = new Player();
+	cout << "Would you like to load an existing character or create a new one?" << endl;
+	cout << "0: Load character" << endl;
+	cout << "1: New character" << endl;
+	int answer = dungeon.getAnswer(2);
+	if (answer == 0) p->loadPlayer();
+	else p->newPlayer();
 	return p;
 }

@@ -14,9 +14,12 @@ public:
 	Dungeon();
 	~Dungeon();
 	void play();
+	void tryEncounterEnemy();
+	void Fight(Enemy * enemy);
 	void tryItems();
 	void tryMove();
 	void tryNextFloor();
+	int getAnswer(int amountOfOptions);
 	vector<Floor> floors;
 	Player* player;
 	bool finished;
