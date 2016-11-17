@@ -20,6 +20,7 @@ Dungeon::~Dungeon()
 
 Dungeon::Dungeon(int w, int l, int f, Player* p)
 {
+	finished = false;
 	player = p;
 	currFloor = 0;
 	width = w;
@@ -30,8 +31,10 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 		floors.push_back((*f));
 		delete f;
 	}
-	finished = false;
 	spawnPlayer();
+	Item* talisman = new Talisman(1);
+	talisman->setName();
+	player->addItem(talisman);
 }
 
 void Dungeon::spawnPlayer() {
@@ -58,15 +61,22 @@ void Dungeon::play() {
 }
 
 void Dungeon::tryItems() {
-
-
 	vector<Item*> items = player->getItems();
 	if (items.size() > 0) {
+		cout << "You can use one of the following items:" << endl;
 		for (int item = 0; item < items.size(); item++) {
-			items[item]->useItem();
+			cout << item << ": " << items[item]->getName() << endl;	
 		}
+		cout << items.size() << ": " << "Cancel" << endl;
+		bool correct = false;
+		int answer;
+		while (!correct) {
+			cin.clear();
+			cin >> answer;
+			if (answer <= items.size() && answer >= 0) correct = true;
+		}
+		if(answer != items.size()) floors[currFloor].useItem(items[answer]);
 	}
-	
 }
 
 void Dungeon::tryMove() 

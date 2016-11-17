@@ -17,6 +17,7 @@ public:
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
+	void useItem(Item * item);
 	~Floor();
 private:
 	Player* player;
@@ -30,7 +31,7 @@ private:
 	void createPossibleEnemies();
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
-	void breathFirstSearch(Room* startRoom);
+	int breadthFirstSearch(Room* startRoom);
 
 	// functie om een random dungeon te maken.
 };

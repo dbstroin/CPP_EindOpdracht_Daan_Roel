@@ -16,3 +16,8 @@ bool Talisman::useItem()
 	int i = 3;
 	return false;
 }
+
+void Talisman::setName()
+{
+	name = "Talisman";
+}

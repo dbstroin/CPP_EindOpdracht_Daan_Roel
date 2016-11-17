@@ -1,12 +1,13 @@
 #pragma once
 #include "Item.h"
 
-class Talisman : Item
+class Talisman : public Item
 {
 public:
 	Talisman();
 	~Talisman();
-	Talisman(std::string nameIn, int amountIn) : Item(nameIn, amountIn) {};
+	Talisman(int amountIn) : Item(amountIn) {};
 	bool useItem();
+	void setName();
 };
 

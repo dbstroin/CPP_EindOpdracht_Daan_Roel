@@ -129,7 +129,6 @@ void Floor::startFloor(int startx, int starty)
 	player->setY(starty);
 	rooms[startx][starty]->playerVisits();
 	createStairs(startx, starty);
-	breathFirstSearch(rooms[player->getX()][player->getY()]);
 }
 
 vector<string> Floor::getDirectionOptions()
@@ -194,6 +193,13 @@ void Floor::createPossibleEnemies()
 	rooms[0][0]->AddEnemy(possibleEnemies);
 }
 
+void Floor::useItem(Item* item) {
+	if (item->getName() == "Talisman") {
+		int a = breadthFirstSearch(rooms[player->getX()][player->getY()]);
+		cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
+	}
+}
+
 void Floor::depthFirstSearch(Room* startRoom) {
 
 }
@@ -202,12 +208,12 @@ void Floor::depthFirstSearch(Room * vertex, vector<Room*> visited)
 {
 }
 
-void Floor::breathFirstSearch(Room* startRoom) {
+int Floor::breadthFirstSearch(Room* startRoom) {
 	vector<Room*> queue;
 	vector<Room*> visited;
 
 	queue.push_back(startRoom);
-	
+	int staircaseAway = 0;
 
 	while (queue.size() > 0) {
 		Room* vertex = queue[0];
@@ -216,12 +222,19 @@ void Floor::breathFirstSearch(Room* startRoom) {
 
 		for each (Room* adjacentRoom in vertex->getAdjacentRooms())
 		{
-			if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+			if (adjacentRoom->getType() == "H") {
+				staircaseAway++;
+				return staircaseAway;
+			}
+			else {
 				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-					queue.push_back(adjacentRoom);
+					if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+						queue.push_back(adjacentRoom);
+					}
 				}
 			}
 		}
+		staircaseAway++;
 	}
 }
 

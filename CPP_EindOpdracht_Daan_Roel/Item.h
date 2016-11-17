@@ -8,9 +8,11 @@ class Item
 public:
 	Item();
 	~Item();
-	Item(string nameIn, int amountIn);
+	Item(int amountIn);
+	string getName();
 
 	virtual bool useItem();
+	virtual void setName();
 
 protected:
 	string name;
