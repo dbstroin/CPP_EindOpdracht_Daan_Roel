@@ -9,13 +9,13 @@ public:
 	Item();
 	~Item();
 	Item(int amountIn);
-	string getName();
+	string name;
+	int amount;
 
-	virtual bool useItem();
+	virtual void useItem();
 	virtual void setName();
 
 protected:
-	string name;
-	int amount;
+
 };
 

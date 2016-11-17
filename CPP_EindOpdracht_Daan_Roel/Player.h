@@ -32,6 +32,10 @@ public:
 
 	void addExperience(int amount);
 
+	void addHealth(int amount);
+
+	void deleteItem(Item * item);
+
 	vector<Item*> getItems();
 
 

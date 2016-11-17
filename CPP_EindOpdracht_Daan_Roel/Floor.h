@@ -16,10 +16,10 @@ public:
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
 	void deleteEnemy(Enemy * enemy);
+	void useTalisman();
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
-	void useItem(Item * item);
 	~Floor();
 private:
 	Player* player;
@@ -31,6 +31,7 @@ private:
 	void createRooms();
 	void createStairs(int playerx, int playery);
 	void createPossibleEnemies();
+
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
 	int breadthFirstSearch(Room* startRoom);

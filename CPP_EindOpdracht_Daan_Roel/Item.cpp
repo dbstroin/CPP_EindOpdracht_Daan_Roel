@@ -16,14 +16,9 @@ Item::Item(int amountIn)
 	amount = amountIn;
 }
 
-string Item::getName()
+void Item::useItem()
 {
-	return name;
-}
 
-bool Item::useItem()
-{
-	return false;
 }
 
 void Item::setName()

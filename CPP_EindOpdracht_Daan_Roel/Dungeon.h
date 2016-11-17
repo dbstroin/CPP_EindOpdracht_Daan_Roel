@@ -14,16 +14,19 @@ public:
 	Dungeon();
 	~Dungeon();
 	void play();
+	void tryEncounterItem();
 	void tryEncounterEnemy();
 	void Fight(Enemy * enemy);
 	void tryItems();
-	void tryMove();
+	bool tryMove();
 	void tryNextFloor();
+	void fillEncounterableItems();
 	int getAnswer(int amountOfOptions);
 	vector<Floor> floors;
 	Player* player;
 	bool finished;
 private:
+	vector<Item*> encounterableItems;
 	int length;
 	int width;
 	int layers;

@@ -2,11 +2,13 @@
 #include "Dungeon.h"
 #include "Item.h"
 #include "Talisman.h"
+#include "SmallPotion.h"
 #include "Enemy.h"
 #include <iostream>
 #include <string>
 #include <random>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
@@ -16,6 +18,7 @@ Dungeon::Dungeon()
 
 Dungeon::~Dungeon()
 {
+	
 }
 
 Dungeon::Dungeon(int w, int l, int f, Player* p)
@@ -31,11 +34,8 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 		floors.push_back((*f));
 		delete f;
 	}
+	fillEncounterableItems();
 	spawnPlayer();
-	Item* talisman = new Talisman(1);
-	talisman->setName();
-	//player->addItem(talisman);
-	delete talisman;
 }
 
 void Dungeon::spawnPlayer() {
@@ -55,17 +55,39 @@ void Dungeon::play() {
 	tryNextFloor();
 	if (finished) {
 		for each (Floor floor in floors) floor.clear();
+		for each (Item* i in encounterableItems) delete i;
 		return;
 	}
+	tryEncounterItem();
 	tryEncounterEnemy();
-	tryItems();
-	tryMove();
+	while(!tryMove());
+}
+
+
+void Dungeon::tryEncounterItem() {
+	int encounterChance = encounterableItems.size() * 2;
+	//int encounterChance = possibleEnemies.size() - 1; // = always encounter item
+
+	default_random_engine g;
+	g.seed(time(0));
+
+	uniform_int_distribution<int> distribution3(0, encounterChance);
+	int randomItem = distribution3(g);
+
+	if (randomItem < encounterableItems.size()) {
+		vector<Item*> v = player->getItems();
+		if (std::find(v.begin(), v.end(), encounterableItems[randomItem]) == v.end()) 
+		{
+			cout << "You found a " << encounterableItems[randomItem]->name << "! It was added to your inventory" << endl << endl;
+			player->addItem(encounterableItems[randomItem]);
+		}
+	}
 }
 
 void Dungeon::tryEncounterEnemy() {
 	Enemy* enemy = floors[currFloor].tryEncounterEnemy();
 	if (enemy != NULL) {
-		cout << "You encountered: " << enemy->name << endl;
+		cout << "You encountered a: " << enemy->name << endl;
 		Fight(enemy);
 	}
 	cout << endl;
@@ -119,32 +141,48 @@ void Dungeon::tryItems() {
 	if (items.size() > 0) {
 		cout << "You can use one of the following items:" << endl;
 		for (int item = 0; item < items.size(); item++) {
-			cout << item << ": " << items[item]->getName() << endl;	
+			cout << item << ": " << items[item]->name << endl;	
 		}
 		cout << items.size() << ": " << "Cancel" << endl;
 
 		int answer = getAnswer(items.size() + 1);
-		if(answer != items.size()) floors[currFloor].useItem(items[answer]);
+		if (answer != items.size()) {
+			if (items[answer]->name == "Talisman") {
+				floors[currFloor].useTalisman();
+			}
+			else if (items[answer]->name == "Small Potion") {
+				player->addHealth(10);
+				player->deleteItem(items[answer]);			
+			}
+		}
 	}
 	else {
 		cout << "You currently don't have any items" << endl;
 	}
 }
 
-void Dungeon::tryMove() 
+bool Dungeon::tryMove() 
 {
 	vector<string> options = floors[currFloor].getDirectionOptions();
-	cout << "There are " << options.size() << " available directions." << endl;
-	cout << "Choose an option below: " << endl;
-	for (int i = 0; i < options.size(); i++)
+	cout << "These are your current options, what would you like to do?" << endl;
+
+	int i = 0;
+	while (i < options.size())
 	{
-		cout << i <<": " << options[i] << endl;
+		cout << i <<": Go " << options[i] << endl;
+		i++;
 	}
-	cout << endl;
-	int answer = getAnswer(options.size());
+	cout << i << ": Use an item" << endl << endl;
+	int answer = getAnswer(options.size() + 1);
+	if (answer == i) {
+		tryItems();
+		return false;
+	}
+	else {
+		floors[currFloor].movePlayer(answer, options);
+		return true;
+	}
 	
-	floors[currFloor].movePlayer(answer, options);
-	cout << endl;
 }
 
 void Dungeon::tryNextFloor() {
@@ -171,15 +209,33 @@ void Dungeon::tryNextFloor() {
 	cout << endl;
 }
 
+void Dungeon::fillEncounterableItems() {
+	encounterableItems.push_back(new SmallPotion(1));
+	for each (Item* i in encounterableItems)
+	{
+		i->setName();
+	}
+}
+
 int Dungeon::getAnswer(int amountOfOptions) {
-	bool correct = false;
-	int answer;
-	while (!correct) {
-		cin.clear();
-		cin >> answer;
-		if (answer < amountOfOptions && answer >= 0) {
-			correct = true;
+	string line;
+	double d;
+	int answer = -1;
+	cin.ignore();
+	while (getline(std::cin, line))
+	{
+		stringstream ss(line);
+		if (ss >> d)
+		{
+			if (ss.eof())
+			{   
+				answer = std::stoi(line);
+				if (answer < amountOfOptions && answer >= 0) {
+					break;
+				}
+			}
 		}
+		cout << "invalid input, try again" << endl;
 	}
 	return answer;
 }

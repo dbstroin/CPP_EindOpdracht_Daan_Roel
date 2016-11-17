@@ -11,10 +11,9 @@ Talisman::~Talisman()
 {
 }
 
-bool Talisman::useItem()
+void Talisman::useItem()
 {
-	int i = 3;
-	return false;
+
 }
 
 void Talisman::setName()

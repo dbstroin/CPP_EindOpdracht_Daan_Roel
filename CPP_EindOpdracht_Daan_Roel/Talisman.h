@@ -7,7 +7,7 @@ public:
 	Talisman();
 	~Talisman();
 	Talisman(int amountIn) : Item(amountIn) {};
-	bool useItem();
+	void useItem();
 	void setName();
 };
 

@@ -218,11 +218,9 @@ void Floor::createPossibleEnemies()
 
 }
 
-void Floor::useItem(Item* item) {
-	if (item->getName() == "Talisman") {
+void Floor::useTalisman() {
 		int a = breadthFirstSearch(rooms[player->getX()][player->getY()]);
 		cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
-	}
 }
 
 void Floor::depthFirstSearch(Room* startRoom) {

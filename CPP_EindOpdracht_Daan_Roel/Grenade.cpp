@@ -11,6 +11,10 @@ Grenade::~Grenade()
 {
 }
 
-bool Grenade::useItem() {
-	return false;
+void Grenade::setName()
+{
+}
+
+void Grenade::useItem() {
+
 }
