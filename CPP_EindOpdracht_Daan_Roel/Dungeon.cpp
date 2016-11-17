@@ -35,6 +35,7 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	Item* talisman = new Talisman(1);
 	talisman->setName();
 	//player->addItem(talisman);
+	delete talisman;
 }
 
 void Dungeon::spawnPlayer() {
@@ -67,6 +68,7 @@ void Dungeon::tryEncounterEnemy() {
 		cout << "You encountered: " << enemy->name << endl;
 		Fight(enemy);
 	}
+	cout << endl;
 }
 
 void Dungeon::Fight(Enemy* enemy) {
@@ -86,18 +88,28 @@ void Dungeon::Fight(Enemy* enemy) {
 			}
 		}
 		switch (answer) {
-		case 0:
-			//attack
+		case 0: //Attack
+			enemy->getHit(player->getDamage());
+			if (enemy->hitPoints > 0) {
+				player->getHit(enemy->getDamage());
+			}
+			else { //Enemy Killed
+				floors[currFloor].deleteEnemy(enemy);
+				cout << "You killed the " << enemy->name << "!" << endl;
+				player->addExperience(enemy->level);
+				delete enemy;
+			}
 			break;
-		case 1:
+		case 1: //Run
 			cout << "You ran away safely" << endl;
 			return;
 			break;
-		case 2:
+		case 2: //Use Item
 			tryItems();
 			break;
 		}
 
+		cout << endl;
 		Fight(enemy);
 	}
 }
@@ -132,6 +144,7 @@ void Dungeon::tryMove()
 	int answer = getAnswer(options.size());
 	
 	floors[currFloor].movePlayer(answer, options);
+	cout << endl;
 }
 
 void Dungeon::tryNextFloor() {
@@ -155,6 +168,7 @@ void Dungeon::tryNextFloor() {
 			}
 		}
 	}
+	cout << endl;
 }
 
 int Dungeon::getAnswer(int amountOfOptions) {

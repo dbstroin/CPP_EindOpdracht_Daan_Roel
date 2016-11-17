@@ -16,6 +16,8 @@ public:
 
 	void newPlayer();
 
+	void getHit(int damage);
+
 	void setX(int ix);
 
 	void setY(int iy);
@@ -24,7 +26,11 @@ public:
 
 	int getX();
 
+	int getDamage();
+
 	void addItem(Item*);
+
+	void addExperience(int amount);
 
 	vector<Item*> getItems();
 

@@ -15,6 +15,7 @@ public:
 	void startFloor(int startx, int starty);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
+	void deleteEnemy(Enemy * enemy);
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;

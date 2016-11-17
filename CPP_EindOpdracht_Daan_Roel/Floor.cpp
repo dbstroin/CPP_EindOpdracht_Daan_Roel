@@ -8,7 +8,7 @@
 
 Floor::Floor()
 {
-	possibleEnemies.reserve(20);
+
 }
 
 Floor::~Floor()
@@ -146,12 +146,16 @@ Enemy* Floor::tryEncounterEnemy() {
 	uniform_int_distribution<int> distribution3(0, encounterChance );
 	int randomEnemy = distribution3(g);
 
-	if (randomEnemy > possibleEnemies.size() - 1) {
+	if (randomEnemy > possibleEnemies.size() - 1 || possibleEnemies.size() < 1) {
 		return NULL;
 	}
 	else {
 		return possibleEnemies[randomEnemy];
 	}
+}
+
+void Floor::deleteEnemy(Enemy* enemy) {
+	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
@@ -206,9 +210,12 @@ void Floor::createPossibleEnemies()
 			else if (newEnemy->level <= level + 1 && newEnemy->level > 0) {
 				possibleEnemies.push_back(newEnemy);
 			}
+			else {
+				delete newEnemy;
+			}
 		}
 	}
-	//rooms[0][0]->AddEnemy(possibleEnemies);
+
 }
 
 void Floor::useItem(Item* item) {
@@ -262,6 +269,10 @@ void Floor::clear() {
 		for (int lIndex = 0; lIndex < length; lIndex++) {
 			delete rooms[wIndex][lIndex];
 		}
+	}
+	for each (Enemy* enemy in possibleEnemies)
+	{
+		delete enemy;
 	}
 }
 
