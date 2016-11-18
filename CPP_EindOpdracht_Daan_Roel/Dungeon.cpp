@@ -221,7 +221,6 @@ int Dungeon::getAnswer(int amountOfOptions) {
 	string line;
 	double d;
 	int answer = -1;
-	cin.ignore();
 	while (getline(std::cin, line))
 	{
 		stringstream ss(line);
