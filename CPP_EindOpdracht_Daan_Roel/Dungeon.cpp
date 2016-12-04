@@ -6,8 +6,6 @@
 #include "Enemy.h"
 #include <iostream>
 #include <string>
-#include <random>
-#include <ctime>
 #include <sstream>
 
 using namespace std;
@@ -39,13 +37,9 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 }
 
 void Dungeon::spawnPlayer() {
-	default_random_engine generator;
-	generator.seed(time(0));
 
-	uniform_int_distribution<int> distribution1(0, width - 1);
-	int randomX = distribution1(generator);
-	uniform_int_distribution<int> distribution2(0, length - 1);
-	int randomY = distribution2(generator);
+	int randomX = getRandom(0, width - 1);
+	int randomY = (0, length - 1);
 	floors[currFloor].startFloor(randomX, randomY);
 }
 
@@ -68,11 +62,8 @@ void Dungeon::tryEncounterItem() {
 	int encounterChance = encounterableItems.size() * 2;
 	//int encounterChance = possibleEnemies.size() - 1; // = always encounter item
 
-	default_random_engine g;
-	g.seed(time(0));
+	int randomItem = getRandom(0, encounterChance);
 
-	uniform_int_distribution<int> distribution3(0, encounterChance);
-	int randomItem = distribution3(g);
 
 	if (randomItem < encounterableItems.size()) {
 		vector<Item*> v = player->getItems();

@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include <random>
-#include <ctime>
 #include <string>
 #include "FileReader.h"
 
@@ -38,11 +36,8 @@ void Player::newPlayer() {
 }
 
 void Player::getHit(int damage) {
-	default_random_engine gen;
-	gen.seed(time(0));
 
-	uniform_int_distribution<int> distribution4(0, 100);
-	int random = distribution4(gen);
+	int random = getRandom(0, 100);
 
 	if (random > defense /2 ) {
 		currHealth = currHealth - damage;

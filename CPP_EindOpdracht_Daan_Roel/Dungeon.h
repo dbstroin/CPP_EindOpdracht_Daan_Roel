@@ -3,6 +3,7 @@
 #include <list>
 #include "Floor.h"
 #include "Room.h"
+#include "Globalfunc.h"
 
 using namespace std;
 

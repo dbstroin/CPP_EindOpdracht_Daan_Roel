@@ -15,11 +15,7 @@ Enemy::~Enemy()
 }
 
 void Enemy::getHit(int damage) {
-	default_random_engine gen;
-	gen.seed(time(0));
-
-	uniform_int_distribution<int> distribution4(0, 100);
-	int random = distribution4(gen);
+	int random = getRandom(0, 100);
 
 	if (random > blockChance) {
 		hitPoints = hitPoints - damage;
@@ -31,10 +27,6 @@ void Enemy::getHit(int damage) {
 }
 
 int Enemy::getDamage() {
-	default_random_engine gene;
-	gene.seed(time(0));
-
-	uniform_int_distribution<int> distribution5(minDamage, maxDamage);
-	int damage = distribution5(gene);
+	int damage = getRandom(minDamage, maxDamage);
 	return damage;
 }

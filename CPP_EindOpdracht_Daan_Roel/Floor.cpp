@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "Floor.h"
-#include <random>
-#include <ctime>
 #include "FileReader.h"
 #include <string>
 #include <fstream>
+
 
 Floor::Floor()
 {
@@ -80,13 +79,8 @@ void Floor::createStairs(int playerx, int playery) {
 	int randomy;
 
 	while (!randomSet) {
-		default_random_engine generator;
-		generator.seed(time(0));
-
-		uniform_int_distribution<int> distribution1(0, width-1);
-		randomx =  distribution1(generator);
-		uniform_int_distribution<int> distribution2(0, length - 1);
-		randomy = distribution2(generator);
+		randomx = getRandom(0, width-1);
+		randomy = getRandom(0, length - 1);
 
 		if (randomx == playerx && randomy == playery);
 		else {
@@ -138,13 +132,9 @@ vector<string> Floor::getDirectionOptions()
 
 Enemy* Floor::tryEncounterEnemy() {
 	int encounterChance = possibleEnemies.size() * 2;
-	//int encounterChance = possibleEnemies.size() - 1;
+	//int encounterChance = possibleEnemies.size() - 1; //turn on to always encounter enemy
 
-	default_random_engine g;
-	g.seed(time(0));
-
-	uniform_int_distribution<int> distribution3(0, encounterChance );
-	int randomEnemy = distribution3(g);
+	int randomEnemy = getRandom(0, encounterChance );
 
 	if (randomEnemy > possibleEnemies.size() - 1 || possibleEnemies.size() < 1) {
 		return NULL;

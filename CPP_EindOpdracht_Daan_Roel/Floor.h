@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "Enemy.h"
 #include <vector>
+#include "Globalfunc.h"
 
 using namespace std;
 

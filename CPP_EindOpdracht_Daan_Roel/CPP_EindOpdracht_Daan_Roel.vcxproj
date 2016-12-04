@@ -151,6 +151,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="Globalfunc.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Player.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Globalfunc.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Player.cpp" />

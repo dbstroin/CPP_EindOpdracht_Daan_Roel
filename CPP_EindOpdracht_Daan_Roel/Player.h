@@ -3,6 +3,7 @@
 #include <List>
 #include "Item.h"
 #include <vector>
+#include "Globalfunc.h"
 
 using namespace std;
 
