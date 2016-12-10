@@ -7,13 +7,63 @@ Player::Player()
 {
 }
 
-
 Player::~Player()
 {
 }
 
-void Player::loadPlayer() {
+void Player::savePlayer()
+{
+	ofstream file;
+	ifstream deleteLineFile;
+	deleteLineFile.open("characters.txt");
+	file.open("temp.txt", std::ofstream::app);
 
+	std::string line;
+	while (getline(deleteLineFile, line)) {
+		if (line.find(name) != string::npos) {
+			line.replace(line.find(line), line.length(), "");
+		}
+		file << line << endl;
+	}
+
+	std::string characterSave = "[";
+
+	characterSave += name + ";";
+	characterSave += std::to_string(level) + ";";
+	characterSave += std::to_string(experience) + ";";
+	characterSave += std::to_string(damage) + ";";
+	characterSave += std::to_string(defense) + ";";
+	characterSave += std::to_string(maxHealth) + ";";
+	characterSave += std::to_string(currHealth) + "]\n";
+
+	file << characterSave;
+	deleteLineFile.close();
+	file.close();
+	remove("characters.txt");
+	rename("temp.txt", "characters.txt");
+}
+
+void Player::loadPlayer(std::string playerName) {
+	fstream file;
+	std::string path = "characters.txt";
+	FileReader reader;
+	file.open(path);
+
+	std::string line;
+	while (getline(file, line)) {
+		if (line.find(playerName) != string::npos) {
+			name = reader.getPlayerName(line);
+			level = reader.getPlayerLevel(line);
+			experience = reader.getPlayerExperience(line);
+			damage = reader.getPlayerDamage(line);
+			defense = reader.getPlayerDefense(line);
+			maxHealth = reader.getPlayerMaxHealth(line);
+			currHealth = reader.getPlayerCurrentHealth(line);
+		}
+	}
+	cout << "Loaded hero!" << endl;
+	cout << "Welcome, " << name << "!\n";
+	cout << endl;
 }
 
 void Player::newPlayer() {
@@ -21,7 +71,6 @@ void Player::newPlayer() {
 
 	cout << "Please enter the heroes name" << endl;
 	while (n == "") getline(cin, n);
-
 
 	name = n;
 	level = 1;
@@ -39,7 +88,7 @@ void Player::getHit(int damage) {
 
 	int random = getRandom(0, 100);
 
-	if (random > defense /2 ) {
+	if (random > defense / 2) {
 		currHealth = currHealth - damage;
 		cout << "You got hit for " << damage << " damage!" << endl;
 		cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
@@ -68,7 +117,7 @@ void Player::addExperience(int amount) {
 void Player::addHealth(int amount) {
 	currHealth = currHealth + amount;
 	if (currHealth > maxHealth) currHealth = maxHealth;
-	cout << "You have been healed for " << amount<< endl;
+	cout << "You have been healed for " << amount << endl;
 	cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
 }
 

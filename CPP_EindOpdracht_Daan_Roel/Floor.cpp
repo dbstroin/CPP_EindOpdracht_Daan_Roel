@@ -1,9 +1,5 @@
 #include "stdafx.h"
 #include "Floor.h"
-#include "FileReader.h"
-#include <string>
-#include <fstream>
-
 
 Floor::Floor()
 {
@@ -185,14 +181,14 @@ void Floor::createPossibleEnemies()
 		if (line.substr(0,1) == "[") {
 			Enemy* newEnemy = new Enemy();
 
-			newEnemy->name = reader.GetName(line);
-			newEnemy->level = reader.GetLevel(line);
-			newEnemy->hitPoints = reader.GetHitpoints(line);
-			newEnemy->hitAmount = reader.GetHitRate(line);
-			newEnemy->hitChance = reader.GetHitChance(line);
-			newEnemy->minDamage = reader.GetMinDamage(line);
-			newEnemy->maxDamage = reader.GetMaxDamage(line);
-			newEnemy->blockChance = reader.GetBlockChance(line);
+			newEnemy->name = reader.getName(line);
+			newEnemy->level = reader.getLevel(line);
+			newEnemy->hitPoints = reader.getHitpoints(line);
+			newEnemy->hitAmount = reader.getHitRate(line);
+			newEnemy->hitChance = reader.getHitChance(line);
+			newEnemy->minDamage = reader.getMinDamage(line);
+			newEnemy->maxDamage = reader.getMaxDamage(line);
+			newEnemy->blockChance = reader.getBlockChance(line);
 
 			if (newEnemy->level < 0 && (level + 1) >= 5) {
 				possibleEnemies.push_back(newEnemy);

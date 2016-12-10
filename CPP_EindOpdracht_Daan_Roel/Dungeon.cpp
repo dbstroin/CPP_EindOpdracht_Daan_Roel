@@ -185,6 +185,9 @@ void Dungeon::tryNextFloor() {
 		bool correct = false;
 		int answer = getAnswer(2);
 		if (answer == 0) {
+
+			player->savePlayer();
+
 			currFloor++;
 			if (currFloor < floors.size()) {
 				spawnPlayer();

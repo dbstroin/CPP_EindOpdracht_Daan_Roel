@@ -3,6 +3,9 @@
 #include "Enemy.h"
 #include <vector>
 #include "Globalfunc.h"
+#include "FileReader.h"
+#include <string>
+#include <fstream>
 
 using namespace std;
 

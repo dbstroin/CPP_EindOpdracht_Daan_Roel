@@ -80,7 +80,23 @@ Player* Controller::AskForPlayer() {
 	cout << "0: Load character" << endl;
 	cout << "1: New character" << endl;
 	int answer = dungeon.getAnswer(2);
-	if (answer == 0) p->loadPlayer();
-	else p->newPlayer();
+	if (answer == 0) {
+		cout << "Select a character (write the character's name):" << endl;
+
+		std::string input = "";
+		cin >> input;
+		p->loadPlayer(input);
+
+		if (p->getDamage() > 0) {
+			return p;
+		}
+		else {
+			cout << "Character: " << input << " does not exist, creating new character..." << endl;
+			p->newPlayer();
+		}
+	}
+	else {
+		p->newPlayer();
+	}
 	return p;
 }

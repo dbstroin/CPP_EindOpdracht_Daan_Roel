@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include <List>
+#include <fstream>
 #include "Item.h"
+#include "string"
 #include <vector>
 #include "Globalfunc.h"
 
@@ -13,7 +15,9 @@ public:
 	Player();
 	~Player();
 
-	void loadPlayer();
+	void savePlayer();
+
+	void loadPlayer(std::string playerName);
 
 	void newPlayer();
 
