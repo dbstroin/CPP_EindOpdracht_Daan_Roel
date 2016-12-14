@@ -26,8 +26,6 @@ void Controller::StartGame()
 	delete player;
 }
 
-//	functies die om user input vragen voor de dungeon grootte
-
 int Controller::AskForHeight()
 {
 	bool correct = false;
