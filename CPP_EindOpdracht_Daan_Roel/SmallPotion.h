@@ -7,7 +7,7 @@ public:
 	SmallPotion();
 	~SmallPotion();
 	SmallPotion(int amountIn) : Item(amountIn) {};
-	void useItem();
+	void useItem(Player* p);
 	void setName();
 };
 

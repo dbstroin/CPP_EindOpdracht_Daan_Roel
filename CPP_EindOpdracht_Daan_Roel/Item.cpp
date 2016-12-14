@@ -16,7 +16,7 @@ Item::Item(int amountIn)
 	amount = amountIn;
 }
 
-void Item::useItem()
+void Item::useItem(Player* p)
 {
 
 }

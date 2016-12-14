@@ -3,6 +3,10 @@
 #include "Item.h"
 #include "Talisman.h"
 #include "SmallPotion.h"
+#include "LargePotion.h"
+#include "MediumPotion.h"
+#include "AttackUp.h"
+#include "DefenseUp.h"
 #include "Enemy.h"
 #include <iostream>
 #include <string>
@@ -60,7 +64,7 @@ void Dungeon::play() {
 
 void Dungeon::tryEncounterItem() {
 	int encounterChance = encounterableItems.size() * 2;
-	//int encounterChance = possibleEnemies.size() - 1; // = always encounter item
+	//encounterChance = encounterableItems.size() - 1; // = always encounter item
 
 	int randomItem = getRandom(0, encounterChance);
 
@@ -131,13 +135,11 @@ void Dungeon::tryItems() {
 
 		int answer = getAnswer(items.size() + 1);
 		if (answer != items.size()) {
-			if (items[answer]->name == "Talisman") {
-				floors[currFloor].useTalisman();
-			}
-			else if (items[answer]->name == "Small Potion") {
-				player->addHealth(10);
-				player->deleteItem(items[answer]);			
-			}
+			//if (items[answer]->name == "Talisman") {
+			//	floors[currFloor].useTalisman();
+			//}
+			items[answer]->useItem(player);
+			player->deleteItem(items[answer]);			
 		}
 	}
 	else {
@@ -198,6 +200,10 @@ void Dungeon::tryNextFloor() {
 
 void Dungeon::fillEncounterableItems() {
 	encounterableItems.push_back(new SmallPotion(1));
+	encounterableItems.push_back(new MediumPotion(1));
+	encounterableItems.push_back(new LargePotion(1));
+	encounterableItems.push_back(new AttackUp(1));
+	encounterableItems.push_back(new DefenseUp(1));
 	for each (Item* i in encounterableItems)
 	{
 		i->setName();

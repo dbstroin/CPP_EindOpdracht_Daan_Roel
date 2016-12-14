@@ -1,7 +1,10 @@
 #pragma once
 #include <iostream>
+#include "Player.h"
 
 using namespace std;
+
+class Player;
 
 class Item
 {
@@ -12,7 +15,7 @@ public:
 	string name;
 	int amount;
 
-	virtual void useItem();
+	virtual void useItem(Player* p);
 	virtual void setName();
 
 protected:

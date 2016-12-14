@@ -145,8 +145,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttackUp.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="DefenseUp.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileReader.h" />
@@ -154,6 +156,8 @@
     <ClInclude Include="Globalfunc.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LargePotion.h" />
+    <ClInclude Include="MediumPotion.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SmallPotion.h" />
@@ -162,9 +166,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AttackUp.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="CPP_EindOpdracht_Daan_Roel.cpp" />
+    <ClCompile Include="DefenseUp.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileReader.cpp" />
@@ -172,6 +178,8 @@
     <ClCompile Include="Globalfunc.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="LargePotion.cpp" />
+    <ClCompile Include="MediumPotion.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="SmallPotion.cpp" />

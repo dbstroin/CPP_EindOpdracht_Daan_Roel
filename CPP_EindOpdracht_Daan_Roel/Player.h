@@ -9,6 +9,8 @@
 
 using namespace std;
 
+class Item;
+
 class Player
 {
 public:
@@ -38,6 +40,10 @@ public:
 	void addExperience(int amount);
 
 	void addHealth(int amount);
+
+	void addDamage(int amount);
+
+	void addDefense(int amount);
 
 	void deleteItem(Item * item);
 

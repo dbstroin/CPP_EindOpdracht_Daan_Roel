@@ -121,6 +121,20 @@ void Player::addHealth(int amount) {
 	cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
 }
 
+void Player::addDamage(int amount)
+{
+	this->damage += amount;
+	cout << "Your damage has been increased by " << amount << "!" << endl;
+	cout << "Current damage: " << damage << endl;
+}
+
+void Player::addDefense(int amount)
+{
+	this->defense += amount;
+	cout << "Your defense has been increased by " << amount << "!" << endl;
+	cout << "Current defense: " << defense << endl;
+}
+
 void Player::deleteItem(Item* i) {
 	items.erase(std::remove(items.begin(), items.end(), i), items.end());
 }

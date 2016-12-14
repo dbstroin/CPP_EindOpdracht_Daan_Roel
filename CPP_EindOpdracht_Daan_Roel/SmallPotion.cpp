@@ -11,8 +11,9 @@ SmallPotion::~SmallPotion()
 {
 }
 
-void SmallPotion::useItem()
+void SmallPotion::useItem(Player * p)
 {
+	p->addHealth(10);
 }
 
 void SmallPotion::setName()
