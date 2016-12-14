@@ -56,6 +56,7 @@ int Controller::AskForWidth()
 			correct = true;
 		}
 	}
+	cin.ignore();
 	return width;
 }
 
@@ -81,10 +82,13 @@ Player* Controller::AskForPlayer() {
 	cout << "1: New character" << endl;
 	int answer = dungeon.getAnswer(2);
 	if (answer == 0) {
-		cout << "Select a character (write the character's name):" << endl;
-
 		std::string input = "";
-		cin >> input;
+
+		while (input == "") {
+			cout << "Select a character (write the character's name):" << endl;
+			cin >> input;
+		}
+		cin.ignore();
 		p->loadPlayer(input);
 
 		if (p->getDamage() > 0) {
@@ -100,3 +104,4 @@ Player* Controller::AskForPlayer() {
 	}
 	return p;
 }
+

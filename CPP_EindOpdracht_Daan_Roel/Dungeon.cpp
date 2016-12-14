@@ -91,15 +91,8 @@ void Dungeon::Fight(Enemy* enemy) {
 		cout << "1: Run" << endl;
 		cout << "2: Use Item" << endl;
 
-		bool correct = false;
-		int answer;
-		while (!correct) {
-			cin.clear();
-			cin >> answer;
-			if (answer < 3 && answer >= 0) {
-				correct = true;
-			}
-		}
+		int answer = getAnswer(3);
+
 		switch (answer) {
 		case 0: //Attack
 			enemy->getHit(player->getDamage());
