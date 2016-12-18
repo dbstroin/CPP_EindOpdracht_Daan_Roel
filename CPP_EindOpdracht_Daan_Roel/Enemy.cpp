@@ -19,7 +19,9 @@ void Enemy::getHit(int damage) {
 
 	if (random > blockChance) {
 		hitPoints = hitPoints - damage;
+		if (hitPoints < 0) hitPoints = 0;
 		cout << "You dealt " << damage << " damage to the " << name << "!" << endl;
+		cout << "The " << name << " has " << hitPoints << " health left." << endl;
 	}
 	else {
 		cout << "the " << name << " blocked your attack!" << endl;

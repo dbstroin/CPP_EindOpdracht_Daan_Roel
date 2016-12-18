@@ -115,11 +115,8 @@ void Floor::drawMap()
 	cout << endl;
 }
 
-void Floor::startFloor(int startx, int starty)
+void Floor::setRandomStairs(int startx, int starty)
 {
-	player->setX(startx);
-	player->setY(starty);
-	rooms[startx][starty]->playerVisits();
 	if (!started) {
 		setStairsToNextFloor(startx, starty);
 		started = true;
@@ -200,7 +197,7 @@ void Floor::createPossibleEnemies()
 			newEnemy->blockChance = reader.getBlockChance(line);
 
 			if (newEnemy->level < 0 && (level + 1) >= 5) {
-				possibleEnemies.push_back(newEnemy);
+				//possibleEnemies.push_back(newEnemy);
 			}
 			else if (newEnemy->level <= level + 1 && newEnemy->level > 0) {
 				possibleEnemies.push_back(newEnemy);
@@ -210,6 +207,54 @@ void Floor::createPossibleEnemies()
 			}
 		}
 	}
+	file.close();
+}
+
+void Floor::setBossLocation() {
+	fstream file;
+	FileReader reader;
+	file.open("monsters.txt");
+
+	string line;
+	while (getline(file, line)) {
+		if (line.substr(0, 1) == "[") {
+			Enemy* newEnemy = new Enemy();
+
+			newEnemy->name = reader.getName(line);
+			newEnemy->level = reader.getLevel(line);
+			newEnemy->hitPoints = reader.getHitpoints(line);
+			newEnemy->hitAmount = reader.getHitRate(line);
+			newEnemy->hitChance = reader.getHitChance(line);
+			newEnemy->minDamage = reader.getMinDamage(line);
+			newEnemy->maxDamage = reader.getMaxDamage(line);
+			newEnemy->blockChance = reader.getBlockChance(line);
+
+			if (newEnemy->level < 0) {
+				bosses.push_back(newEnemy);
+			}
+			else {
+				delete newEnemy;
+			}
+		}
+	}
+	file.close();
+	boss = bosses[getRandom(0, bosses.size()-1)];
+
+	bool randomSet = false;
+	int randomx;
+	int randomy;
+
+	while (!randomSet) {
+		randomx = getRandom(0, width - 1);
+		randomy = getRandom(0, length - 1);
+
+		if (randomx == player->getX() && randomy == player->getY());
+		else {
+			randomSet = true;
+		}
+	}
+
+	rooms[randomx][randomy]->setType("B");
 
 }
 
@@ -263,9 +308,8 @@ void Floor::clear() {
 			delete rooms[wIndex][lIndex];
 		}
 	}
-	for each (Enemy* enemy in possibleEnemies)
-	{
-		delete enemy;
-	}
+	for each (Enemy* enemy in possibleEnemies) delete enemy;
+	for each (Enemy* b in bosses) delete b;
+	delete boss;
 }
 

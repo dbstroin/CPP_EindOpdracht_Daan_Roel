@@ -5,6 +5,7 @@
 
 Player::Player()
 {
+	maxExperience = 10;
 }
 
 Player::~Player()
@@ -88,8 +89,9 @@ void Player::getHit(int damage) {
 
 	int random = getRandom(0, 100);
 
-	if (random > defense / 2) {
+	if (random > defense) {
 		currHealth = currHealth - damage;
+		if (currHealth < 1) currHealth = 0;
 		cout << "You got hit for " << damage << " damage!" << endl;
 		cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
 	}
@@ -103,15 +105,14 @@ void Player::addItem(Item * i) {
 }
 
 void Player::addExperience(int amount) {
-	int expToNextlvl = 10;
 	experience = experience + amount;
 	cout << "Experience gained: " << amount << endl;
-	if (experience > expToNextlvl) {
-		experience = experience - expToNextlvl;
+	if (experience > maxExperience) {
+		experience = experience - maxExperience;
 		level++;
 		cout << "You leveled up! You are now level " << level << endl;
 	}
-	cout << "Current experience: " << experience << "/" << expToNextlvl << endl;
+	cout << "Current experience: " << experience << "/" << maxExperience << endl;
 }
 
 void Player::addHealth(int amount) {
@@ -161,4 +162,9 @@ int Player::getX() {
 
 int Player::getDamage() {
 	return damage;
+}
+
+int Player::getCurrHealth()
+{
+	return currHealth;
 }

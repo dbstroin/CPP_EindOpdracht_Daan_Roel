@@ -33,7 +33,21 @@ public:
 
 	int getX();
 
+	int getDefense(){ return defense; }
+
+	int getLevel() { return level; }
+
 	int getDamage();
+
+	int getCurrHealth();
+
+	int getMaxHealth() { return maxHealth; }
+
+	int getExperience() { return experience; }
+
+	int getMaxExperience() { return maxExperience; }
+
+	string getName() { return name; }
 
 	void addItem(Item*);
 
@@ -57,6 +71,7 @@ private:
 	string name;
 	int level;
 	int experience;
+	int maxExperience;
 	int damage;
 	int defense;
 	int maxHealth;

@@ -16,10 +16,12 @@ public:
 	Floor(int l, int w, int lev, Player* p);
 	void clear();
 	void drawMap();
-	void startFloor(int startx, int starty);
+	void setRandomStairs(int startx, int starty);
 	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
+	Enemy* getBoss() { return boss; }
+	void setBossLocation();
 	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
 	bool getIfOnPlayerOnStairs();
@@ -30,6 +32,8 @@ private:
 	bool started;
 	Player* player;
 	vector<Enemy*> possibleEnemies;
+	vector<Enemy*> bosses;
+	Enemy* boss;
 	int level;
 	int width;
 	int length;

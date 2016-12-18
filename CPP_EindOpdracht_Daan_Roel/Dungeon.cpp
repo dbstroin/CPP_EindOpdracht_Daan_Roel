@@ -42,8 +42,13 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 
 void Dungeon::spawnPlayer() {
 	int randomX = getRandom(0, width - 1);
-	int randomY = (0, length - 1);
-	floors[currFloor].startFloor(randomX, randomY);
+	int randomY = getRandom(0, length - 1);
+	floors[currFloor].setRandomStairs(randomX, randomY);
+	floors[currFloor].rooms[randomX][randomY]->playerVisits();
+	player->setX(randomX);
+	player->setY(randomY);
+	floors[currFloor].drawMap();
+	while (!tryBasicActions());
 }
 
 void Dungeon::play() {
@@ -58,7 +63,7 @@ void Dungeon::play() {
 	}
 	tryEncounterItem();
 	tryEncounterEnemy();
-	while(!tryMove());
+	while(!tryBasicActions());
 }
 
 
@@ -91,10 +96,16 @@ void Dungeon::tryEncounterEnemy() {
 		}
 		cout << endl;
 	}
+	if (roomType == "B") {
+		cout << "You encountered the Dungeon Boss! It's a: " << floors[currFloor].getBoss()->name << endl;
+		if (Fight(floors[currFloor].getBoss())) {
+			finishDungeon();
+		}
+	}
 }
 
-void Dungeon::Fight(Enemy* enemy) {
-	if (enemy->hitPoints > 0) {
+bool Dungeon::Fight(Enemy* enemy) {
+	while (enemy->hitPoints > 0) {
 		cout << "What would you like to do?" << endl;
 		cout << "0: Attack" << endl;
 		cout << "1: Run" << endl;
@@ -107,6 +118,7 @@ void Dungeon::Fight(Enemy* enemy) {
 			enemy->getHit(player->getDamage());
 			if (enemy->hitPoints > 0) {
 				player->getHit(enemy->getDamage());
+				if (player->getCurrHealth() < 1) playerDied();
 			}
 			else { //Enemy Killed
 				floors[currFloor].deleteEnemy(enemy);
@@ -117,7 +129,7 @@ void Dungeon::Fight(Enemy* enemy) {
 			break;
 		case 1: //Run
 			cout << "You ran away safely" << endl;
-			return;
+			return false;
 			break;
 		case 2: //Use Item
 			tryItems();
@@ -125,8 +137,8 @@ void Dungeon::Fight(Enemy* enemy) {
 		}
 
 		cout << endl;
-		Fight(enemy);
 	}
+	return true;
 }
 
 void Dungeon::tryItems() {
@@ -152,7 +164,7 @@ void Dungeon::tryItems() {
 	}
 }
 
-bool Dungeon::tryMove() 
+bool Dungeon::tryBasicActions() 
 {
 	vector<string> options = floors[currFloor].getDirectionOptions();
 	cout << "These are your current options, what would you like to do?" << endl;
@@ -163,10 +175,35 @@ bool Dungeon::tryMove()
 		cout << i <<": Go " << options[i] << endl;
 		i++;
 	}
-	cout << i << ": Use an item" << endl << endl;
-	int answer = getAnswer(options.size() + 1);
+
+	cout << i << ": Use an item" << endl;
+	cout << i + 1 << ": Show Map" << endl;
+	cout << i + 2 << ": Rest" << endl;
+	cout << i + 3 << ": Show Player stats" << endl;
+	int answer = getAnswer(options.size() + 4);
 	if (answer == i) {
 		tryItems();
+		return false;
+	}
+	else if (answer == i + 1) {
+		floors[currFloor].drawMap();
+		cout << endl;
+		return false;
+	}
+	else if (answer == i + 2) {
+		cout << "You started resting for a bit and restored some health" << endl;
+		player->addHealth(getRandom(5, 30));
+		cout << "Current Health: " << player->getCurrHealth() << "/" << player->getMaxHealth() << endl;
+		cout << endl;
+		return false;
+	}
+	else if (answer == i + 3) {
+		cout << player->getName() << " player stats:" << endl;
+		cout << "Health: " << player->getCurrHealth() << "/" << player->getMaxHealth() << endl;
+		cout << "Experience: " << player->getExperience() << "/" << player->getMaxExperience() << endl;
+		cout << "Damage: " << player->getDamage() << endl;
+		cout << "Defense: " << player->getDefense() << endl;
+		cout << endl;
 		return false;
 	}
 	else {
@@ -174,6 +211,7 @@ bool Dungeon::tryMove()
 		return true;
 	}
 	
+	cout << endl;
 }
 
 void Dungeon::tryPrevFloor() {
@@ -201,24 +239,36 @@ void Dungeon::tryNextFloor() {
 		bool correct = false;
 		int answer = getAnswer(2);
 		if (answer == 0) {
-		
+
 			currFloor++;
-			if (currFloor < floors.size()) {
-				floors[currFloor].startFloor(player->getX(), player->getY());
-				floors[currFloor].setStairsToPrevFloor(player->getX(), player->getY());
-				floors[currFloor - 1].rooms[player->getX()][player->getY()]->playerLeaves();
-				floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
-				floors[currFloor].drawMap();
+
+			if (currFloor == floors.size() - 1) {
+				floors[currFloor].setBossLocation();
 			}
 			else {
-				player->savePlayer();
-				cout << "You succesfully exited the dungeon, Congratulations!" << endl;
-				getchar(); getchar();
-				finished = true;
+				floors[currFloor].setRandomStairs(player->getX(), player->getY()); 
 			}
+			floors[currFloor].setStairsToPrevFloor(player->getX(), player->getY());
+			floors[currFloor - 1].rooms[player->getX()][player->getY()]->playerLeaves();
+			floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
+			floors[currFloor].drawMap();
 		}
 	}
 	cout << endl;
+}
+
+void Dungeon::finishDungeon() {
+	player->savePlayer();
+	cout << "You succesfully exited the dungeon, Congratulations!" << endl;
+	getchar();
+	finished = true;
+}
+
+void Dungeon::playerDied() {
+	cout << player->getName() << " died..." << endl;
+	cout << "player will be reset to before starting the dungeon" << endl;
+	getchar();
+	finished = true;
 }
 
 void Dungeon::fillEncounterableItems() {

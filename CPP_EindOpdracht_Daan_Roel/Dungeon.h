@@ -17,11 +17,13 @@ public:
 	void play();
 	void tryEncounterItem();
 	void tryEncounterEnemy();
-	void Fight(Enemy * enemy);
+	bool Fight(Enemy * enemy);
 	void tryItems();
-	bool tryMove();
+	bool tryBasicActions();
 	void tryPrevFloor();
 	void tryNextFloor();
+	void finishDungeon();
+	void playerDied();
 	void fillEncounterableItems();
 	int getAnswer(int amountOfOptions);
 	vector<Floor> floors;
