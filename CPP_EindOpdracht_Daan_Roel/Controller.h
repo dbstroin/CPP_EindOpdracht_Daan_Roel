@@ -10,10 +10,10 @@ public:
 	void StartGame();
 	Player* player;
 private:
-	Dungeon dungeon;
 	int AskForHeight();
 	int AskForWidth();
 	int AskForFloors();
 	Player* AskForPlayer();
+	int getAnswer(int amountOfOptions);
 };
 

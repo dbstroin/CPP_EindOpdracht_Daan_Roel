@@ -3,6 +3,7 @@
 #include <string>
 #include "Controller.h"
 #include "Dungeon.h"
+#include <sstream>
 
 Controller::Controller()
 {
@@ -19,7 +20,7 @@ void Controller::StartGame()
 	int width = AskForWidth();
 	player = AskForPlayer();
 
-	dungeon = Dungeon(width, height, floors, player);
+	Dungeon dungeon(width, height, floors, player);
 
 	while (!dungeon.finished) dungeon.play();
 
@@ -78,7 +79,7 @@ Player* Controller::AskForPlayer() {
 	cout << "Would you like to load an existing character or create a new one?" << endl;
 	cout << "0: Load character" << endl;
 	cout << "1: New character" << endl;
-	int answer = dungeon.getAnswer(2);
+	int answer = getAnswer(2);
 	if (answer == 0) {
 		std::string input = "";
 
@@ -103,3 +104,24 @@ Player* Controller::AskForPlayer() {
 	return p;
 }
 
+int Controller::getAnswer(int amountOfOptions) {
+	string line;
+	double d;
+	int answer = -1;
+	while (getline(std::cin, line))
+	{
+		stringstream ss(line);
+		if (ss >> d)
+		{
+			if (ss.eof())
+			{
+				answer = std::stoi(line);
+				if (answer < amountOfOptions && answer >= 0) {
+					break;
+				}
+			}
+		}
+		cout << "invalid input, try again" << endl;
+	}
+	return answer;
+}

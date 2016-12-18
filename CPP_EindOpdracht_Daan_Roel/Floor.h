@@ -17,6 +17,7 @@ public:
 	void clear();
 	void drawMap();
 	void startFloor(int startx, int starty);
+	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
 	void deleteEnemy(Enemy * enemy);
@@ -26,6 +27,7 @@ public:
 	vector <vector<Room*>> rooms;
 	~Floor();
 private:
+	bool started;
 	Player* player;
 	vector<Enemy*> possibleEnemies;
 	int level;
@@ -33,7 +35,7 @@ private:
 	int length;
 	void createEdges();
 	void createRooms();
-	void createStairs(int playerx, int playery);
+	void setStairsToNextFloor(int playerx, int playery);
 	void createPossibleEnemies();
 
 	void depthFirstSearch(Room* startRoom);

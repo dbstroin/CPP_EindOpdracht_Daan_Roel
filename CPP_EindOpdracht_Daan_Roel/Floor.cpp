@@ -16,10 +16,12 @@ Floor::Floor(int l, int w, int lev, Player* p)
 	length = l;
 	width = w;
 	level = lev;
+	started = false;
 
 	createRooms();
 	createEdges();
 	createPossibleEnemies();	
+
 }
 
 void Floor::createEdges()
@@ -69,7 +71,7 @@ void Floor::createRooms()
 	}
 }
 
-void Floor::createStairs(int playerx, int playery) {
+void Floor::setStairsToNextFloor(int playerx, int playery) {
 	bool randomSet = false;
 	int randomx;
 	int randomy;
@@ -118,7 +120,14 @@ void Floor::startFloor(int startx, int starty)
 	player->setX(startx);
 	player->setY(starty);
 	rooms[startx][starty]->playerVisits();
-	createStairs(startx, starty);
+	if (!started) {
+		setStairsToNextFloor(startx, starty);
+		started = true;
+	}
+}
+
+void Floor::setStairsToPrevFloor(int x, int y) {
+	rooms[x][y]->setType("D");
 }
 
 vector<string> Floor::getDirectionOptions()

@@ -20,6 +20,7 @@ public:
 	void Fight(Enemy * enemy);
 	void tryItems();
 	bool tryMove();
+	void tryPrevFloor();
 	void tryNextFloor();
 	void fillEncounterableItems();
 	int getAnswer(int amountOfOptions);

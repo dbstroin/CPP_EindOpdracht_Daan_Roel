@@ -41,7 +41,6 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 }
 
 void Dungeon::spawnPlayer() {
-
 	int randomX = getRandom(0, width - 1);
 	int randomY = (0, length - 1);
 	floors[currFloor].startFloor(randomX, randomY);
@@ -50,6 +49,7 @@ void Dungeon::spawnPlayer() {
 void Dungeon::play() {
 	floors[currFloor].drawMap();
 
+	tryPrevFloor();
 	tryNextFloor();
 	if (finished) {
 		for each (Floor floor in floors) floor.clear();
@@ -63,29 +63,34 @@ void Dungeon::play() {
 
 
 void Dungeon::tryEncounterItem() {
-	int encounterChance = encounterableItems.size() * 2;
-	//encounterChance = encounterableItems.size() - 1; // = always encounter item
+	string roomType = floors[currFloor].rooms[player->getX()][player->getY()]->getType();
+	if (roomType == "N") {
+		int encounterChance = encounterableItems.size() * 2;
+		//encounterChance = encounterableItems.size() - 1; // = always encounter item
 
-	int randomItem = getRandom(0, encounterChance);
+		int randomItem = getRandom(0, encounterChance);
 
-
-	if (randomItem < encounterableItems.size()) {
-		vector<Item*> v = player->getItems();
-		if (std::find(v.begin(), v.end(), encounterableItems[randomItem]) == v.end()) 
-		{
-			cout << "You found a " << encounterableItems[randomItem]->name << "! It was added to your inventory" << endl << endl;
-			player->addItem(encounterableItems[randomItem]);
+		if (randomItem < encounterableItems.size()) {
+			vector<Item*> v = player->getItems();
+			if (std::find(v.begin(), v.end(), encounterableItems[randomItem]) == v.end())
+			{
+				cout << "You found a " << encounterableItems[randomItem]->name << "! It was added to your inventory" << endl << endl;
+				player->addItem(encounterableItems[randomItem]);
+			}
 		}
 	}
 }
 
 void Dungeon::tryEncounterEnemy() {
-	Enemy* enemy = floors[currFloor].tryEncounterEnemy();
-	if (enemy != NULL) {
-		cout << "You encountered a: " << enemy->name << endl;
-		Fight(enemy);
+	string roomType = floors[currFloor].rooms[player->getX()][player->getY()]->getType();
+	if (roomType == "N") {
+		Enemy* enemy = floors[currFloor].tryEncounterEnemy();
+		if (enemy != NULL) {
+			cout << "You encountered a: " << enemy->name << endl;
+			Fight(enemy);
+		}
+		cout << endl;
 	}
-	cout << endl;
 }
 
 void Dungeon::Fight(Enemy* enemy) {
@@ -171,6 +176,22 @@ bool Dungeon::tryMove()
 	
 }
 
+void Dungeon::tryPrevFloor() {
+	if (floors[currFloor].rooms[player->getX()][player->getY()]->getType() == "D") {
+		cout << "The stairs back to the previous floor is in the current room." << endl;
+		cout << "Would you like to go back to the previous floor?" << endl;
+		cout << "0: yes" << endl;
+		cout << "1: no" << endl;
+		int answer = getAnswer(2);
+		if (answer == 0) {
+			currFloor--;
+			floors[currFloor + 1].rooms[player->getX()][player->getY()]->playerLeaves();
+			floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
+			floors[currFloor].drawMap();
+		}
+	}
+}
+
 void Dungeon::tryNextFloor() {
 	if (floors[currFloor].getIfOnPlayerOnStairs()) {
 		cout << "You have found the stairs do you want to move to the next floor? " << endl;
@@ -180,15 +201,17 @@ void Dungeon::tryNextFloor() {
 		bool correct = false;
 		int answer = getAnswer(2);
 		if (answer == 0) {
-
-			player->savePlayer();
-
+		
 			currFloor++;
 			if (currFloor < floors.size()) {
-				spawnPlayer();
+				floors[currFloor].startFloor(player->getX(), player->getY());
+				floors[currFloor].setStairsToPrevFloor(player->getX(), player->getY());
+				floors[currFloor - 1].rooms[player->getX()][player->getY()]->playerLeaves();
+				floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
 				floors[currFloor].drawMap();
 			}
 			else {
+				player->savePlayer();
 				cout << "You succesfully exited the dungeon, Congratulations!" << endl;
 				getchar(); getchar();
 				finished = true;
