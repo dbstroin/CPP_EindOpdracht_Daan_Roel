@@ -25,7 +25,6 @@ public:
 	void finishDungeon();
 	void playerDied();
 	void fillEncounterableItems();
-	int getAnswer(int amountOfOptions);
 	vector<Floor> floors;
 	Player* player;
 	bool finished;

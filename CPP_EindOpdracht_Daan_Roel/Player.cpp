@@ -93,11 +93,12 @@ void Player::getHit(int damage) {
 		currHealth = currHealth - damage;
 		if (currHealth < 1) currHealth = 0;
 		cout << "You got hit for " << damage << " damage!" << endl;
-		cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
+		
 	}
 	else {
 		cout << "You blocked the enemies attack!" << endl;
 	}
+	cout << "Current Health: " << currHealth << "/" << maxHealth << endl;
 }
 
 void Player::addItem(Item * i) {
@@ -111,6 +112,20 @@ void Player::addExperience(int amount) {
 		experience = experience - maxExperience;
 		level++;
 		cout << "You leveled up! You are now level " << level << endl;
+		cout << "You now have a skill point available what would you like to invest it in?" << endl;
+		cout << "0: damage" << endl;
+		cout << "1: defense" << endl;
+		int answer = getAnswer(2);
+		if (answer == 0) {
+			damage++;
+			cout << "Your damage has been increased!" << endl;
+			cout << "Current damage: " << damage << endl;
+		}
+		if (answer == 1) {
+			defense++;
+			cout << "Your defense has been increased!" << endl;
+			cout << "Current defense: " << defense << endl;
+		}
 	}
 	cout << "Current experience: " << experience << "/" << maxExperience << endl;
 }

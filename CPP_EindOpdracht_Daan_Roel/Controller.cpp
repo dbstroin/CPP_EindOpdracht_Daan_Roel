@@ -103,25 +103,3 @@ Player* Controller::AskForPlayer() {
 	}
 	return p;
 }
-
-int Controller::getAnswer(int amountOfOptions) {
-	string line;
-	double d;
-	int answer = -1;
-	while (getline(std::cin, line))
-	{
-		stringstream ss(line);
-		if (ss >> d)
-		{
-			if (ss.eof())
-			{
-				answer = std::stoi(line);
-				if (answer < amountOfOptions && answer >= 0) {
-					break;
-				}
-			}
-		}
-		cout << "invalid input, try again" << endl;
-	}
-	return answer;
-}

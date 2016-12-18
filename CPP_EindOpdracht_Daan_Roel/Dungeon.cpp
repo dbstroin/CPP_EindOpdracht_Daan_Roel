@@ -34,7 +34,6 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	for (int level = 0; level < layers; level++) {
 		Floor* f = new Floor(width, length, level, player);
 		floors.push_back((*f));
-		delete f;
 	}
 	fillEncounterableItems();
 	spawnPlayer();
@@ -56,13 +55,13 @@ void Dungeon::play() {
 
 	tryPrevFloor();
 	tryNextFloor();
+	tryEncounterItem();
+	tryEncounterEnemy();
 	if (finished) {
 		for each (Floor floor in floors) floor.clear();
 		for each (Item* i in encounterableItems) delete i;
 		return;
 	}
-	tryEncounterItem();
-	tryEncounterEnemy();
 	while(!tryBasicActions());
 }
 
@@ -98,14 +97,14 @@ void Dungeon::tryEncounterEnemy() {
 	}
 	if (roomType == "B") {
 		cout << "You encountered the Dungeon Boss! It's a: " << floors[currFloor].getBoss()->name << endl;
-		if (Fight(floors[currFloor].getBoss())) {
+		if (Fight(floors[currFloor].getBoss()) && player->getCurrHealth() > 0) {
 			finishDungeon();
 		}
 	}
 }
 
 bool Dungeon::Fight(Enemy* enemy) {
-	while (enemy->hitPoints > 0) {
+	while (enemy->hitPoints > 0 && player->getCurrHealth() > 0) {
 		cout << "What would you like to do?" << endl;
 		cout << "0: Attack" << endl;
 		cout << "1: Run" << endl;
@@ -118,7 +117,9 @@ bool Dungeon::Fight(Enemy* enemy) {
 			enemy->getHit(player->getDamage());
 			if (enemy->hitPoints > 0) {
 				player->getHit(enemy->getDamage());
-				if (player->getCurrHealth() < 1) playerDied();
+				if (player->getCurrHealth() < 1) {
+					playerDied();
+				}
 			}
 			else { //Enemy Killed
 				floors[currFloor].deleteEnemy(enemy);
@@ -199,6 +200,7 @@ bool Dungeon::tryBasicActions()
 	}
 	else if (answer == i + 3) {
 		cout << player->getName() << " player stats:" << endl;
+		cout << "Level: " << player->getLevel() << endl;
 		cout << "Health: " << player->getCurrHealth() << "/" << player->getMaxHealth() << endl;
 		cout << "Experience: " << player->getExperience() << "/" << player->getMaxExperience() << endl;
 		cout << "Damage: " << player->getDamage() << endl;
@@ -283,24 +285,3 @@ void Dungeon::fillEncounterableItems() {
 	}
 }
 
-int Dungeon::getAnswer(int amountOfOptions) {
-	string line;
-	double d;
-	int answer = -1;
-	while (getline(std::cin, line))
-	{
-		stringstream ss(line);
-		if (ss >> d)
-		{
-			if (ss.eof())
-			{   
-				answer = std::stoi(line);
-				if (answer < amountOfOptions && answer >= 0) {
-					break;
-				}
-			}
-		}
-		cout << "invalid input, try again" << endl;
-	}
-	return answer;
-}

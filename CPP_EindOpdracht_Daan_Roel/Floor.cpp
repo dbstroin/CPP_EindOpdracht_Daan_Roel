@@ -238,7 +238,8 @@ void Floor::setBossLocation() {
 		}
 	}
 	file.close();
-	boss = bosses[getRandom(0, bosses.size()-1)];
+	int randomBoss = getRandom(0, bosses.size() - 1);
+	boss = bosses[randomBoss];
 
 	bool randomSet = false;
 	int randomx;

@@ -14,6 +14,5 @@ private:
 	int AskForWidth();
 	int AskForFloors();
 	Player* AskForPlayer();
-	int getAnswer(int amountOfOptions);
 };
 
