@@ -181,66 +181,52 @@ void Floor::createPossibleEnemies()
 	fstream file;
 	FileReader reader;
 	file.open("monsters.txt");
+	vector<Enemy> bosses;
 
 	string line;
 	while (getline(file, line)) {
 		if (line.substr(0,1) == "[") {
-			Enemy* newEnemy = new Enemy();
+			if (reader.getLevel(line) < 0) {
+				Enemy newBoss;
 
-			newEnemy->name = reader.getName(line);
-			newEnemy->level = reader.getLevel(line);
-			newEnemy->hitPoints = reader.getHitpoints(line);
-			newEnemy->hitAmount = reader.getHitRate(line);
-			newEnemy->hitChance = reader.getHitChance(line);
-			newEnemy->minDamage = reader.getMinDamage(line);
-			newEnemy->maxDamage = reader.getMaxDamage(line);
-			newEnemy->blockChance = reader.getBlockChance(line);
+				newBoss.name = reader.getName(line);
+				newBoss.level = reader.getLevel(line);
+				newBoss.hitPoints = reader.getHitpoints(line);
+				newBoss.hitAmount = reader.getHitRate(line);
+				newBoss.hitChance = reader.getHitChance(line);
+				newBoss.minDamage = reader.getMinDamage(line);
+				newBoss.maxDamage = reader.getMaxDamage(line);
+				newBoss.blockChance = reader.getBlockChance(line);
 
-			if (newEnemy->level < 0 && (level + 1) >= 5) {
-				//possibleEnemies.push_back(newEnemy);
+				bosses.push_back(newBoss);
 			}
-			else if (newEnemy->level <= level + 1 && newEnemy->level > 0) {
+			else if (reader.getLevel(line) <= level + 1 && reader.getLevel(line) > 0) {
+				Enemy* newEnemy = new Enemy();
+
+				newEnemy->name = reader.getName(line);
+				newEnemy->level = reader.getLevel(line);
+				newEnemy->hitPoints = reader.getHitpoints(line);
+				newEnemy->hitAmount = reader.getHitRate(line);
+				newEnemy->hitChance = reader.getHitChance(line);
+				newEnemy->minDamage = reader.getMinDamage(line);
+				newEnemy->maxDamage = reader.getMaxDamage(line);
+				newEnemy->blockChance = reader.getBlockChance(line);
+
 				possibleEnemies.push_back(newEnemy);
-			}
-			else {
-				delete newEnemy;
 			}
 		}
 	}
+
+	if (bosses.size() > 0) {
+		int randomBoss = getRandom(0, bosses.size() - 1);
+		boss = new Enemy();
+		*boss = bosses[randomBoss];
+	}
+
 	file.close();
 }
 
 void Floor::setBossLocation() {
-	fstream file;
-	FileReader reader;
-	file.open("monsters.txt");
-
-	string line;
-	while (getline(file, line)) {
-		if (line.substr(0, 1) == "[") {
-			Enemy* newEnemy = new Enemy();
-
-			newEnemy->name = reader.getName(line);
-			newEnemy->level = reader.getLevel(line);
-			newEnemy->hitPoints = reader.getHitpoints(line);
-			newEnemy->hitAmount = reader.getHitRate(line);
-			newEnemy->hitChance = reader.getHitChance(line);
-			newEnemy->minDamage = reader.getMinDamage(line);
-			newEnemy->maxDamage = reader.getMaxDamage(line);
-			newEnemy->blockChance = reader.getBlockChance(line);
-
-			if (newEnemy->level < 0) {
-				bosses.push_back(newEnemy);
-			}
-			else {
-				delete newEnemy;
-			}
-		}
-	}
-	file.close();
-	int randomBoss = getRandom(0, bosses.size() - 1);
-	boss = bosses[randomBoss];
-
 	bool randomSet = false;
 	int randomx;
 	int randomy;
@@ -310,7 +296,6 @@ void Floor::clear() {
 		}
 	}
 	for each (Enemy* enemy in possibleEnemies) delete enemy;
-	for each (Enemy* b in bosses) delete b;
 	delete boss;
 }
 

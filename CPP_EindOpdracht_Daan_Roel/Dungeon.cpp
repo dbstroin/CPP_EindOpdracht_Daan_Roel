@@ -34,6 +34,7 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	for (int level = 0; level < layers; level++) {
 		Floor* f = new Floor(width, length, level, player);
 		floors.push_back((*f));
+		delete f;
 	}
 	fillEncounterableItems();
 	spawnPlayer();

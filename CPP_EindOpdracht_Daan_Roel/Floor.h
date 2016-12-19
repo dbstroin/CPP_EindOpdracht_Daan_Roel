@@ -32,7 +32,6 @@ private:
 	bool started;
 	Player* player;
 	vector<Enemy*> possibleEnemies;
-	vector<Enemy*> bosses;
 	Enemy* boss;
 	int level;
 	int width;
