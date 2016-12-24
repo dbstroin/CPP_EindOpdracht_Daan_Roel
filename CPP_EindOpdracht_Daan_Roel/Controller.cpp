@@ -3,6 +3,7 @@
 #include <string>
 #include "Controller.h"
 #include "Dungeon.h"
+#include <sstream>
 
 Controller::Controller()
 {
@@ -19,14 +20,12 @@ void Controller::StartGame()
 	int width = AskForWidth();
 	player = AskForPlayer();
 
-	dungeon = Dungeon(width, height, floors, player);
+	Dungeon dungeon(width, height, floors, player);
 
 	while (!dungeon.finished) dungeon.play();
 
 	delete player;
 }
-
-//	functies die om user input vragen voor de dungeon grootte
 
 int Controller::AskForHeight()
 {
@@ -56,6 +55,7 @@ int Controller::AskForWidth()
 			correct = true;
 		}
 	}
+	cin.ignore();
 	return width;
 }
 
@@ -76,5 +76,30 @@ int Controller::AskForFloors()
 
 Player* Controller::AskForPlayer() {
 	Player* p = new Player();
+	cout << "Would you like to load an existing character or create a new one?" << endl;
+	cout << "0: Load character" << endl;
+	cout << "1: New character" << endl;
+	int answer = getAnswer(2);
+	if (answer == 0) {
+		std::string input = "";
+
+		while (input == "") {
+			cout << "Select a character (write the character's name):" << endl;
+			cin >> input;
+		}
+		cin.ignore();
+		p->loadPlayer(input);
+
+		if (p->getDamage() > 0) {
+			return p;
+		}
+		else {
+			cout << "Character: " << input << " does not exist, creating new character..." << endl;
+			p->newPlayer();
+		}
+	}
+	else {
+		p->newPlayer();
+	}
 	return p;
 }

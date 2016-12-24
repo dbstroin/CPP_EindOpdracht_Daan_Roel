@@ -11,7 +11,17 @@ Item::~Item()
 {
 }
 
-bool Item::useItem()
+Item::Item(int amountIn)
 {
-	return false;
+	amount = amountIn;
 }
+
+void Item::useItem(Player* p)
+{
+
+}
+
+void Item::setName()
+{
+}
+

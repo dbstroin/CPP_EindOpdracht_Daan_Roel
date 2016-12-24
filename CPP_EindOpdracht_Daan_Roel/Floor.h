@@ -2,6 +2,10 @@
 #include "Room.h"
 #include "Enemy.h"
 #include <vector>
+#include "Globalfunc.h"
+#include "FileReader.h"
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -12,25 +16,34 @@ public:
 	Floor(int l, int w, int lev, Player* p);
 	void clear();
 	void drawMap();
-	void startFloor(int startx, int starty);
+	std::pair<int, int> setStairsToNextFloor(int playerx, int playery);
+	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
+	Enemy* tryEncounterEnemy();
+	Enemy* getBoss() { return boss; }
+	void setBossLocation();
+	void deleteEnemy(Enemy * enemy);
+	void useTalisman();
+	void randomizeFloor();
+	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
 	~Floor();
 private:
 	Player* player;
-	vector<Enemy> possibleEnemies;
+	vector<Enemy*> possibleEnemies;
+	Enemy* boss;
 	int level;
 	int width;
 	int length;
-	void createEdges();
 	void createRooms();
-	void createStairs(int playerx, int playery);
+
 	void createPossibleEnemies();
+
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
-	void breathFirstSearch(Room* startRoom);
+	int breadthFirstSearch(Room* startRoom);
 
 	// functie om een random dungeon te maken.
 };

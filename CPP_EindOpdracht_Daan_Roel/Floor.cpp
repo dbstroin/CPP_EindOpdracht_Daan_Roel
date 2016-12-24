@@ -1,14 +1,9 @@
 #include "stdafx.h"
 #include "Floor.h"
-#include <random>
-#include <ctime>
-#include "FileReader.h"
-#include <string>
-#include <fstream>
 
 Floor::Floor()
 {
-	possibleEnemies.reserve(20);
+
 }
 
 Floor::~Floor()
@@ -23,38 +18,9 @@ Floor::Floor(int l, int w, int lev, Player* p)
 	level = lev;
 
 	createRooms();
-	createEdges();
+	//createEdges();
 	createPossibleEnemies();	
-}
 
-void Floor::createEdges()
-{
-	//Connect rooms on ALL sides
-	for (int wIndex = 0; wIndex < width; wIndex++)
-	{
-		for (int lIndex = 0; lIndex < length; lIndex++) {
-			//East
-			if (wIndex + 1 < width) {
-
-				rooms[wIndex][lIndex]->setEast(rooms[wIndex + 1][lIndex]);
-			}
-			//West
-			if (wIndex - 1 > -1) {
-	
-				rooms[wIndex][lIndex]->setWest(rooms[wIndex - 1][lIndex]);
-			}
-			//North
-			if (lIndex - 1 > -1) {
-
-				rooms[wIndex][lIndex]->setNorth(rooms[wIndex][lIndex - 1]);
-			}
-			//South
-			if (lIndex + 1 < length) {
-
-				rooms[wIndex][lIndex]->setSouth(rooms[wIndex][lIndex + 1]);
-			}
-		}
-	}
 }
 
 void Floor::createRooms()
@@ -74,67 +40,176 @@ void Floor::createRooms()
 	}
 }
 
-void Floor::createStairs(int playerx, int playery) {
-	bool randomSet = false;
-	int randomx;
-	int randomy;
-
-	while (!randomSet) {
-		default_random_engine generator;
-		generator.seed(time(0));
-
-		uniform_int_distribution<int> distribution1(0, width-1);
-		randomx =  distribution1(generator);
-		uniform_int_distribution<int> distribution2(0, length - 1);
-		randomy = distribution2(generator);
-
-		if (randomx == playerx && randomy == playery);
-		else {
-			randomSet = true;
+void Floor::randomizeFloor() {
+	int stairsUpX = 0;
+	int stairsUpY = 0;
+	int stairsDownX = player->getX();
+	int stairsDownY = player->getY();
+	
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
+				stairsUpX = x;
+				stairsUpY = y;
+			}
+			if (rooms[x][y]->getType() == "D") {
+				stairsDownX = x;
+				stairsDownY = y;
+			}
 		}
 	}
 
-	rooms[randomx][randomy]->setType("H");
+	int roomX = stairsDownX;
+	int roomY = stairsDownY;
 
+	while (roomX != stairsUpX || roomY != stairsUpY) {
+		int random = getRandom(0, 1);
+		if (random == 0) {
+			if (stairsUpX > roomX) {
+				rooms[roomX][roomY]->setEast(rooms[roomX + 1][roomY]);
+				rooms[roomX + 1][roomY]->setWest(rooms[roomX][roomY]);
+				roomX++;
+			}
+			if (stairsUpX < roomX) {
+				rooms[roomX][roomY]->setWest(rooms[roomX - 1][roomY]);
+				rooms[roomX - 1][roomY]->setEast(rooms[roomX][roomY]);
+				roomX--;
+			}
+		}
+
+		if (random == 1) {
+			if (stairsUpY > roomY) {
+				rooms[roomX][roomY]->setSouth(rooms[roomX][roomY + 1]);
+				rooms[roomX][roomY + 1]->setNorth(rooms[roomX][roomY]);
+				roomY++;
+			}
+			if (stairsUpY < roomY) {
+				rooms[roomX][roomY]->setNorth(rooms[roomX][roomY - 1]);
+				rooms[roomX][roomY - 1]->setSouth(rooms[roomX][roomY]);
+				roomY--;
+			}
+		}
+
+		connectRandomRoom(roomX, roomY);
+	}
+
+}
+
+void Floor::connectRandomRoom(int x, int y) {
+	int randomConnects = getRandom(1, 10);
+
+	while (randomConnects > 0) {
+		int random = getRandom(0, 3);
+		switch (random) {
+		case(0) :
+			if (x < width - 1) {
+				rooms[x][y]->setEast(rooms[x + 1][y]);
+				rooms[x + 1][y]->setWest(rooms[x][y]);
+				x++;
+			}
+				break;
+		case(1) :
+			if (x > 0) {
+				rooms[x][y]->setWest(rooms[x - 1][y]);
+				rooms[x - 1][y]->setEast(rooms[x][y]);
+				x--;
+			}
+				break;
+		case(2) :
+			if (y < length - 1) {
+				rooms[x][y]->setSouth(rooms[x][y + 1]);
+				rooms[x][y + 1]->setNorth(rooms[x][y]);
+				y++;
+			}
+				break;
+		case(3) :
+			if (y > 0) {
+				rooms[x][y]->setNorth(rooms[x][y - 1]);
+				rooms[x][y - 1]->setSouth(rooms[x][y]);
+				y--;
+			}
+				break;
+		}
+		randomConnects--;
+	}
 }
 
 void Floor::drawMap()
 {
 	for (int lIndex = 0; lIndex < length; lIndex++) {
-		cout << "   ";
+		std::cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
-				cout << "| ";
+				if (rooms[wIndex][lIndex]->getNorth()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					std::cout << "| ";
+				}
+				else std::cout << "  ";
 			}
+			else std::cout << "  ";
 		}
 
-		cout << endl;
-		cout << "   ";
+		std::cout << endl;
+		std::cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			rooms[wIndex][lIndex]->Draw();
 			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
-				cout << "-";
+				if (rooms[wIndex][lIndex]->getEast()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					std::cout << "-";
+				}
+				else std::cout << " ";
 			}
+			else std::cout << " ";
 		}
-		cout << endl;
+		std::cout << endl;
 	}
-	cout << endl;
+	std::cout << endl;
 }
 
-void Floor::startFloor(int startx, int starty)
-{
-	player->setX(startx);
-	player->setY(starty);
-	rooms[startx][starty]->playerVisits();
-	createStairs(startx, starty);
-	breathFirstSearch(rooms[player->getX()][player->getY()]);
+void Floor::setStairsToPrevFloor(int x, int y) {
+	rooms[x][y]->setType("D");
+}
+
+std::pair<int, int> Floor::setStairsToNextFloor(int xNot, int yNot) {
+	bool randomSet = false;
+	int randomx;
+	int randomy;
+
+	while (!randomSet) {
+		randomx = getRandom(0, width - 1);
+		randomy = getRandom(0, length - 1);
+
+		if (randomx != xNot || randomy != yNot)	randomSet = true;
+		
+	}
+
+	rooms[randomx][randomy]->setType("H");
+	std::pair<int, int> pair(randomx, randomy);
+	return pair;
 }
 
 vector<string> Floor::getDirectionOptions()
 {
 	return rooms[player->getX()][player->getY()]->getAvailableDirections();
+}
+
+Enemy* Floor::tryEncounterEnemy() {
+	int encounterChance = possibleEnemies.size() * 2;
+	//int encounterChance = possibleEnemies.size() - 1; //turn on to always encounter enemy
+
+	int randomEnemy = getRandom(0, encounterChance );
+
+	if (randomEnemy > possibleEnemies.size() - 1 || possibleEnemies.size() < 1) {
+		return NULL;
+	}
+	else {
+		return possibleEnemies[randomEnemy];
+	}
+}
+
+void Floor::deleteEnemy(Enemy* enemy) {
+	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
@@ -168,30 +243,73 @@ void Floor::createPossibleEnemies()
 	fstream file;
 	FileReader reader;
 	file.open("monsters.txt");
+	vector<Enemy> bosses;
 
 	string line;
 	while (getline(file, line)) {
 		if (line.substr(0,1) == "[") {
-			Enemy newEnemy;
+			if (reader.getLevel(line) < 0) {
+				Enemy newBoss;
 
-			newEnemy.name = reader.GetName(line);
-			newEnemy.level = reader.GetLevel(line);
-			newEnemy.hitPoints = reader.GetHitpoints(line);
-			newEnemy.hitAmount = reader.GetHitRate(line);
-			newEnemy.hitChance = reader.GetHitChance(line);
-			newEnemy.minDamage = reader.GetMinDamage(line);
-			newEnemy.maxDamage = reader.GetMaxDamage(line);
-			newEnemy.blockChance = reader.GetBlockChance(line);
+				newBoss.name = reader.getName(line);
+				newBoss.level = reader.getLevel(line);
+				newBoss.hitPoints = reader.getHitpoints(line);
+				newBoss.hitAmount = reader.getHitRate(line);
+				newBoss.hitChance = reader.getHitChance(line);
+				newBoss.minDamage = reader.getMinDamage(line);
+				newBoss.maxDamage = reader.getMaxDamage(line);
+				newBoss.blockChance = reader.getBlockChance(line);
 
-			if (newEnemy.level < 0 && (level + 1) >= 5) {
-				possibleEnemies.push_back(newEnemy);
+				bosses.push_back(newBoss);
 			}
-			else if (newEnemy.level <= level + 1 && newEnemy.level > 0) {
+			else if (reader.getLevel(line) <= level + 1 && reader.getLevel(line) > 0) {
+				Enemy* newEnemy = new Enemy();
+
+				newEnemy->name = reader.getName(line);
+				newEnemy->level = reader.getLevel(line);
+				newEnemy->hitPoints = reader.getHitpoints(line);
+				newEnemy->hitAmount = reader.getHitRate(line);
+				newEnemy->hitChance = reader.getHitChance(line);
+				newEnemy->minDamage = reader.getMinDamage(line);
+				newEnemy->maxDamage = reader.getMaxDamage(line);
+				newEnemy->blockChance = reader.getBlockChance(line);
+
 				possibleEnemies.push_back(newEnemy);
 			}
 		}
 	}
-	rooms[0][0]->AddEnemy(possibleEnemies);
+
+	if (bosses.size() > 0) {
+		int randomBoss = getRandom(0, bosses.size() - 1);
+		boss = new Enemy();
+		*boss = bosses[randomBoss];
+	}
+
+	file.close();
+}
+
+void Floor::setBossLocation() {
+	bool randomSet = false;
+	int randomx;
+	int randomy;
+
+	while (!randomSet) {
+		randomx = getRandom(0, width - 1);
+		randomy = getRandom(0, length - 1);
+
+		if (randomx == player->getX() && randomy == player->getY());
+		else {
+			randomSet = true;
+		}
+	}
+
+	rooms[randomx][randomy]->setType("B");
+
+}
+
+void Floor::useTalisman() {
+		int a = breadthFirstSearch(rooms[player->getX()][player->getY()]);
+		cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
 }
 
 void Floor::depthFirstSearch(Room* startRoom) {
@@ -202,12 +320,12 @@ void Floor::depthFirstSearch(Room * vertex, vector<Room*> visited)
 {
 }
 
-void Floor::breathFirstSearch(Room* startRoom) {
+int Floor::breadthFirstSearch(Room* startRoom) {
 	vector<Room*> queue;
 	vector<Room*> visited;
 
 	queue.push_back(startRoom);
-	
+	int staircaseAway = 0;
 
 	while (queue.size() > 0) {
 		Room* vertex = queue[0];
@@ -216,12 +334,19 @@ void Floor::breathFirstSearch(Room* startRoom) {
 
 		for each (Room* adjacentRoom in vertex->getAdjacentRooms())
 		{
-			if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+			if (adjacentRoom->getType() == "H") {
+				staircaseAway++;
+				return staircaseAway;
+			}
+			else {
 				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-					queue.push_back(adjacentRoom);
+					if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+						queue.push_back(adjacentRoom);
+					}
 				}
 			}
 		}
+		staircaseAway++;
 	}
 }
 
@@ -232,5 +357,7 @@ void Floor::clear() {
 			delete rooms[wIndex][lIndex];
 		}
 	}
+	for each (Enemy* enemy in possibleEnemies) delete enemy;
+	delete boss;
 }
 

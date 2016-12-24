@@ -6,6 +6,7 @@ class Grenade : Item
 public:
 	Grenade();
 	~Grenade();
-	bool useItem();
+	void setName();
+	void useItem();
 private:
 };
