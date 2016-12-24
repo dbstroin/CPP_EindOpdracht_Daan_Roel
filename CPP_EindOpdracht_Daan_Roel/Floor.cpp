@@ -16,10 +16,10 @@ Floor::Floor(int l, int w, int lev, Player* p)
 	length = l;
 	width = w;
 	level = lev;
-	started = false;
 
 	createRooms();
 	createEdges();
+	//randomizeFloor();
 	createPossibleEnemies();	
 
 }
@@ -71,60 +71,87 @@ void Floor::createRooms()
 	}
 }
 
-void Floor::setStairsToNextFloor(int playerx, int playery) {
-	bool randomSet = false;
-	int randomx;
-	int randomy;
+void Floor::randomizeFloor() {
+	int removeEdges = width * length / 2;
+	for (int i = 0; i < removeEdges; i++) {
+		int randomX = getRandom(0, width-1);
+		int randomY = getRandom(0, length-1);
 
-	while (!randomSet) {
-		randomx = getRandom(0, width-1);
-		randomy = getRandom(0, length - 1);
-
-		if (randomx == playerx && randomy == playery);
-		else {
-			randomSet = true;
+		int randomSide = getRandom(0, 3);
+		if (randomSide == 0) { //North
+			if (rooms[randomX][randomY]->getNorth() != nullptr) {
+				rooms[randomX][randomY]->setNorth(nullptr);
+				rooms[randomX][randomY - 1]->setSouth(nullptr);
+			}
+		}
+		if (randomSide == 1) { //East
+			if (rooms[randomX][randomY]->getEast() != nullptr) {
+				rooms[randomX][randomY]->setEast(nullptr);
+				rooms[randomX + 1][randomY]->setWest(nullptr);
+			}
+		}
+		if (randomSide == 2) { //West
+			if (rooms[randomX][randomY]->getWest() != nullptr) {
+				rooms[randomX][randomY]->setWest(nullptr);
+				rooms[randomX - 1][randomY]->setEast(nullptr);
+			}
+		}
+		if (randomSide == 3) { //South
+			if (rooms[randomX][randomY]->getSouth() != nullptr) {
+				rooms[randomX][randomY]->setSouth(nullptr);
+				rooms[randomX][randomY + 1]->setNorth(nullptr);
+			}
 		}
 	}
-
-	rooms[randomx][randomy]->setType("H");
-
 }
 
 void Floor::drawMap()
 {
 	for (int lIndex = 0; lIndex < length; lIndex++) {
-		cout << "   ";
+		std::cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
-				cout << "| ";
+				std::cout << "| ";
 			}
+			else std::cout << "  ";
 		}
 
-		cout << endl;
-		cout << "   ";
+		std::cout << endl;
+		std::cout << "   ";
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			rooms[wIndex][lIndex]->Draw();
 			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
-				cout << "-";
+				std::cout << "-";
 			}
+			else std::cout << " ";
 		}
-		cout << endl;
+		std::cout << endl;
 	}
-	cout << endl;
-}
-
-void Floor::setRandomStairs(int startx, int starty)
-{
-	if (!started) {
-		setStairsToNextFloor(startx, starty);
-		started = true;
-	}
+	std::cout << endl;
 }
 
 void Floor::setStairsToPrevFloor(int x, int y) {
 	rooms[x][y]->setType("D");
+}
+
+std::pair<int, int> Floor::setStairsToNextFloor(int xNot, int yNot) {
+	bool randomSet = false;
+	int randomx;
+	int randomy;
+
+	while (!randomSet) {
+		randomx = getRandom(0, width - 1);
+		randomy = getRandom(0, length - 1);
+
+		if (randomx != xNot || randomy != yNot)	randomSet = true;
+		
+	}
+
+	rooms[randomx][randomy]->setType("H");
+	std::pair<int, int> pair(randomx, randomy);
+	return pair;
 }
 
 vector<string> Floor::getDirectionOptions()

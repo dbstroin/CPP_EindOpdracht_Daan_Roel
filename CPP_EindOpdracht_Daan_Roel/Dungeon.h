@@ -12,6 +12,7 @@ class Dungeon
 public:
 	Dungeon(int width, int length, int floors, Player* p);
 	void spawnPlayer();
+	void setAllStairs();
 	Dungeon();
 	~Dungeon();
 	void play();

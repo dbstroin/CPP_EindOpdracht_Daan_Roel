@@ -38,17 +38,36 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	}
 	fillEncounterableItems();
 	spawnPlayer();
+
+	
 }
 
 void Dungeon::spawnPlayer() {
 	int randomX = getRandom(0, width - 1);
 	int randomY = getRandom(0, length - 1);
-	floors[currFloor].setRandomStairs(randomX, randomY);
-	floors[currFloor].rooms[randomX][randomY]->playerVisits();
 	player->setX(randomX);
 	player->setY(randomY);
+	setAllStairs();
+	floors[currFloor].rooms[randomX][randomY]->playerVisits();
 	floors[currFloor].drawMap();
 	while (!tryBasicActions());
+}
+
+void Dungeon::setAllStairs() {
+	int prevX = player->getX();
+	int prevY = player->getY();
+	for (int i = 0; i < length; i++)
+	{
+		if (i == floors.size() - 1) {
+			floors[i].setBossLocation();
+		}
+		else {
+			std::pair<int, int> pair = floors[i].setStairsToNextFloor(prevX, prevY);
+			prevX = pair.first;
+			prevY = pair.second;
+			floors[i + 1].setStairsToPrevFloor(prevX, prevY);
+		}
+	}
 }
 
 void Dungeon::play() {
@@ -245,13 +264,6 @@ void Dungeon::tryNextFloor() {
 
 			currFloor++;
 
-			if (currFloor == floors.size() - 1) {
-				floors[currFloor].setBossLocation();
-			}
-			else {
-				floors[currFloor].setRandomStairs(player->getX(), player->getY()); 
-			}
-			floors[currFloor].setStairsToPrevFloor(player->getX(), player->getY());
 			floors[currFloor - 1].rooms[player->getX()][player->getY()]->playerLeaves();
 			floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
 			floors[currFloor].drawMap();

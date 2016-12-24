@@ -16,7 +16,7 @@ public:
 	Floor(int l, int w, int lev, Player* p);
 	void clear();
 	void drawMap();
-	void setRandomStairs(int startx, int starty);
+	std::pair<int, int> setStairsToNextFloor(int playerx, int playery);
 	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
@@ -29,7 +29,6 @@ public:
 	vector <vector<Room*>> rooms;
 	~Floor();
 private:
-	bool started;
 	Player* player;
 	vector<Enemy*> possibleEnemies;
 	Enemy* boss;
@@ -38,7 +37,7 @@ private:
 	int length;
 	void createEdges();
 	void createRooms();
-	void setStairsToNextFloor(int playerx, int playery);
+	void randomizeFloor();
 	void createPossibleEnemies();
 
 	void depthFirstSearch(Room* startRoom);
