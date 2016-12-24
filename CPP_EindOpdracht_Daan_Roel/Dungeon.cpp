@@ -32,31 +32,40 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	length = l;
 	layers = f;
 	for (int level = 0; level < layers; level++) {
-		Floor* f = new Floor(width, length, level, player);
+		Floor* f = new Floor(length, width, level, player);
 		floors.push_back((*f));
 		delete f;
 	}
 	fillEncounterableItems();
+
+	int randomX = getRandom(0, width - 1);
+	int randomY = getRandom(0, length - 1);
+	player->setX(randomX);
+	player->setY(randomY);
+	setAllStairs();
+	randomizeDungeon();
 	spawnPlayer();
 
 	
 }
 
 void Dungeon::spawnPlayer() {
-	int randomX = getRandom(0, width - 1);
-	int randomY = getRandom(0, length - 1);
-	player->setX(randomX);
-	player->setY(randomY);
-	setAllStairs();
-	floors[currFloor].rooms[randomX][randomY]->playerVisits();
+
+	floors[currFloor].rooms[player->getX()][player->getY()]->playerVisits();
 	floors[currFloor].drawMap();
 	while (!tryBasicActions());
+}
+
+void Dungeon::randomizeDungeon() {
+	for (int i = 0; i < floors.size(); i++) {
+		floors[i].randomizeFloor();
+	}
 }
 
 void Dungeon::setAllStairs() {
 	int prevX = player->getX();
 	int prevY = player->getY();
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < floors.size(); i++)
 	{
 		if (i == floors.size() - 1) {
 			floors[i].setBossLocation();

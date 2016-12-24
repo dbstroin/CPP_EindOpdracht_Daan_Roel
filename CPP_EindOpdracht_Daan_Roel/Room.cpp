@@ -38,10 +38,9 @@ int Room::GetCombinedHitPoints()
 
 void Room::Draw()
 {
-	if (visiting == true) {
-		cout << 'P';
-	}
-	else if (visited == true) cout << type;
+	if (north == nullptr && south == nullptr && east == nullptr && west == nullptr) cout << ".";
+	else if (visiting) cout << 'P';
+	else if (visited || showAllRooms) cout << type;
 	else cout << ".";
 }
 

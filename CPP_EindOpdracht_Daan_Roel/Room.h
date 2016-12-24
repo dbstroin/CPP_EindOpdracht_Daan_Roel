@@ -6,6 +6,7 @@
 #include "Player.h"
 #include <vector>
 #include <string>
+#include "Globalfunc.h"
 
 class Room
 {
@@ -35,6 +36,7 @@ public:
 	void setSouth(Room * r);
 	void setSearchVisited(bool i);
 	bool setSearchVisited();
+	bool getVisited() { return visited; }
 	void AddEnemy(vector<Enemy> e);
 	bool searchVisited;
 	vector<Room*> getAdjacentRooms();
@@ -55,9 +57,9 @@ private:
 	Room* south;
 	
 	vector<Room*> adjacentRooms;
-	// dit is voor de edges
+
 	int combinedHitPoints;
 
-	// opties
+
 };
 

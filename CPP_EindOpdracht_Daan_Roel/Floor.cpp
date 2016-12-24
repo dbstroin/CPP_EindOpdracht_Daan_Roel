@@ -18,40 +18,9 @@ Floor::Floor(int l, int w, int lev, Player* p)
 	level = lev;
 
 	createRooms();
-	createEdges();
-	//randomizeFloor();
+	//createEdges();
 	createPossibleEnemies();	
 
-}
-
-void Floor::createEdges()
-{
-	//Connect rooms on ALL sides
-	for (int wIndex = 0; wIndex < width; wIndex++)
-	{
-		for (int lIndex = 0; lIndex < length; lIndex++) {
-			//East
-			if (wIndex + 1 < width) {
-
-				rooms[wIndex][lIndex]->setEast(rooms[wIndex + 1][lIndex]);
-			}
-			//West
-			if (wIndex - 1 > -1) {
-	
-				rooms[wIndex][lIndex]->setWest(rooms[wIndex - 1][lIndex]);
-			}
-			//North
-			if (lIndex - 1 > -1) {
-
-				rooms[wIndex][lIndex]->setNorth(rooms[wIndex][lIndex - 1]);
-			}
-			//South
-			if (lIndex + 1 < length) {
-
-				rooms[wIndex][lIndex]->setSouth(rooms[wIndex][lIndex + 1]);
-			}
-		}
-	}
 }
 
 void Floor::createRooms()
@@ -72,36 +41,96 @@ void Floor::createRooms()
 }
 
 void Floor::randomizeFloor() {
-	int removeEdges = width * length / 2;
-	for (int i = 0; i < removeEdges; i++) {
-		int randomX = getRandom(0, width-1);
-		int randomY = getRandom(0, length-1);
+	int stairsUpX = 0;
+	int stairsUpY = 0;
+	int stairsDownX = player->getX();
+	int stairsDownY = player->getY();
+	
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
+				stairsUpX = x;
+				stairsUpY = y;
+			}
+			if (rooms[x][y]->getType() == "D") {
+				stairsDownX = x;
+				stairsDownY = y;
+			}
+		}
+	}
 
-		int randomSide = getRandom(0, 3);
-		if (randomSide == 0) { //North
-			if (rooms[randomX][randomY]->getNorth() != nullptr) {
-				rooms[randomX][randomY]->setNorth(nullptr);
-				rooms[randomX][randomY - 1]->setSouth(nullptr);
+	int roomX = stairsDownX;
+	int roomY = stairsDownY;
+
+	while (roomX != stairsUpX || roomY != stairsUpY) {
+		int random = getRandom(0, 1);
+		if (random == 0) {
+			if (stairsUpX > roomX) {
+				rooms[roomX][roomY]->setEast(rooms[roomX + 1][roomY]);
+				rooms[roomX + 1][roomY]->setWest(rooms[roomX][roomY]);
+				roomX++;
+			}
+			if (stairsUpX < roomX) {
+				rooms[roomX][roomY]->setWest(rooms[roomX - 1][roomY]);
+				rooms[roomX - 1][roomY]->setEast(rooms[roomX][roomY]);
+				roomX--;
 			}
 		}
-		if (randomSide == 1) { //East
-			if (rooms[randomX][randomY]->getEast() != nullptr) {
-				rooms[randomX][randomY]->setEast(nullptr);
-				rooms[randomX + 1][randomY]->setWest(nullptr);
+
+		if (random == 1) {
+			if (stairsUpY > roomY) {
+				rooms[roomX][roomY]->setSouth(rooms[roomX][roomY + 1]);
+				rooms[roomX][roomY + 1]->setNorth(rooms[roomX][roomY]);
+				roomY++;
+			}
+			if (stairsUpY < roomY) {
+				rooms[roomX][roomY]->setNorth(rooms[roomX][roomY - 1]);
+				rooms[roomX][roomY - 1]->setSouth(rooms[roomX][roomY]);
+				roomY--;
 			}
 		}
-		if (randomSide == 2) { //West
-			if (rooms[randomX][randomY]->getWest() != nullptr) {
-				rooms[randomX][randomY]->setWest(nullptr);
-				rooms[randomX - 1][randomY]->setEast(nullptr);
+
+		connectRandomRoom(roomX, roomY);
+	}
+
+}
+
+void Floor::connectRandomRoom(int x, int y) {
+	int randomConnects = getRandom(1, 10);
+
+	while (randomConnects > 0) {
+		int random = getRandom(0, 3);
+		switch (random) {
+		case(0) :
+			if (x < width - 1) {
+				rooms[x][y]->setEast(rooms[x + 1][y]);
+				rooms[x + 1][y]->setWest(rooms[x][y]);
+				x++;
 			}
-		}
-		if (randomSide == 3) { //South
-			if (rooms[randomX][randomY]->getSouth() != nullptr) {
-				rooms[randomX][randomY]->setSouth(nullptr);
-				rooms[randomX][randomY + 1]->setNorth(nullptr);
+				break;
+		case(1) :
+			if (x > 0) {
+				rooms[x][y]->setWest(rooms[x - 1][y]);
+				rooms[x - 1][y]->setEast(rooms[x][y]);
+				x--;
 			}
+				break;
+		case(2) :
+			if (y < length - 1) {
+				rooms[x][y]->setSouth(rooms[x][y + 1]);
+				rooms[x][y + 1]->setNorth(rooms[x][y]);
+				y++;
+			}
+				break;
+		case(3) :
+			if (y > 0) {
+				rooms[x][y]->setNorth(rooms[x][y - 1]);
+				rooms[x][y - 1]->setSouth(rooms[x][y]);
+				y--;
+			}
+				break;
 		}
+		randomConnects--;
 	}
 }
 
@@ -112,7 +141,10 @@ void Floor::drawMap()
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
-				std::cout << "| ";
+				if (rooms[wIndex][lIndex]->getNorth()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					std::cout << "| ";
+				}
+				else std::cout << "  ";
 			}
 			else std::cout << "  ";
 		}
@@ -123,7 +155,10 @@ void Floor::drawMap()
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			rooms[wIndex][lIndex]->Draw();
 			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
-				std::cout << "-";
+				if (rooms[wIndex][lIndex]->getEast()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					std::cout << "-";
+				}
+				else std::cout << " ";
 			}
 			else std::cout << " ";
 		}

@@ -24,6 +24,8 @@ public:
 	void setBossLocation();
 	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
+	void randomizeFloor();
+	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
@@ -35,9 +37,8 @@ private:
 	int level;
 	int width;
 	int length;
-	void createEdges();
 	void createRooms();
-	void randomizeFloor();
+
 	void createPossibleEnemies();
 
 	void depthFirstSearch(Room* startRoom);
