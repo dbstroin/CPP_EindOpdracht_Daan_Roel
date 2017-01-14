@@ -331,33 +331,47 @@ void Floor::depthFirstSearch(Room * vertex, vector<Room*> visited)
 }
 
 int Floor::breadthFirstSearch(Room* startRoom, int currentDistance) {
-	startRoom->setSearchVisited(true);
-	vector<Room*> adjacentRooms = startRoom->getAdjacentRooms();
+	int counter = 0;
 
-	int shortestPath = -1;
+	std::queue<Room *> frontier;
+	frontier.push(startRoom);
 
-	for (int i = 0; i < adjacentRooms.size(); i++)
-	{
-		if (adjacentRooms[i]->getSearchVisited() == false) {
-			int pathLength = breadthFirstSearch(adjacentRooms[i], currentDistance);
+	//startRoom->previousRoom = startRoom;
+	std::unordered_map<Room *, Room*> came_from;
+	came_from[startRoom] = startRoom;
 
-			if (i == 0) {
-				shortestPath = pathLength;
-			}
-			else if (pathLength < shortestPath) {
-				shortestPath = pathLength;
+	while (!frontier.empty()) {
+		Room* current = frontier.front();
+		frontier.pop();
+
+		for (auto next : current->getAdjacentRooms()) {
+			if (!came_from.count(next)) {
+				came_from[next] = current;
+				frontier.push(next);
 			}
 		}
 	}
 
-
-	if (adjacentRooms.size() == 0) {
-		return -1;
+	Room* currentRoom = startRoom;
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
+				currentRoom = rooms[x][y];
+			}
+		}
 	}
 
+	while (true) {
+		if (startRoom == currentRoom) {
+			break;
+		}
+		else {
+			currentRoom = came_from[currentRoom];
+			counter++;
+		}
+	}
 
-	return currentDistance + shortestPath;
-
+	return counter;
 	//vector<Room*> queue;
 	//vector<Room*> visited;
 
