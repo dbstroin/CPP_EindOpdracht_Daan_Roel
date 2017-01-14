@@ -134,9 +134,11 @@ void Room::setSearchVisited(bool i) {
 	searchVisited = i;
 }
 
-bool Room::setSearchVisited() {
+bool Room::getSearchVisited() {
 	return searchVisited;
 }
+
+
 
 vector<Room*> Room::getAdjacentRooms()
 {

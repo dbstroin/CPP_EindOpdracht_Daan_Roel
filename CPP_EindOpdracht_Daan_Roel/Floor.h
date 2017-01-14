@@ -24,6 +24,7 @@ public:
 	void setBossLocation();
 	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
+	void resetSearchVisitedRooms();
 	void randomizeFloor();
 	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();
@@ -43,7 +44,7 @@ private:
 
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
-	int breadthFirstSearch(Room* startRoom);
+	int breadthFirstSearch(Room * startRoom, int currentDistance);
 
 	// functie om een random dungeon te maken.
 };

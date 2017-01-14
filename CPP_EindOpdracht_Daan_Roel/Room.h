@@ -35,7 +35,7 @@ public:
 	Room * getSouth();
 	void setSouth(Room * r);
 	void setSearchVisited(bool i);
-	bool setSearchVisited();
+	bool getSearchVisited();
 	bool getVisited() { return visited; }
 	void AddEnemy(vector<Enemy> e);
 	bool searchVisited;

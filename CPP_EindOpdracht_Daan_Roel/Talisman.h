@@ -7,7 +7,7 @@ public:
 	Talisman();
 	~Talisman();
 	Talisman(int amountIn) : Item(amountIn) {};
-	void useItem();
+	void useItem(Player* p);
 	void setName();
 };
 

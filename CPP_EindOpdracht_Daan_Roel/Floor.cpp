@@ -308,8 +308,18 @@ void Floor::setBossLocation() {
 }
 
 void Floor::useTalisman() {
-		int a = breadthFirstSearch(rooms[player->getX()][player->getY()]);
+		int a = breadthFirstSearch(rooms[player->getX()][player->getY()], 0);
+		resetSearchVisitedRooms();
 		cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
+}
+
+void Floor::resetSearchVisitedRooms() {
+	for (int x = 0; x < width; x++)
+	{
+		for (int y = 0; y < length; y++) {
+			rooms[x][y]->setSearchVisited(false);
+		}
+	}
 }
 
 void Floor::depthFirstSearch(Room* startRoom) {
@@ -320,34 +330,61 @@ void Floor::depthFirstSearch(Room * vertex, vector<Room*> visited)
 {
 }
 
-int Floor::breadthFirstSearch(Room* startRoom) {
-	vector<Room*> queue;
-	vector<Room*> visited;
+int Floor::breadthFirstSearch(Room* startRoom, int currentDistance) {
+	startRoom->setSearchVisited(true);
+	vector<Room*> adjacentRooms = startRoom->getAdjacentRooms();
 
-	queue.push_back(startRoom);
-	int staircaseAway = 0;
+	int shortestPath = -1;
 
-	while (queue.size() > 0) {
-		Room* vertex = queue[0];
-		visited.push_back(vertex);
-		queue.erase(std::remove(queue.begin(), queue.end(), vertex), queue.end());
+	for (int i = 0; i < adjacentRooms.size(); i++)
+	{
+		if (adjacentRooms[i]->getSearchVisited() == false) {
+			int pathLength = breadthFirstSearch(adjacentRooms[i], currentDistance);
 
-		for each (Room* adjacentRoom in vertex->getAdjacentRooms())
-		{
-			if (adjacentRoom->getType() == "H") {
-				staircaseAway++;
-				return staircaseAway;
+			if (i == 0) {
+				shortestPath = pathLength;
 			}
-			else {
-				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-					if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-						queue.push_back(adjacentRoom);
-					}
-				}
+			else if (pathLength < shortestPath) {
+				shortestPath = pathLength;
 			}
 		}
-		staircaseAway++;
 	}
+
+
+	if (adjacentRooms.size() == 0) {
+		return -1;
+	}
+
+
+	return currentDistance + shortestPath;
+
+	//vector<Room*> queue;
+	//vector<Room*> visited;
+
+	//queue.push_back(startRoom);
+	//int staircaseAway = 0;
+
+	//while (queue.size() > 0) {
+	//	Room* vertex = queue[0];
+	//	visited.push_back(vertex);
+	//	queue.erase(std::remove(queue.begin(), queue.end(), vertex), queue.end());
+
+	//	for each (Room* adjacentRoom in vertex->getAdjacentRooms())
+	//	{
+	//		if (adjacentRoom->getType() == "H") {
+	//			staircaseAway++;
+	//			return staircaseAway;
+	//		}
+	//		else {
+	//			if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+	//				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
+	//					queue.push_back(adjacentRoom);
+	//				}
+	//			}
+	//		}
+	//	}
+	//	staircaseAway++;
+	//}
 }
 
 void Floor::clear() {

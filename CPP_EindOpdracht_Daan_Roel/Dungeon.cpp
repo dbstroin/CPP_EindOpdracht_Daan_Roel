@@ -40,6 +40,9 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 
 	int randomX = getRandom(0, width - 1);
 	int randomY = getRandom(0, length - 1);
+	Talisman* t = new Talisman();
+	t->setName();
+	player->addItem(t);
 	player->setX(randomX);
 	player->setY(randomY);
 	setAllStairs();
@@ -182,11 +185,13 @@ void Dungeon::tryItems() {
 
 		int answer = getAnswer(items.size() + 1);
 		if (answer != items.size()) {
-			//if (items[answer]->name == "Talisman") {
-			//	floors[currFloor].useTalisman();
-			//}
-			items[answer]->useItem(player);
-			player->deleteItem(items[answer]);			
+			if (items[answer]->name == "Talisman") {
+				floors[currFloor].useTalisman();
+			}
+			else {
+				items[answer]->useItem(player);
+				player->deleteItem(items[answer]);
+			}
 		}
 	}
 	else {
