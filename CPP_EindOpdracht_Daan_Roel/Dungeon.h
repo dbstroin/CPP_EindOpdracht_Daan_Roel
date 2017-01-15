@@ -4,6 +4,7 @@
 #include "Floor.h"
 #include "Room.h"
 #include "Globalfunc.h"
+#include "Talisman.h"
 
 using namespace std;
 
@@ -36,5 +37,6 @@ private:
 	int width;
 	int layers;
 	int currFloor;
+	Talisman* t;
 };
 

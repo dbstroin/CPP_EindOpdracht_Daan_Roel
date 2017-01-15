@@ -40,7 +40,7 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 
 	int randomX = getRandom(0, width - 1);
 	int randomY = getRandom(0, length - 1);
-	Talisman* t = new Talisman();
+	t = new Talisman();
 	t->setName();
 	player->addItem(t);
 	player->setX(randomX);
@@ -92,6 +92,7 @@ void Dungeon::play() {
 	if (finished) {
 		for each (Floor floor in floors) floor.clear();
 		for each (Item* i in encounterableItems) delete i;
+		delete t;
 		return;
 	}
 	while(!tryBasicActions());
@@ -128,8 +129,8 @@ void Dungeon::tryEncounterEnemy() {
 		cout << endl;
 	}
 	if (roomType == "B") {
-		cout << "You encountered the Dungeon Boss! It's a: " << floors[currFloor].getBoss()->name << endl;
-		if (Fight(floors[currFloor].getBoss()) && player->getCurrHealth() > 0) {
+		cout << "You encountered the Dungeon Boss! It's a: " << floors[currFloor].getBoss().name << endl;
+		if (Fight(&floors[currFloor].getBoss()) && player->getCurrHealth() > 0) {
 			finishDungeon();
 		}
 	}
@@ -154,10 +155,11 @@ bool Dungeon::Fight(Enemy* enemy) {
 				}
 			}
 			else { //Enemy Killed
-				floors[currFloor].deleteEnemy(enemy);
 				cout << "You killed the " << enemy->name << "!" << endl;
 				player->addExperience(enemy->level);
-				delete enemy;
+				if (enemy->level != -1) {
+					floors[currFloor].deleteEnemy(enemy);
+				}
 			}
 			break;
 		case 1: //Run

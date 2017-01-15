@@ -106,6 +106,7 @@ void Player::addItem(Item * i) {
 }
 
 void Player::addExperience(int amount) {
+	if (amount < 0) amount = 5;
 	experience = experience + amount;
 	cout << "Experience gained: " << amount << endl;
 	if (experience > maxExperience) {

@@ -210,6 +210,7 @@ Enemy* Floor::tryEncounterEnemy() {
 
 void Floor::deleteEnemy(Enemy* enemy) {
 	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
+	delete enemy;
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
@@ -281,8 +282,7 @@ void Floor::createPossibleEnemies()
 
 	if (bosses.size() > 0) {
 		int randomBoss = getRandom(0, bosses.size() - 1);
-		boss = new Enemy();
-		*boss = bosses[randomBoss];
+		boss = bosses[randomBoss];
 	}
 
 	file.close();
@@ -409,6 +409,6 @@ void Floor::clear() {
 		}
 	}
 	for each (Enemy* enemy in possibleEnemies) delete enemy;
-	delete boss;
+//	delete boss;
 }
 

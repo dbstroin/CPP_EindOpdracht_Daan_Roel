@@ -22,7 +22,7 @@ public:
 	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
-	Enemy* getBoss() { return boss; }
+	Enemy getBoss() { return boss; }
 	void setBossLocation();
 	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
@@ -36,7 +36,7 @@ public:
 private:
 	Player* player;
 	vector<Enemy*> possibleEnemies;
-	Enemy* boss;
+	Enemy boss;
 	int level;
 	int width;
 	int length;
