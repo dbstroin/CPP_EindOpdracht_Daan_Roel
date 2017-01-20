@@ -40,11 +40,13 @@ public:
 	void AddEnemy(vector<Enemy> e);
 	bool searchVisited;
 	vector<Room*> getAdjacentRooms();
+	string getBeschrijving() { return beschrijving; }
+	void setRandomBeschrijving();
 	// void AddDoors(); 
 private:
 	string type;
 	list<Enemy> enemies;
-
+	string beschrijving;
 
 	Enemy enemy;
 	Player player;

@@ -33,6 +33,7 @@ void Floor::createRooms()
 		temp.reserve(length);
 		for (int lIndex = 0; lIndex < length; lIndex++) {
 			Room* r = new Room(wIndex, lIndex, "N");
+			r->setRandomBeschrijving();
 			temp.push_back(r);
 		}
 

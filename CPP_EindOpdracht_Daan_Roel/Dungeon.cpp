@@ -203,6 +203,8 @@ void Dungeon::tryItems() {
 
 bool Dungeon::tryBasicActions() 
 {
+	cout << floors[currFloor].rooms[player->getX()][player->getY()]->getBeschrijving() << endl;
+	cout << endl;
 	vector<string> options = floors[currFloor].getDirectionOptions();
 	cout << "These are your current options, what would you like to do?" << endl;
 

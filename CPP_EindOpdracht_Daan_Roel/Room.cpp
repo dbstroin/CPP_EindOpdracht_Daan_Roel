@@ -158,4 +158,23 @@ vector<Room*> Room::getAdjacentRooms()
 	}
 	return temp;
 }
+void Room::setRandomBeschrijving()
+{
+	beschrijving = "Beschrijving: ";
+	int random = getRandom(0, 3);
+	switch (random) {
+	case 0: 
+		beschrijving += "In de hoek van de kamer staat een stoel waarop een skelet zit dat niet beweegt.";
+		break;
+	case 1:
+		beschrijving += "Aan het plafond hangt een knipperende lamp waardoor het moeilijk is om rond te kijken.";
+		break;
+	case 2:
+		beschrijving += "Op de vloer bevindt zich een grote hoeveelheid mos. Er is hier waarschijnlijk lang niemand meer geweest.";
+		break;
+	case 3:
+		beschrijving += "Aan de Oostelijke muur zie je een raam naar buiten. Maar het lijkt niet dat hier iets of iemand doorheen past.";
+		break;
+	}
+}
 #pragma endregion
