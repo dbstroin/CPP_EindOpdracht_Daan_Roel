@@ -244,7 +244,14 @@ void Floor::createPossibleEnemies()
 {
 	fstream file;
 	FileReader reader;
-	file.open("monsters.txt");
+	try {
+		file.open("monsters.txt");
+	}
+	catch (exception ex) {
+		// Als het bestand niet kan worden gevonden kan de speler geen vijanden tegenkomen. Er kan nog wel gespeeld worden.
+		std::cout << "There was an error with opening the file 'monsters.txt'. No monsters can be encountered." << std::endl;
+		return;
+	}
 	vector<Enemy> bosses;
 
 	string line;

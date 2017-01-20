@@ -16,7 +16,14 @@ void Player::savePlayer()
 {
 	ofstream file;
 	ifstream deleteLineFile;
-	deleteLineFile.open("characters.txt");
+
+	try {
+		deleteLineFile.open("characters.txt");
+	}
+	catch (exception ex) {
+		std::cout << "There went something wrong with saving the character. Character could not be saved." << std::endl;
+	}
+
 	file.open("temp.txt", std::ofstream::app);
 
 	std::string line;
@@ -40,7 +47,12 @@ void Player::savePlayer()
 	file << characterSave;
 	deleteLineFile.close();
 	file.close();
-	remove("characters.txt");
+	try {
+		remove("characters.txt");
+	}
+	catch (exception ex) {
+		// als characters.txt verwijderen niet lukt zal het waarschijnlijk in gebruik zijn of niet bestaan. Er hoeft niets te gebeuren.
+	}
 	rename("temp.txt", "characters.txt");
 }
 
@@ -48,7 +60,12 @@ void Player::loadPlayer(std::string playerName) {
 	fstream file;
 	std::string path = "characters.txt";
 	FileReader reader;
-	file.open(path);
+	try {
+		file.open(path);
+	}
+	catch (exception ex) {
+		std::cout << "There was an error with loading 'characters.txt'. It's not possible to load characters." << std::endl;
+	}
 
 	std::string line;
 	while (getline(file, line)) {
