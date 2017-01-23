@@ -48,7 +48,6 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	setAllStairs();
 	randomizeDungeon();
 	spawnPlayer();
-
 	
 }
 
@@ -121,8 +120,9 @@ void Dungeon::tryEncounterItem() {
 void Dungeon::tryEncounterEnemy() {
 	string roomType = floors[currFloor].rooms[player->getX()][player->getY()]->getType();
 	if (roomType == "N") {
-		Enemy* enemy = floors[currFloor].tryEncounterEnemy();
-		if (enemy != NULL) {
+		//Enemy* enemy = floors[currFloor].tryEncounterEnemy();
+		Enemy* enemy = floors[currFloor].getEnemy(player->getX(), player->getY());
+		if (enemy != nullptr) {
 			cout << "You encountered a: " << enemy->name << endl;
 			Fight(enemy);
 		}
@@ -158,7 +158,7 @@ bool Dungeon::Fight(Enemy* enemy) {
 				cout << "You killed the " << enemy->name << "!" << endl;
 				player->addExperience(enemy->level);
 				if (enemy->level != -1) {
-					floors[currFloor].deleteEnemy(enemy);
+					floors[currFloor].deleteEnemy(enemy, player->getX(), player->getY());
 				}
 			}
 			break;

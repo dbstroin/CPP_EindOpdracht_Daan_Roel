@@ -94,6 +94,7 @@ void Floor::randomizeFloor() {
 		connectRandomRoom(roomX, roomY);
 	}
 
+	setEnemyLocations();
 }
 
 void Floor::connectRandomRoom(int x, int y) {
@@ -209,9 +210,15 @@ Enemy* Floor::tryEncounterEnemy() {
 	}
 }
 
-void Floor::deleteEnemy(Enemy* enemy) {
+Enemy* Floor::getEnemy(int x, int y) {
+	return rooms[x][y]->getEnemy();
+}
+
+void Floor::deleteEnemy(Enemy* enemy, int x , int y) {
 	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
 	delete enemy;
+	rooms[x][y]->setEnemy(nullptr);
+
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
@@ -296,6 +303,24 @@ void Floor::createPossibleEnemies()
 	file.close();
 }
 
+void Floor::setEnemyLocations() {
+	for each (Enemy* enemy in possibleEnemies)
+	{
+		bool set = false;
+		while (!set) {
+			int x = getRandom(0, width-1);
+			int y = getRandom(0, length-1);
+
+			if (rooms[x][y]->getAvailableDirections().size() > 0) {
+				if (rooms[x][y]->getEnemy() == nullptr && rooms[x][y]->getType() == "N") {
+					rooms[x][y]->setEnemy(enemy);
+					set = true;
+				}
+			}
+		}
+	}
+}
+
 void Floor::setBossLocation() {
 	bool randomSet = false;
 	int randomx;
@@ -306,6 +331,7 @@ void Floor::setBossLocation() {
 		randomy = getRandom(0, length - 1);
 
 		if (randomx == player->getX() && randomy == player->getY());
+		else if (rooms[randomx][randomy]->getType() == "D");
 		else {
 			randomSet = true;
 		}

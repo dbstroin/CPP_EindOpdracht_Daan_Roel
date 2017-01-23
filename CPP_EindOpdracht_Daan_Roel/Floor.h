@@ -22,9 +22,10 @@ public:
 	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
 	Enemy* tryEncounterEnemy();
+	Enemy * getEnemy(int x, int y);
+	void deleteEnemy(Enemy * enemy, int x, int y);
 	Enemy getBoss() { return boss; }
 	void setBossLocation();
-	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
 	void useCompass();
 	void resetSearchVisitedRooms();
@@ -42,8 +43,10 @@ private:
 	int width;
 	int length;
 	void createRooms();
-
+	void setEnemyLocations();
 	void createPossibleEnemies();
+
+
 
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
