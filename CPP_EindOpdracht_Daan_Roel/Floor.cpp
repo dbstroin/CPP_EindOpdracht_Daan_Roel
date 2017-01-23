@@ -214,7 +214,7 @@ Enemy* Floor::getEnemy(int x, int y) {
 	return rooms[x][y]->getEnemy();
 }
 
-void Floor::deleteEnemy(Enemy* enemy, int x , int y) {
+void Floor::deleteEnemy(Enemy* enemy, int x, int y) {
 	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
 	delete enemy;
 	rooms[x][y]->setEnemy(nullptr);
@@ -308,8 +308,8 @@ void Floor::setEnemyLocations() {
 	{
 		bool set = false;
 		while (!set) {
-			int x = getRandom(0, width-1);
-			int y = getRandom(0, length-1);
+			int x = getRandom(0, width - 1);
+			int y = getRandom(0, length - 1);
 
 			if (rooms[x][y]->getAvailableDirections().size() > 0) {
 				if (rooms[x][y]->getEnemy() == nullptr && rooms[x][y]->getType() == "N") {
@@ -353,8 +353,9 @@ void Floor::useCompass()
 	std::cout << "het kompas brand een aantal worden op de vloer:" << std::endl;
 	for each (std::string direction in path)
 	{
-		// print rightings
+		std::cout << direction << " -> ";
 	}
+	std::cout << ::endl;
 }
 
 void Floor::resetSearchVisitedRooms() {
@@ -413,7 +414,6 @@ int Floor::breadthFirstSearch(Room* startRoom, int currentDistance) {
 			counter++;
 		}
 	}
-
 	return counter;
 }
 
@@ -432,7 +432,6 @@ std::vector<std::string> Floor::dijkstraSearch(Room * startRoom)
 		frontier.pop();
 
 		for (auto next : current->getAdjacentRooms()) {
-			// TODO : controlleer aantal HP
 			double new_cost = cost_so_far[current] + next->GetCombinedHitPoints();
 			if (!came_from.count(next) || new_cost < cost_so_far[next]) {
 				cost_so_far[next] = new_cost;
@@ -443,22 +442,39 @@ std::vector<std::string> Floor::dijkstraSearch(Room * startRoom)
 	}
 
 	std::vector<Room *> path;
-	Room* currentRoom = startRoom;
+	Room* goal = startRoom;
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < length; y++) {
 			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
-				currentRoom = rooms[x][y];
+				goal = rooms[x][y];
 			}
 		}
 	}
+	Room* currentRoom = goal;
+	path.push_back(goal);
 	while (currentRoom != startRoom) {
 		currentRoom = came_from[currentRoom];
 		path.push_back(currentRoom);
 	}
-	std::reverse(path.begin(), path.end());
+	std::reverse(path.begin(), path.end()); // pad wordt vanaf doel naar start gemaakt, omdraairen om van start naar doel te gaan
 
-	//TODO : maak van het pad strings -> north -> south -> west etc...
-	return std::vector<std::string>();
+	std::vector<std::string> directions;
+	for (int x = 0; x < path.size() - 1; x++) {
+		Room* c = path[x];
+		if (c->getEast() != nullptr && c->getEast() == path[x + 1]) {
+			directions.push_back("East");
+		}
+		else if (c->getWest() != nullptr && c->getWest() == path[x + 1]) {
+			directions.push_back("West");
+		}
+		else if(c->getNorth() != nullptr && c->getNorth() == path[x + 1]) {
+			directions.push_back("North");
+		}
+		else if (c->getSouth() != nullptr && c->getSouth() == path[x + 1]) {
+			directions.push_back("South");
+		}
+	}
+	return directions;
 }
 
 void Floor::clear() {

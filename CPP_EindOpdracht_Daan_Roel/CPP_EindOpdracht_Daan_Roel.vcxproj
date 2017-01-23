@@ -156,6 +156,7 @@
     <ClInclude Include="Globalfunc.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Kompas.h" />
     <ClInclude Include="LargePotion.h" />
     <ClInclude Include="MediumPotion.h" />
     <ClInclude Include="Player.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Globalfunc.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Kompas.cpp" />
     <ClCompile Include="LargePotion.cpp" />
     <ClCompile Include="MediumPotion.cpp" />
     <ClCompile Include="Player.cpp" />

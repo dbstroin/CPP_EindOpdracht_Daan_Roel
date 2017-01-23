@@ -27,10 +27,15 @@ Room::Room(int x, int y, string t)
 
 int Room::GetCombinedHitPoints()
 {
-	int hitPoints = enemy->hitPoints;
+	if (enemy != nullptr) {
+		int hitPoints = enemy->hitPoints;
 
-	if (hitPoints != NULL) {
-		return hitPoints;
+		if (hitPoints != NULL) {
+			return hitPoints;
+		}
+		else {
+			return 1;
+		}
 	}
 	else {
 		return 1;

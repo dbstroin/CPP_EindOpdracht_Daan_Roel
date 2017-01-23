@@ -41,8 +41,11 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	int randomX = getRandom(0, width - 1);
 	int randomY = getRandom(0, length - 1);
 	t = new Talisman();
+	k = new Kompas();
 	t->setName();
+	k->setName();
 	player->addItem(t);
+	player->addItem(k);
 	player->setX(randomX);
 	player->setY(randomY);
 	setAllStairs();
@@ -92,6 +95,7 @@ void Dungeon::play() {
 		for each (Floor floor in floors) floor.clear();
 		for each (Item* i in encounterableItems) delete i;
 		delete t;
+		delete k;
 		return;
 	}
 	while(!tryBasicActions());
@@ -189,6 +193,9 @@ void Dungeon::tryItems() {
 		if (answer != items.size()) {
 			if (items[answer]->name == "Talisman") {
 				floors[currFloor].useTalisman();
+			}
+			else if (items[answer]->name == "Kompas") {
+				floors[currFloor].useCompass();
 			}
 			else {
 				items[answer]->useItem(player);
