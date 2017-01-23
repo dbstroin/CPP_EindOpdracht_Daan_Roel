@@ -19,7 +19,7 @@ Floor::Floor(int l, int w, int lev, Player* p)
 
 	createRooms();
 	//createEdges();
-	createPossibleEnemies();	
+	createPossibleEnemies();
 
 }
 
@@ -46,7 +46,7 @@ void Floor::randomizeFloor() {
 	int stairsUpY = 0;
 	int stairsDownX = player->getX();
 	int stairsDownY = player->getY();
-	
+
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < length; y++) {
 			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
@@ -94,6 +94,7 @@ void Floor::randomizeFloor() {
 		connectRandomRoom(roomX, roomY);
 	}
 
+	setEnemyLocations();
 }
 
 void Floor::connectRandomRoom(int x, int y) {
@@ -102,34 +103,34 @@ void Floor::connectRandomRoom(int x, int y) {
 	while (randomConnects > 0) {
 		int random = getRandom(0, 3);
 		switch (random) {
-		case(0) :
+		case(0):
 			if (x < width - 1) {
 				rooms[x][y]->setEast(rooms[x + 1][y]);
 				rooms[x + 1][y]->setWest(rooms[x][y]);
 				x++;
 			}
-				break;
-		case(1) :
+			break;
+		case(1):
 			if (x > 0) {
 				rooms[x][y]->setWest(rooms[x - 1][y]);
 				rooms[x - 1][y]->setEast(rooms[x][y]);
 				x--;
 			}
-				break;
-		case(2) :
+			break;
+		case(2):
 			if (y < length - 1) {
 				rooms[x][y]->setSouth(rooms[x][y + 1]);
 				rooms[x][y + 1]->setNorth(rooms[x][y]);
 				y++;
 			}
-				break;
-		case(3) :
+			break;
+		case(3):
 			if (y > 0) {
 				rooms[x][y]->setNorth(rooms[x][y - 1]);
 				rooms[x][y - 1]->setSouth(rooms[x][y]);
 				y--;
 			}
-				break;
+			break;
 		}
 		randomConnects--;
 	}
@@ -182,7 +183,7 @@ std::pair<int, int> Floor::setStairsToNextFloor(int xNot, int yNot) {
 		randomy = getRandom(0, length - 1);
 
 		if (randomx != xNot || randomy != yNot)	randomSet = true;
-		
+
 	}
 
 	rooms[randomx][randomy]->setType("H");
@@ -199,7 +200,7 @@ Enemy* Floor::tryEncounterEnemy() {
 	int encounterChance = possibleEnemies.size() * 2;
 	//int encounterChance = possibleEnemies.size() - 1; //turn on to always encounter enemy
 
-	int randomEnemy = getRandom(0, encounterChance );
+	int randomEnemy = getRandom(0, encounterChance);
 
 	if (randomEnemy > possibleEnemies.size() - 1 || possibleEnemies.size() < 1) {
 		return NULL;
@@ -209,9 +210,15 @@ Enemy* Floor::tryEncounterEnemy() {
 	}
 }
 
-void Floor::deleteEnemy(Enemy* enemy) {
+Enemy* Floor::getEnemy(int x, int y) {
+	return rooms[x][y]->getEnemy();
+}
+
+void Floor::deleteEnemy(Enemy* enemy, int x, int y) {
 	possibleEnemies.erase(std::remove(possibleEnemies.begin(), possibleEnemies.end(), enemy), possibleEnemies.end());
 	delete enemy;
+	rooms[x][y]->setEnemy(nullptr);
+
 }
 
 bool Floor::getIfOnPlayerOnStairs() {
@@ -219,7 +226,7 @@ bool Floor::getIfOnPlayerOnStairs() {
 	else return false;
 }
 
-void Floor::movePlayer(int direction, vector<string> options) 
+void Floor::movePlayer(int direction, vector<string> options)
 {
 	rooms[player->getX()][player->getY()]->playerLeaves();
 	if (options[direction] == "north") {
@@ -256,7 +263,7 @@ void Floor::createPossibleEnemies()
 
 	string line;
 	while (getline(file, line)) {
-		if (line.substr(0,1) == "[") {
+		if (line.substr(0, 1) == "[") {
 			if (reader.getLevel(line) < 0) {
 				Enemy newBoss;
 
@@ -296,6 +303,24 @@ void Floor::createPossibleEnemies()
 	file.close();
 }
 
+void Floor::setEnemyLocations() {
+	for each (Enemy* enemy in possibleEnemies)
+	{
+		bool set = false;
+		while (!set) {
+			int x = getRandom(0, width - 1);
+			int y = getRandom(0, length - 1);
+
+			if (rooms[x][y]->getAvailableDirections().size() > 0) {
+				if (rooms[x][y]->getEnemy() == nullptr && rooms[x][y]->getType() == "N") {
+					rooms[x][y]->setEnemy(enemy);
+					set = true;
+				}
+			}
+		}
+	}
+}
+
 void Floor::setBossLocation() {
 	bool randomSet = false;
 	int randomx;
@@ -306,6 +331,7 @@ void Floor::setBossLocation() {
 		randomy = getRandom(0, length - 1);
 
 		if (randomx == player->getX() && randomy == player->getY());
+		else if (rooms[randomx][randomy]->getType() == "D");
 		else {
 			randomSet = true;
 		}
@@ -316,9 +342,20 @@ void Floor::setBossLocation() {
 }
 
 void Floor::useTalisman() {
-		int a = breadthFirstSearch(rooms[player->getX()][player->getY()], 0);
-		resetSearchVisitedRooms();
-		cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
+	int a = breadthFirstSearch(rooms[player->getX()][player->getY()], 0);
+	resetSearchVisitedRooms();
+	cout << "De talisman zegt dat de trap " << a << " kamers ver weg is." << endl;
+}
+
+void Floor::useCompass()
+{
+	std::vector<std::string> path = dijkstraSearch(rooms[player->getX()][player->getY()]);
+	std::cout << "het kompas brand een aantal worden op de vloer:" << std::endl;
+	for each (std::string direction in path)
+	{
+		std::cout << " -> " << direction;
+	}
+	std::cout << ::endl;
 }
 
 void Floor::resetSearchVisitedRooms() {
@@ -344,7 +381,6 @@ int Floor::breadthFirstSearch(Room* startRoom, int currentDistance) {
 	std::queue<Room *> frontier;
 	frontier.push(startRoom);
 
-	//startRoom->previousRoom = startRoom;
 	std::unordered_map<Room *, Room*> came_from;
 	came_from[startRoom] = startRoom;
 
@@ -378,35 +414,67 @@ int Floor::breadthFirstSearch(Room* startRoom, int currentDistance) {
 			counter++;
 		}
 	}
-
 	return counter;
-	//vector<Room*> queue;
-	//vector<Room*> visited;
+}
 
-	//queue.push_back(startRoom);
-	//int staircaseAway = 0;
+std::vector<std::string> Floor::dijkstraSearch(Room * startRoom)
+{
+	std::priority_queue<Room*> frontier;
+	frontier.push(startRoom);
 
-	//while (queue.size() > 0) {
-	//	Room* vertex = queue[0];
-	//	visited.push_back(vertex);
-	//	queue.erase(std::remove(queue.begin(), queue.end(), vertex), queue.end());
+	std::unordered_map<Room *, Room*> came_from;
+	std::unordered_map<Room *, double> cost_so_far;
+	came_from[startRoom] = startRoom;
+	cost_so_far[startRoom] = 0;
 
-	//	for each (Room* adjacentRoom in vertex->getAdjacentRooms())
-	//	{
-	//		if (adjacentRoom->getType() == "H") {
-	//			staircaseAway++;
-	//			return staircaseAway;
-	//		}
-	//		else {
-	//			if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-	//				if (find(visited.begin(), visited.end(), adjacentRoom) == visited.end()) {
-	//					queue.push_back(adjacentRoom);
-	//				}
-	//			}
-	//		}
-	//	}
-	//	staircaseAway++;
-	//}
+	while (!frontier.empty()) {
+		auto current = frontier.top();
+		frontier.pop();
+
+		for (auto next : current->getAdjacentRooms()) {
+			double new_cost = cost_so_far[current] + next->GetCombinedHitPoints();
+			if (!came_from.count(next) || new_cost < cost_so_far[next]) {
+				cost_so_far[next] = new_cost;
+				came_from[next] = current;
+				frontier.push(next);
+			}
+		}
+	}
+
+	std::vector<Room *> path;
+	Room* goal = startRoom;
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
+				goal = rooms[x][y];
+			}
+		}
+	}
+	Room* currentRoom = goal;
+	path.push_back(goal);
+	while (currentRoom != startRoom) {
+		currentRoom = came_from[currentRoom];
+		path.push_back(currentRoom);
+	}
+	std::reverse(path.begin(), path.end()); // pad wordt vanaf doel naar start gemaakt, omdraairen om van start naar doel te gaan
+
+	std::vector<std::string> directions;
+	for (int x = 0; x < path.size() - 1; x++) {
+		Room* c = path[x];
+		if (c->getEast() != nullptr && c->getEast() == path[x + 1]) {
+			directions.push_back("East");
+		}
+		else if (c->getWest() != nullptr && c->getWest() == path[x + 1]) {
+			directions.push_back("West");
+		}
+		else if(c->getNorth() != nullptr && c->getNorth() == path[x + 1]) {
+			directions.push_back("North");
+		}
+		else if (c->getSouth() != nullptr && c->getSouth() == path[x + 1]) {
+			directions.push_back("South");
+		}
+	}
+	return directions;
 }
 
 void Floor::clear() {
@@ -417,6 +485,6 @@ void Floor::clear() {
 		}
 	}
 	for each (Enemy* enemy in possibleEnemies) delete enemy;
-//	delete boss;
+	//	delete boss;
 }
 

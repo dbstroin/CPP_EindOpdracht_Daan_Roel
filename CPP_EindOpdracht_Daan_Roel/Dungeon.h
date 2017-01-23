@@ -5,6 +5,7 @@
 #include "Room.h"
 #include "Globalfunc.h"
 #include "Talisman.h"
+#include "Kompas.h"
 
 using namespace std;
 
@@ -38,5 +39,6 @@ private:
 	int layers;
 	int currFloor;
 	Talisman* t;
+	Kompas* k;
 };
 

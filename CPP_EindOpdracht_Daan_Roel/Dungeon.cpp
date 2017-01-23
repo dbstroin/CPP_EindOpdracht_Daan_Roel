@@ -41,14 +41,16 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	int randomX = getRandom(0, width - 1);
 	int randomY = getRandom(0, length - 1);
 	t = new Talisman();
+	k = new Kompas();
 	t->setName();
+	k->setName();
 	player->addItem(t);
+	player->addItem(k);
 	player->setX(randomX);
 	player->setY(randomY);
 	setAllStairs();
 	randomizeDungeon();
 	spawnPlayer();
-
 	
 }
 
@@ -93,6 +95,7 @@ void Dungeon::play() {
 		for each (Floor floor in floors) floor.clear();
 		for each (Item* i in encounterableItems) delete i;
 		delete t;
+		delete k;
 		return;
 	}
 	while(!tryBasicActions());
@@ -121,8 +124,9 @@ void Dungeon::tryEncounterItem() {
 void Dungeon::tryEncounterEnemy() {
 	string roomType = floors[currFloor].rooms[player->getX()][player->getY()]->getType();
 	if (roomType == "N") {
-		Enemy* enemy = floors[currFloor].tryEncounterEnemy();
-		if (enemy != NULL) {
+		//Enemy* enemy = floors[currFloor].tryEncounterEnemy();
+		Enemy* enemy = floors[currFloor].getEnemy(player->getX(), player->getY());
+		if (enemy != nullptr) {
 			cout << "You encountered a: " << enemy->name << endl;
 			Fight(enemy);
 		}
@@ -158,7 +162,7 @@ bool Dungeon::Fight(Enemy* enemy) {
 				cout << "You killed the " << enemy->name << "!" << endl;
 				player->addExperience(enemy->level);
 				if (enemy->level != -1) {
-					floors[currFloor].deleteEnemy(enemy);
+					floors[currFloor].deleteEnemy(enemy, player->getX(), player->getY());
 				}
 			}
 			break;
@@ -189,6 +193,9 @@ void Dungeon::tryItems() {
 		if (answer != items.size()) {
 			if (items[answer]->name == "Talisman") {
 				floors[currFloor].useTalisman();
+			}
+			else if (items[answer]->name == "Kompas") {
+				floors[currFloor].useCompass();
 			}
 			else {
 				items[answer]->useItem(player);

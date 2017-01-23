@@ -93,6 +93,9 @@
     <ClInclude Include="DefenseUp.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Kompas.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -150,6 +153,9 @@
       <Filter>Source Files\Items</Filter>
     </ClCompile>
     <ClCompile Include="DefenseUp.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Kompas.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
   </ItemGroup>

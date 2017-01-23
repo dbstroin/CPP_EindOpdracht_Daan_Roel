@@ -25,6 +25,8 @@ public:
 	string getType();
 	void playerVisits();
 	void playerLeaves();
+	void setEnemy(Enemy * e);
+	Enemy * getEnemy();
 	vector<string> getAvailableDirections();
 	Room * getEast();
 	void setEast(Room * r);
@@ -37,7 +39,6 @@ public:
 	void setSearchVisited(bool i);
 	bool getSearchVisited();
 	bool getVisited() { return visited; }
-	void AddEnemy(vector<Enemy> e);
 	bool searchVisited;
 	vector<Room*> getAdjacentRooms();
 	string getBeschrijving() { return beschrijving; }
@@ -45,10 +46,9 @@ public:
 	// void AddDoors(); 
 private:
 	string type;
-	list<Enemy> enemies;
 	string beschrijving;
 
-	Enemy enemy;
+	Enemy* enemy;
 	Player player;
 	bool visited;
 	bool visiting;
