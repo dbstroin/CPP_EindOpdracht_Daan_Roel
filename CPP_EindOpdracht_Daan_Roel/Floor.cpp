@@ -353,7 +353,7 @@ void Floor::useCompass()
 	std::cout << "het kompas brand een aantal worden op de vloer:" << std::endl;
 	for each (std::string direction in path)
 	{
-		std::cout << direction << " -> ";
+		std::cout << " -> " << direction;
 	}
 	std::cout << ::endl;
 }
