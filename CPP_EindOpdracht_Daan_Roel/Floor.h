@@ -26,6 +26,7 @@ public:
 	void setBossLocation();
 	void deleteEnemy(Enemy * enemy);
 	void useTalisman();
+	void useCompass();
 	void resetSearchVisitedRooms();
 	void randomizeFloor();
 	void connectRandomRoom(int x, int y);
@@ -47,6 +48,7 @@ private:
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
 	int breadthFirstSearch(Room * startRoom, int currentDistance);
+	std::vector<std::string> dijkstraSearch(Room* startRoom);
 
 	// functie om een random dungeon te maken.
 };

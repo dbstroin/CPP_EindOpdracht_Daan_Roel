@@ -32,7 +32,7 @@ int Room::GetCombinedHitPoints()
 		return hitPoints;
 	}
 	else {
-		return 0;
+		return 1;
 	}
 }
 
