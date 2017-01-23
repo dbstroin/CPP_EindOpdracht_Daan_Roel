@@ -16,6 +16,7 @@ Room::~Room()
 
 Room::Room(int x, int y, string t)
 {
+	enemy = nullptr;
 	searchVisited = false;
 	visiting = false;
 	visited = false;
@@ -26,7 +27,7 @@ Room::Room(int x, int y, string t)
 
 int Room::GetCombinedHitPoints()
 {
-	int hitPoints = enemy.hitPoints;
+	int hitPoints = enemy->hitPoints;
 
 	if (hitPoints != NULL) {
 		return hitPoints;
@@ -67,16 +68,14 @@ void Room::playerLeaves()
 {
 	visiting = false;
 }
-void Room::AddEnemy(vector<Enemy> e)
+void Room::setEnemy(Enemy* e)
 {
-	// pak een RANDOM int
-	int randomIndex = 0;
-	
-	Enemy enemyToAdd = e[randomIndex];
-	//int i = 0; // voor testen
+	enemy = e;
 }
 
-
+Enemy* Room::getEnemy() {
+	return enemy;
+}
 
 vector<string> Room::getAvailableDirections() {
 	vector<string> temp;
