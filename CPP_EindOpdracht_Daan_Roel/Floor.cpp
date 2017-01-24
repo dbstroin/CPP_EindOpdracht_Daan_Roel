@@ -97,6 +97,33 @@ void Floor::randomizeFloor() {
 	setEnemyLocations();
 }
 
+void Floor::setEdgeCosts() {
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getNorth() != nullptr) {
+				int random = getRandom(1, 10);
+				rooms[x][y]->northCost = random;
+				rooms[x][y]->getNorth()->southCost = random;
+			}
+			if (rooms[x][y]->getEast() != nullptr) {
+				int random = getRandom(1, 10);
+				rooms[x][y]->eastCost = random;
+				rooms[x][y]->getEast()->westCost = random;
+			}
+			if (rooms[x][y]->getSouth() != nullptr) {
+				int random = getRandom(1, 10);
+				rooms[x][y]->southCost = random;
+				rooms[x][y]->getSouth()->northCost = random;
+			}
+			if (rooms[x][y]->getWest() != nullptr) {
+				int random = getRandom(1, 10);
+				rooms[x][y]->westCost = random;
+				rooms[x][y]->getWest()->eastCost = random;
+			}
+		}
+	}
+}
+
 void Floor::connectRandomRoom(int x, int y) {
 	int randomConnects = getRandom(1, 10);
 
@@ -389,36 +416,143 @@ void Floor::useGrenade()
 	}
 
 	primsAlgorithm(rooms[startX][startY]);
+
+	removeTooManyCollapsedRooms();
 }
 
 void Floor::primsAlgorithm(Room* startRoom) {
 	startRoom->isVisitable = true;
-	if (startRoom->getNorth() != nullptr) {
-		if (startRoom->getNorth()->isVisitable == false) {
-			startRoom->northIsCollapsed = false;
-			startRoom->getNorth()->southIsCollapsed = false;
-			primsAlgorithm(startRoom->getNorth());
+	bool northDone = false;
+	bool southDone = false;
+	bool eastDone = false;
+	bool westDone = false;
+
+	while (!northDone || !southDone || !westDone || !eastDone)
+	{
+		int random = getRandom(0, 3);
+
+		switch (random) {
+		case 0:
+			if (startRoom->getNorth() != nullptr) {
+				if (startRoom->getNorth()->isVisitable == false) {
+					startRoom->northIsCollapsed = false;
+					startRoom->getNorth()->southIsCollapsed = false;
+					primsAlgorithm(startRoom->getNorth());
+				}
+			}
+			northDone = true;
+			break;
+		case 1:
+			if (startRoom->getEast() != nullptr) {
+				if (startRoom->getEast()->isVisitable == false) {
+					startRoom->eastIsCollapsed = false;
+					startRoom->getEast()->westIsCollapsed = false;
+					primsAlgorithm(startRoom->getEast());
+				}
+			}
+			eastDone = true;
+			break;
+		case 2:
+			if (startRoom->getSouth() != nullptr) {
+				if (startRoom->getSouth()->isVisitable == false) {
+					startRoom->southIsCollapsed = false;
+					startRoom->getSouth()->northIsCollapsed = false;
+					primsAlgorithm(startRoom->getSouth());
+				}
+			}
+			southDone = true;
+		break;
+		case 3:
+			if (startRoom->getWest() != nullptr) {
+				if (startRoom->getWest()->isVisitable == false) {
+					startRoom->westIsCollapsed = false;
+					startRoom->getWest()->eastIsCollapsed = false;
+					primsAlgorithm(startRoom->getWest());
+				}
+			}
+			westDone = true;
+		break;
 		}
 	}
-	if (startRoom->getEast() != nullptr) {
-		if (startRoom->getEast()->isVisitable == false) {
-			startRoom->eastIsCollapsed = false;
-			startRoom->getEast()->westIsCollapsed = false;
-			primsAlgorithm(startRoom->getEast());
+}
+
+void Floor::primsAlgorithm(Room* startRoom, direction d) {
+	switch (d) {
+	case NORTH:
+		if (startRoom->getNorth() != nullptr) {
+			if (startRoom->getNorth()->isVisitable == false) {
+				startRoom->northIsCollapsed = false;
+				startRoom->getNorth()->southIsCollapsed = false;
+				primsAlgorithm(startRoom->getNorth());
+			}
+		}
+		break;
+	case EAST:
+		if (startRoom->getEast() != nullptr) {
+			if (startRoom->getEast()->isVisitable == false) {
+				startRoom->eastIsCollapsed = false;
+				startRoom->getEast()->westIsCollapsed = false;
+				primsAlgorithm(startRoom->getEast());
+			}
+		}
+		break;
+	case SOUTH:
+		if (startRoom->getSouth() != nullptr) {
+			if (startRoom->getSouth()->isVisitable == false) {
+				startRoom->southIsCollapsed = false;
+				startRoom->getSouth()->northIsCollapsed = false;
+				primsAlgorithm(startRoom->getSouth());
+			}
+		}
+		break;
+	case WEST:
+		if (startRoom->getWest() != nullptr) {
+			if (startRoom->getWest()->isVisitable == false) {
+				startRoom->westIsCollapsed = false;
+				startRoom->getWest()->eastIsCollapsed = false;
+				primsAlgorithm(startRoom->getWest());
+			}
+		}
+		break;
+	}
+}
+
+void Floor::removeTooManyCollapsedRooms() {
+	int maxCollapsedRooms = getRandom(10, 15);
+	int collapsedRooms = 0;
+
+	for (int x = 0; x < width; x++)
+	{
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getAdjacentRooms().size() > 0) {
+				if (rooms[x][y]->eastIsCollapsed) {
+					collapsedRooms++;
+				}
+				if (rooms[x][y]->northIsCollapsed) {
+					collapsedRooms++;
+				}
+			}
 		}
 	}
-	if (startRoom->getSouth() != nullptr) {
-		if (startRoom->getSouth()->isVisitable == false) {
-			startRoom->southIsCollapsed = false;
-			startRoom->getSouth()->northIsCollapsed = false;
-			primsAlgorithm(startRoom->getSouth());
+
+	while (collapsedRooms > maxCollapsedRooms) {
+		int randomX = getRandom(0, width - 1);
+		int randomY = getRandom(0, length - 1);
+		if (rooms[randomX][randomY]->northIsCollapsed) {
+			rooms[randomX][randomY]->northIsCollapsed = false;
+			collapsedRooms--;
 		}
-	}
-	if (startRoom->getWest() != nullptr) {
-		if (startRoom->getWest()->isVisitable == false) {
-			startRoom->westIsCollapsed = false;
-			startRoom->getWest()->eastIsCollapsed = false;
-			primsAlgorithm(startRoom->getWest());
+		if (rooms[randomX][randomY]->southIsCollapsed) {
+			rooms[randomX][randomY]->southIsCollapsed = false;
+			collapsedRooms--;
+		}
+		if (rooms[randomX][randomY]->eastIsCollapsed) {
+			rooms[randomX][randomY]->eastIsCollapsed = false;
+			collapsedRooms--;
+		}
+		if (rooms[randomX][randomY]->westIsCollapsed) {
+			rooms[randomX][randomY]->westIsCollapsed = false;
+			collapsedRooms--;
 		}
 	}
 }

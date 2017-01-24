@@ -50,6 +50,10 @@ public:
 	bool southIsCollapsed = false;
 	bool eastIsCollapsed = false;
 	bool westIsCollapsed = false;
+	int northCost = -1;
+	int southCost = -1;
+	int eastCost = -1;
+	int westCost = -1;
 private:
 	string type;
 	string beschrijving;

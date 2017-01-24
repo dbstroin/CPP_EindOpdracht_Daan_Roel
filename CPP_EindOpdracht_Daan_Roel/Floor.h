@@ -16,6 +16,7 @@ class Floor
 public:
 	Floor();
 	Floor(int l, int w, int lev, Player* p);
+	enum direction { EAST, NORTH, SOUTH, WEST };
 	void clear();
 	void drawMap();
 	std::pair<int, int> setStairsToNextFloor(int playerx, int playery);
@@ -30,14 +31,18 @@ public:
 	void useCompass();
 	void useGrenade();
 	void primsAlgorithm(Room * startRoom);
+	void primsAlgorithm(Room * startRoom, direction d);
+	void removeTooManyCollapsedRooms();
 	void resetSearchVisitedRooms();
 	void randomizeFloor();
+	void setEdgeCosts();
 	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
 	bool grenadeUsed = false;
 	~Floor();
+	
 private:
 	Player* player;
 	vector<Enemy*> possibleEnemies;

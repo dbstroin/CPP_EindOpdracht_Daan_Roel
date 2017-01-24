@@ -142,8 +142,6 @@ bool Room::getSearchVisited() {
 	return searchVisited;
 }
 
-
-
 vector<Room*> Room::getAdjacentRooms()
 {
 	vector<Room*> temp;

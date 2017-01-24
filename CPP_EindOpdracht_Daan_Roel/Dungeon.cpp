@@ -67,6 +67,7 @@ void Dungeon::spawnPlayer() {
 void Dungeon::randomizeDungeon() {
 	for (int i = 0; i < floors.size(); i++) {
 		floors[i].randomizeFloor();
+		floors[i].setEdgeCosts();
 	}
 }
 
