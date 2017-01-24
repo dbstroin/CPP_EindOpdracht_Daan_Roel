@@ -85,16 +85,16 @@ Enemy* Room::getEnemy() {
 vector<string> Room::getAvailableDirections() {
 	vector<string> temp;
 	temp.reserve(4);
-	if (north != nullptr) {
+	if (north != nullptr && !northIsCollapsed) {
 		temp.push_back("north");
 	}
-	if (east != nullptr) {
+	if (east != nullptr && !eastIsCollapsed) {
 		temp.push_back("east");
 	}
-	if (south != nullptr) {
+	if (south != nullptr && !southIsCollapsed) {
 		temp.push_back("south");
 	}
-	if (west != nullptr) {
+	if (west != nullptr && !westIsCollapsed) {
 		temp.push_back("west");
 	}
 	return temp;
