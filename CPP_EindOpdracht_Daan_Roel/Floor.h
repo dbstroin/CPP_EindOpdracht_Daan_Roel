@@ -19,6 +19,7 @@ public:
 	enum direction { EAST, NORTH, SOUTH, WEST };
 	void clear();
 	void drawMap();
+	void drawMapHitpoints();
 	std::pair<int, int> setStairsToNextFloor(int playerx, int playery);
 	void setStairsToPrevFloor(int x, int y);
 	vector<string> getDirectionOptions();
@@ -35,6 +36,7 @@ public:
 	void removeTooManyCollapsedRooms();
 	void resetSearchVisitedRooms();
 	void randomizeFloor();
+	void addTauntEnemy(int xPos, int yPos);
 	void setEdgeCosts();
 	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();

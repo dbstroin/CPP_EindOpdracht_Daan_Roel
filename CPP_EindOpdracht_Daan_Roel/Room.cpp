@@ -50,6 +50,14 @@ void Room::Draw()
 	else cout << ".";
 }
 
+void Room::DrawHitpoints()
+{
+	if (north == nullptr && south == nullptr && east == nullptr && west == nullptr) cout << ".";
+	else if (visiting) cout << 'P';
+	else if (visited || showAllRooms) cout << GetCombinedHitPoints();
+	else cout << ".";
+}
+
 void Room::AddToys()
 {
 }

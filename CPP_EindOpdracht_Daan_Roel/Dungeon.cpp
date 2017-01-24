@@ -259,7 +259,7 @@ bool Dungeon::tryBasicActions()
 	cout << i + 1 << ": Show Map" << endl;
 	cout << i + 2 << ": Rest" << endl;
 	cout << i + 3 << ": Show Player stats" << endl;
-	int answer = getAnswer(options.size() + 4);
+	int answer = getAnswer(options.size() + 6);
 	if (answer == i) {
 		tryItems();
 		return false;
@@ -283,6 +283,51 @@ bool Dungeon::tryBasicActions()
 		cout << "Experience: " << player->getExperience() << "/" << player->getMaxExperience() << endl;
 		cout << "Damage: " << player->getDamage() << endl;
 		cout << "Defense: " << player->getDefense() << endl;
+		cout << endl;
+		return false;
+	}
+	else if (answer == i + 4) {
+		cout << "--- Spawn command ---" << endl;
+		cout << "Enter x:" << endl;
+		std::string line;
+		double x;
+		double y;
+		while (getline(std::cin, line))
+		{
+			std::stringstream ss(line);
+			if (ss >> x)
+			{
+				if (ss.eof())
+				{
+					x = std::stoi(line);
+					if (x < width && x >= 0) {
+						break;
+					}
+				}
+			}
+			std::cout << "invalid input, try again" << std::endl;
+		}
+		cout << "Enter y:" << endl;
+		while (getline(std::cin, line))
+		{
+			std::stringstream ss(line);
+			if (ss >> y)
+			{
+				if (ss.eof())
+				{
+					y = std::stoi(line);
+					if (y < length && y >= 0) {
+						break;
+					}
+				}
+			}
+			std::cout << "invalid input, try again" << std::endl;
+		}
+		floors[currFloor].addTauntEnemy(x, y);
+		cout << "enemy has been spawned at " << x << ":" << y << endl;
+		return false;
+	} else if (answer == i + 5) {
+		floors[currFloor].drawMapHitpoints();
 		cout << endl;
 		return false;
 	}

@@ -20,6 +20,7 @@ public:
 
 	// functies voor het toevoegen van dingen
 	void Draw();
+	void DrawHitpoints();
 	void AddToys();
 	void setType(string t);
 	string getType();

@@ -97,6 +97,26 @@ void Floor::randomizeFloor() {
 	setEnemyLocations();
 }
 
+void Floor::addTauntEnemy(int xPos, int yPos)
+{
+	if (xPos >= 0 && xPos < width) {
+		if (yPos >= 0 && yPos < length) {
+			Enemy* newEnemy = new Enemy();
+
+			newEnemy->name = "lopende muur";
+			newEnemy->level = 0;
+			newEnemy->hitChance = 100;
+			newEnemy->hitAmount = 1;
+			newEnemy->minDamage = 0;
+			newEnemy->maxDamage = 0;
+			newEnemy->blockChance = 1;
+			newEnemy->hitPoints = 99;
+
+			rooms[xPos][yPos]->setEnemy(newEnemy);
+		}
+	}
+}
+
 void Floor::setEdgeCosts() {
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < length; y++) {
@@ -184,6 +204,41 @@ void Floor::drawMap()
 
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			rooms[wIndex][lIndex]->Draw();
+			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
+				if (rooms[wIndex][lIndex]->getEast()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					if (rooms[wIndex][lIndex]->eastIsCollapsed) std::cout << "~";
+					else std::cout << "-";
+				}
+				else std::cout << " ";
+			}
+			else std::cout << " ";
+		}
+		std::cout << endl;
+	}
+	std::cout << endl;
+}
+
+void Floor::drawMapHitpoints()
+{
+	for (int lIndex = 0; lIndex < length; lIndex++) {
+		std::cout << "   ";
+
+		for (int wIndex = 0; wIndex < width; wIndex++) {
+			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
+				if (rooms[wIndex][lIndex]->getNorth()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
+					if (rooms[wIndex][lIndex]->northIsCollapsed) std::cout << "~ ";
+					else std::cout << "| ";
+				}
+				else std::cout << "  ";
+			}
+			else std::cout << "  ";
+		}
+
+		std::cout << endl;
+		std::cout << "   ";
+
+		for (int wIndex = 0; wIndex < width; wIndex++) {
+			rooms[wIndex][lIndex]->DrawHitpoints();
 			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
 				if (rooms[wIndex][lIndex]->getEast()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
 					if (rooms[wIndex][lIndex]->eastIsCollapsed) std::cout << "~";
