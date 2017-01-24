@@ -28,6 +28,10 @@ void Enemy::getHit(int damage) {
 	cout << "The " << name << " has " << hitPoints << " health left." << endl;
 }
 
+void Enemy::Die() {
+	hitPoints = 0;
+}
+
 int Enemy::getDamage() {
 	int damage = getRandom(minDamage, maxDamage);
 	return damage;

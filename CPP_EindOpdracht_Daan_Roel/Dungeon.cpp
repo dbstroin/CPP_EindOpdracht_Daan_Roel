@@ -42,10 +42,13 @@ Dungeon::Dungeon(int w, int l, int f, Player* p)
 	int randomY = getRandom(0, length - 1);
 	t = new Talisman();
 	k = new Kompas();
+	g = new Grenade();
 	t->setName();
 	k->setName();
+	g->setName();
 	player->addItem(t);
 	player->addItem(k);
+	player->addItem(g);
 	player->setX(randomX);
 	player->setY(randomY);
 	setAllStairs();
@@ -141,6 +144,7 @@ void Dungeon::tryEncounterEnemy() {
 }
 
 bool Dungeon::Fight(Enemy* enemy) {
+	inBattle = true;
 	while (enemy->hitPoints > 0 && player->getCurrHealth() > 0) {
 		cout << "What would you like to do?" << endl;
 		cout << "0: Attack" << endl;
@@ -176,7 +180,26 @@ bool Dungeon::Fight(Enemy* enemy) {
 		}
 
 		cout << endl;
+
+		if (useGrenade) {
+			if (!floors[currFloor].grenadeUsed) {
+				enemy->Die();
+				cout << "The explosion from the grenade killed the " << enemy->name << "!" << endl;
+				cout << "But it also destroyed some of the hallways..." << endl;
+				player->addExperience(enemy->level);
+				if (enemy->level != -1) {
+					floors[currFloor].deleteEnemy(enemy, player->getX(), player->getY());
+				}
+				floors[currFloor].useGrenade();
+				useGrenade = false;
+				floors[currFloor].grenadeUsed = true;
+			}
+			else {
+				cout << "You already used the grenade on this floor. It's too dangerous to use it again" << endl;
+			}
+		}
 	}
+	inBattle = false;
 	return true;
 }
 
@@ -196,6 +219,15 @@ void Dungeon::tryItems() {
 			}
 			else if (items[answer]->name == "Kompas") {
 				floors[currFloor].useCompass();
+			}
+			else if (items[answer]->name == "Grenade") {
+				if (inBattle) {
+					useGrenade = true;
+				}
+				else {
+					cout << "You can only use the grenade while in battle." << endl;
+					floors[currFloor].useGrenade();
+				}
 			}
 			else {
 				items[answer]->useItem(player);

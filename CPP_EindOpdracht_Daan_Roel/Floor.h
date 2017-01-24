@@ -28,12 +28,15 @@ public:
 	void setBossLocation();
 	void useTalisman();
 	void useCompass();
+	void useGrenade();
+	void primsAlgorithm(Room * startRoom);
 	void resetSearchVisitedRooms();
 	void randomizeFloor();
 	void connectRandomRoom(int x, int y);
 	bool getIfOnPlayerOnStairs();
 	void movePlayer(int direction, vector<string> options);
 	vector <vector<Room*>> rooms;
+	bool grenadeUsed = false;
 	~Floor();
 private:
 	Player* player;
@@ -45,9 +48,6 @@ private:
 	void createRooms();
 	void setEnemyLocations();
 	void createPossibleEnemies();
-
-
-
 	void depthFirstSearch(Room* startRoom);
 	void depthFirstSearch(Room* vertex, vector<Room*> visited);
 	int breadthFirstSearch(Room * startRoom, int currentDistance);

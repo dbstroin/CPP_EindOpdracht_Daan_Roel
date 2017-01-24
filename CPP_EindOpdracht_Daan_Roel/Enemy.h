@@ -10,6 +10,7 @@ public:
 	Enemy();
 	~Enemy();
 	void getHit(int damage);
+	void Die();
 	int getDamage();
 	string name;
 	int level;

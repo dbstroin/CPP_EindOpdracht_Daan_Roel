@@ -44,6 +44,16 @@ public:
 	string getBeschrijving() { return beschrijving; }
 	void setRandomBeschrijving();
 	// void AddDoors(); 
+	bool shouldBeVisitable = false;
+	bool isVisitable = false;
+	bool northIsConnected = false;
+	bool southIsConnected = false;
+	bool eastIsConnected = false;
+	bool westIsConnected = false;
+	bool northIsCollapsed = false;
+	bool southIsCollapsed = false;
+	bool eastIsCollapsed = false;
+	bool westIsCollapsed = false;
 private:
 	string type;
 	string beschrijving;

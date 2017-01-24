@@ -144,7 +144,8 @@ void Floor::drawMap()
 		for (int wIndex = 0; wIndex < width; wIndex++) {
 			if (rooms[wIndex][lIndex]->getNorth() != nullptr) {
 				if (rooms[wIndex][lIndex]->getNorth()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
-					std::cout << "| ";
+					if(rooms[wIndex][lIndex]->northIsCollapsed) std::cout << "~ ";
+					else std::cout << "| ";
 				}
 				else std::cout << "  ";
 			}
@@ -158,7 +159,8 @@ void Floor::drawMap()
 			rooms[wIndex][lIndex]->Draw();
 			if (rooms[wIndex][lIndex]->getEast() != nullptr) {
 				if (rooms[wIndex][lIndex]->getEast()->getVisited() || rooms[wIndex][lIndex]->getVisited() || showAllRooms) {
-					std::cout << "-";
+					if (rooms[wIndex][lIndex]->eastIsCollapsed) std::cout << "~";
+					else std::cout << "-";
 				}
 				else std::cout << " ";
 			}
@@ -304,10 +306,13 @@ void Floor::createPossibleEnemies()
 }
 
 void Floor::setEnemyLocations() {
+	int done = 0;
+
 	for each (Enemy* enemy in possibleEnemies)
 	{
 		bool set = false;
-		while (!set) {
+		while (!set && done < 1000) {
+			done++;
 			int x = getRandom(0, width - 1);
 			int y = getRandom(0, length - 1);
 
@@ -356,6 +361,66 @@ void Floor::useCompass()
 		std::cout << " -> " << direction;
 	}
 	std::cout << ::endl;
+}
+
+void Floor::useGrenade()
+{
+	int startX = 0;
+	int startY = 0;
+
+	//Check welke rooms bereikt moeten kunnen worden en locatie van Trap/Baas opslaan in startX en startY om vanuit daar het algoritme te starten;
+	for (int x = 0; x < width; x++)
+	{
+		for (int y = 0; y < length; y++) {
+			if (rooms[x][y]->getAdjacentRooms().size() > 0) {
+				rooms[x][y]->shouldBeVisitable = true;
+				rooms[x][y]->isVisitable = false;
+				if (rooms[x][y]->getType() == "H" || rooms[x][y]->getType() == "B") {
+					startX = x;
+					startY = y;
+				}
+
+				if (rooms[x][y]->getNorth() != nullptr) rooms[x][y]->northIsCollapsed = true;
+				if (rooms[x][y]->getEast() != nullptr) rooms[x][y]->eastIsCollapsed = true;
+				if (rooms[x][y]->getWest() != nullptr) rooms[x][y]->westIsCollapsed = true;
+				if (rooms[x][y]->getSouth() != nullptr) rooms[x][y]->southIsCollapsed = true;
+			}
+		}
+	}
+
+	primsAlgorithm(rooms[startX][startY]);
+}
+
+void Floor::primsAlgorithm(Room* startRoom) {
+	startRoom->isVisitable = true;
+	if (startRoom->getNorth() != nullptr) {
+		if (startRoom->getNorth()->isVisitable == false) {
+			startRoom->northIsCollapsed = false;
+			startRoom->getNorth()->southIsCollapsed = false;
+			primsAlgorithm(startRoom->getNorth());
+		}
+	}
+	if (startRoom->getEast() != nullptr) {
+		if (startRoom->getEast()->isVisitable == false) {
+			startRoom->eastIsCollapsed = false;
+			startRoom->getEast()->westIsCollapsed = false;
+			primsAlgorithm(startRoom->getEast());
+		}
+	}
+	if (startRoom->getSouth() != nullptr) {
+		if (startRoom->getSouth()->isVisitable == false) {
+			startRoom->southIsCollapsed = false;
+			startRoom->getSouth()->northIsCollapsed = false;
+			primsAlgorithm(startRoom->getSouth());
+		}
+	}
+	if (startRoom->getWest() != nullptr) {
+		if (startRoom->getWest()->isVisitable == false) {
+			startRoom->westIsCollapsed = false;
+			startRoom->getWest()->eastIsCollapsed = false;
+			primsAlgorithm(startRoom->getWest());
+		}
+	}
 }
 
 void Floor::resetSearchVisitedRooms() {

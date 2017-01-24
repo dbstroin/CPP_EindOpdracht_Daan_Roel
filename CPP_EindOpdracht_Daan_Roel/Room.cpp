@@ -181,4 +181,5 @@ void Room::setRandomBeschrijving()
 		break;
 	}
 }
+
 #pragma endregion

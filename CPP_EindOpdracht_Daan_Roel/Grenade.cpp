@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Item.h"
 #include "Grenade.h"
+
 
 Grenade::Grenade()
 {
@@ -11,10 +11,12 @@ Grenade::~Grenade()
 {
 }
 
-void Grenade::setName()
+void Grenade::useItem(Player * p)
 {
+	p->addDamage(1);
 }
 
-void Grenade::useItem() {
-
+void Grenade::setName()
+{
+	name = "Grenade";
 }

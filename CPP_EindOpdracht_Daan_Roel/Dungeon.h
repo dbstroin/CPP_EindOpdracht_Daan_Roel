@@ -6,6 +6,7 @@
 #include "Globalfunc.h"
 #include "Talisman.h"
 #include "Kompas.h"
+#include "Grenade.h"
 
 using namespace std;
 
@@ -40,5 +41,8 @@ private:
 	int currFloor;
 	Talisman* t;
 	Kompas* k;
+	Grenade* g;
+	bool inBattle = false;
+	bool useGrenade = false;
 };
 
